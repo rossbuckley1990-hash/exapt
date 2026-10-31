@@ -1,0 +1,28 @@
+{
+  "name": "exapt",
+  "version": "0.1.0-rc.1",
+  "description": "Exaptive Capability Engine: an agent runtime that detects a missing computational capability, constructs it, falsifies it against independent evidence, and retains it as a reusable operation.",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "bin": { "exapt": "./apps/cli/exapt.ts" },
+  "engines": { "node": ">=22.18" },
+  "scripts": {
+    "setup": "node apps/cli/exapt.ts setup",
+    "doctor": "node apps/cli/exapt.ts doctor",
+    "demo": "node apps/cli/exapt.ts demo",
+    "lab": "node apps/cli/exapt.ts serve --lab",
+    "serve": "node apps/cli/exapt.ts serve",
+    "mcp": "node apps/cli/exapt.ts mcp",
+    "test": "node --test --test-concurrency=4 --test-timeout=240000 test/*.test.ts",
+    "test:security": "node --test --test-timeout=240000 test/security-*.test.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "upstream:verify": "node scripts/verify-upstream.ts",
+    "check": "npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  },
+  "keywords": ["agents", "mcp", "program-synthesis", "capability-acquisition", "cegis", "verification"]
+}

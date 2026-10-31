@@ -1,0 +1,67 @@
+{
+  "name": "rightclick-x",
+  "version": "0.1.0",
+  "description": "An MCP server that turns an authorised environment's software into verified, reusable AI capabilities: it learns OpenAPI, GraphQL and MCP contracts and investigates local command-line programs in a sandbox, then plans, runs, checks and retains what works.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "rcx": "./dist/rcx.mjs"
+  },
+  "exports": {
+    ".": { "types": "./src/index.ts", "default": "./dist/index.mjs" },
+    "./node": { "types": "./src/entry/node-host.ts", "default": "./dist/node.mjs" },
+    "./edge": { "types": "./src/entry/edge.ts", "default": "./dist/edge.js" },
+    "./actenon-evidence": { "types": "./integrations/actenon/authority-evidence.ts", "default": "./integrations/actenon/authority-evidence.mjs" }
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.ts experiments/inheritance/guards.test.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "demo": "node bin/rcx.ts demo",
+    "serve": "node bin/rcx.ts serve --demo",
+    "build": "bun build bin/rcx.ts --target node --outfile dist/rcx.mjs && bun build src/index.ts --target node --outfile dist/index.mjs && bun build src/entry/node-host.ts --target node --outfile dist/node.mjs && bun build integrations/actenon/authority-evidence.ts --target node --outfile integrations/actenon/authority-evidence.mjs && bun build src/entry/edge.ts --target browser --external 'node:*' --outfile dist/edge.js",
+    "build:bin": "bun build bin/rcx.ts --compile --outfile dist/rcx",
+    "prepublishOnly": "npm run build && npm test",
+    "lab": "node lab/run.ts",
+    "lab:report": "node lab/report.ts 10",
+    "proof": "node proof/run.ts",
+    "proof:ai": "node proof/ai-clients.ts --run",
+    "proof:real": "node proof/real-ai.ts --run",
+    "demo:unknown": "node demo/unknown.ts",
+    "check": "npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261015.1",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0",
+    "wrangler": "^4.151.0"
+  },
+  "files": [
+    "dist/rcx.mjs",
+    "dist/index.mjs",
+    "dist/node.mjs",
+    "dist/edge.js",
+    "src",
+    "integrations/actenon",
+    "integrations/actenon/authority-evidence.mjs",
+    "bin",
+    "demo",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "agent-skills",
+    "agents",
+    "ai",
+    "capabilities",
+    "cli",
+    "federation",
+    "graphql",
+    "mcp",
+    "model-context-protocol",
+    "openapi",
+    "sandbox"
+  ]
+}

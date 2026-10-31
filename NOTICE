@@ -1,0 +1,9 @@
+EXAPT — Exaptive Capability Engine
+Copyright 2026 Ross Buckley
+
+This product includes software from RightClick X
+(https://github.com/rossbuckley1990-hash/rightclick-x), licensed under the
+Apache License, Version 2.0. The vendored copy is in vendor/rightclick-x/ with
+its original LICENSE. vendor/rightclick-x/UPSTREAM.json records the exact
+upstream commit and the SHA-256 of every vendored file. No vendored file has
+been modified.
