@@ -8,7 +8,7 @@
 //   malformed    invalid input a correct program must refuse
 //   holdout      drawn fresh for each candidate that reaches this gate; failures are never fed
 //                back, so no later attempt can have been fitted to them
-import { accepted, isRecordRepr, parseRecords, renderRecords, reprLabel, sniff, type Goal, type Repr, type Universe } from "../capability-universe/index.ts";
+import { accepted, cellText, isRecordRepr, parseRecords, renderRecords, reprLabel, sniff, type Goal, type Repr, type Universe } from "../capability-universe/index.ts";
 import { digest, Rng, pool } from "../shared/index.ts";
 import { loadSample, type Gap, type OracleSpec } from "../gap-reasoner/index.ts";
 import { boundaryInputs, generateLike, malformedBinary, malformedInputs } from "./generators.ts";
@@ -26,6 +26,10 @@ export interface TestCase {
   expected?: string;
   origin: "inverse-pair" | "corpus" | "stated-example" | "upstream" | "generated" | "boundary" | "malformed";
   note?: string;
+  /** Text a correct output must still contain. */
+  mark?: string;
+  /** Oracles that failed qualification for this case and do not judge it. */
+  disqualified?: string[];
 }
 
 export interface BehaviouralContract {
@@ -137,6 +141,8 @@ export class TestBench {
   private readonly base: string;
   private readonly seed: number;
   readonly sizes: BenchSizes;
+  /** What this bench could not test, found while building it. */
+  readonly limitations = new Set<string>();
   private cases = 0;
   private readonly corpusTiers: { visible: number[]; independent: number[]; holdout: number[] };
   private readonly exampleTiers: { visible: number[]; holdout: number[] };
@@ -248,11 +254,35 @@ export class TestBench {
     return cases;
   }
 
-  boundary(): TestCase[] {
+  /** Can the inverse route itself carry this text? An oracle that cannot is not evidence about it:
+   *  a correct program would fail through no fault of its own. */
+  private async inverseCarries(mark: string): Promise<boolean> {
+    const route = this.inverseRoute;
+    const { sample, repr } = this.contract.target;
+    if (!route || !sample) return false;
+    const text = repr.fields.find((f) => f.kind === "string");
+    if (!text) return false;
+    const rows = parseRecords(sample, repr.syntax).map((r) => ({ ...r, [text.name]: `${cellText(r[text.name])}${mark}` }));
+    const back = await this.through(route, renderRecords(rows, repr.syntax, repr.fields.map((f) => f.name)));
+    if (back === null) return false;
+    try {
+      return parseRecords(back, this.contract.source.repr.syntax).some((r) => Object.values(r).some((v) => cellText(v).includes(mark)));
+    } catch {
+      return false;
+    }
+  }
+
+  async boundary(): Promise<TestCase[]> {
     if (this.contract.inputKind === "binary") return [];
     const rng = new Rng(this.seed + 41);
     const sample = this.contract.source.sample;
-    return boundaryInputs(sample, this.contract.source.repr, rng).map((b) => ({ id: this.next("boundary"), tier: "boundary", input: b.input, origin: "boundary", note: b.name }));
+    const out: TestCase[] = [];
+    for (const b of boundaryInputs(sample, this.contract.source.repr, rng)) {
+      const unqualified = b.mark !== undefined && this.inverseRoute !== undefined && !(await this.inverseCarries(b.mark));
+      if (unqualified) this.limitations.add(`The inverse route cannot carry "${b.name}", so that case is judged by the consumer and by text preservation only.`);
+      out.push({ id: this.next("boundary"), tier: "boundary", input: b.input, origin: "boundary", note: b.name, ...(b.mark !== undefined ? { mark: b.mark } : {}), ...(unqualified ? { disqualified: ["inverse-route"] } : {}) });
+    }
+    return out;
   }
 
   malformed(): TestCase[] {

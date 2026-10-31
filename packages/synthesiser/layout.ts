@@ -12,7 +12,11 @@ import { cellText, parseRecords, sniffSyntax, type Rec } from "../capability-uni
 
 interface Located {
   name: string;
+  /** Where the value starts on the row where it starts earliest. */
   offset: number;
+  /** Trailing padding in the previous column can't be told apart from leading padding in this one,
+   *  so the column's true start is only known to lie in lowest..offset. */
+  lowest: number;
   width: number;
 }
 
@@ -41,88 +45,176 @@ function occurrences(hay: Buffer, needle: Buffer, limit = 64): number[] {
   return out;
 }
 
-/** The stride and first-record offset that explain where the first text column recurs. */
-function findStride(bytes: Buffer, records: Rec[], names: string[], counter: { n: number }): { stride: number; origin: number } | null {
-  for (const name of names) {
-    const values = records.map((r) => cellText(r[name]).trim());
-    if (values.some((v) => v.length < 2) || new Set(values).size < Math.min(3, values.length)) continue;
-    for (const first of occurrences(bytes, Buffer.from(values[0]))) {
-      for (const second of occurrences(bytes, Buffer.from(values[1]))) {
-        const stride = second - first;
+/** Bytes of a value as they would sit in a latin1 view of the file. */
+const asBytes = (v: string): string => Buffer.from(v).toString("latin1");
+
+/** Offsets inside the record from which a field's value can be read on every row. */
+function fieldOffsets(rows: string[], texts: string[]): number[] {
+  const known = texts.map((t, i) => ({ t: asBytes(t), i })).filter((x) => x.t);
+  if (!known.length) return [];
+  const first = known[0];
+  for (let at = rows[first.i].indexOf(first.t); at >= 0; at = rows[first.i].indexOf(first.t, at + 1)) {
+    const out: number[] = [];
+    // Values may be padded on the left, so a value's own start need not be the field's start.
+    for (let start = at; start >= 0; start--) {
+      if (rows[first.i].slice(start, at).trim() !== "") break;
+      if (known.every(({ t, i }) => rows[i].slice(start).trimStart().startsWith(t))) out.push(start);
+    }
+    if (out.length) return out.sort((a, b) => a - b);
+  }
+  return [];
+}
+
+interface Layout {
+  start: number;
+  stride: number;
+  fields: Located[];
+}
+
+/** Record sizes suggested by where one column's values recur: two values r rows apart, d bytes
+ *  apart, suggest d/r bytes per record. */
+function strideCandidates(view: string, texts: string[][], counter: { n: number }): number[] {
+  const out = new Map<number, number>();
+  const columns = texts.map((t, i) => ({ i, t })).sort((a, b) => Math.max(...b.t.map((v) => v.length)) - Math.max(...a.t.map((v) => v.length))).slice(0, 8);
+  for (const { t } of columns) {
+    const rows = t.map((v, r) => ({ v: asBytes(v), r })).filter((x) => x.v.length >= 2).sort((a, b) => b.v.length - a.v.length).slice(0, 6);
+    for (let x = 0; x < rows.length; x++) for (let y = x + 1; y < rows.length; y++) {
+      const [a, b] = rows[x].r < rows[y].r ? [rows[x], rows[y]] : [rows[y], rows[x]];
+      if (a.r === b.r) continue;
+      for (const p of allAt(view, a.v)) for (const q of allAt(view, b.v)) {
         counter.n++;
-        if (stride <= 0) continue;
-        if (values.every((v, i) => {
-          const at = first + i * stride;
-          return at + v.length <= bytes.length && bytes.subarray(at, at + v.length).toString("latin1") === Buffer.from(v).toString("latin1");
-        })) return { stride, origin: first };
+        const d = (q - p) / (b.r - a.r);
+        if (d > 0 && Number.isInteger(d)) out.set(d, (out.get(d) ?? 0) + 1);
       }
     }
   }
-  return null;
+  return [...out].sort((a, b) => b[1] - a[1]).map(([d]) => d).slice(0, 24);
 }
 
-function locate(bytes: Buffer, records: Rec[], names: string[], origin: number, stride: number): { start: number; fields: Located[] } | null {
-  // The record starts at or before the anchor; try each start that keeps the file a whole number of records.
-  for (let start = origin; start >= Math.max(0, origin - stride); start--) {
-    const remainder = bytes.length - start - records.length * stride;
-    if (remainder < 0 || remainder > 16) continue;
-    const fields: Located[] = [];
-    for (const name of names) {
-      const texts = records.map((r) => cellText(r[name]).trim());
-      const sample = texts.find((t) => t.length) ?? "";
-      const row0 = bytes.subarray(start, start + stride).toString("latin1");
-      const firstAt = sample ? [...row0.matchAll(new RegExp(sample.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"))].map((m) => m.index!) : [];
-      let found: Located | null = null;
-      for (const at of firstAt) {
-        const rows = records.map((_, i) => bytes.subarray(start + i * stride, start + (i + 1) * stride).toString("latin1"));
-        if (rows.every((row, i) => row.slice(at).trimStart().startsWith(texts[i]) || texts[i] === "")) {
-          let width = stride - at;
-          for (const other of names) if (other !== name) {
-            const o = fields.find((f) => f.name === other);
-            if (o && o.offset > at) width = Math.min(width, o.offset - at);
-          }
-          found = { name, offset: at, width };
-          break;
-        }
-      }
-      if (!found && !sample) found = { name, offset: -1, width: 0 };
-      if (!found) return null;
-      fields.push(found);
-    }
-    return { start, fields: fields.sort((a, b) => a.offset - b.offset) };
-  }
-  return null;
-}
-
-function integerSlots(files: Buffer[], want: number[], limit: number, counter: { n: number }): Slot[] {
-  const out: Slot[] = [];
-  for (let offset = 0; offset < Math.min(limit, 64); offset++) {
-    for (const bytes of [1, 2, 4]) for (const little of bytes === 1 ? [true] : [true, false]) {
-      const s: Slot = { offset, bytes, little };
-      counter.n++;
-      if (files.every((f, i) => offset + bytes <= f.length && readInt(f, s) === want[i])) out.push(s);
-    }
-  }
+function allAt(view: string, needle: string, limit = 24): number[] {
+  const out: number[] = [];
+  for (let at = view.indexOf(needle); at >= 0 && out.length < limit; at = view.indexOf(needle, at + 1)) out.push(at);
   return out;
 }
 
-/** A table of equal-sized entries in the header, one per field, each beginning with its name. */
-function findDescriptorTable(file: Buffer, headerEnd: number, names: string[], counter: { n: number }): { start: number; entry: number; nameBytes: number } | null {
-  const at = names.map((n) => file.subarray(0, headerEnd).indexOf(Buffer.from(n)));
-  if (at.some((x) => x < 0)) return null;
-  const entry = at[1] - at[0];
-  if (names.length < 2 || entry <= 0) return null;
-  counter.n++;
-  if (!at.every((x, i) => x === at[0] + i * entry)) return null;
-  return { start: at[0], entry, nameBytes: entry };
+/** Find the layout: a record size and start that the file's length allows, under which the example's
+ *  values line up in fixed columns. */
+function findLayouts(bytes: Buffer, records: Rec[], names: string[], counter: { n: number }): Layout[] {
+  const n = records.length;
+  if (!n) return [];
+  const view = bytes.toString("latin1");
+  const texts = names.map((name) => records.map((r) => cellText(r[name]).trim()));
+  const needed = Math.max(1, Math.ceil(names.filter((_, i) => texts[i].some((t) => t)).length * 0.5));
+  const attempt = (stride: number, start: number) => {
+    counter.n++;
+    const rows = records.map((_, r) => view.slice(start + r * stride, start + (r + 1) * stride));
+    const fields: Located[] = [];
+    for (const [i, name] of names.entries()) {
+      const offsets = fieldOffsets(rows, texts[i]);
+      if (offsets.length) fields.push({ name, offset: offsets[offsets.length - 1], lowest: offsets[0], width: 0 });
+    }
+    if (fields.length < needed) return null;
+    fields.sort((a, b) => a.offset - b.offset);
+    fields.forEach((f, i) => (f.width = (fields[i + 1]?.offset ?? stride) - f.offset));
+    return { start, stride, fields };
+  };
+  // A file may end in a few bytes of trailer, and padding can hide a one-byte error in where the
+  // records begin, so every start that fits is kept for the header to settle.
+  const fits = (stride: number): Layout[] => {
+    const out: Layout[] = [];
+    for (let tail = 0; tail <= 16; tail++) {
+      const start = bytes.length - tail - n * stride;
+      if (start < 0) break;
+      const found = attempt(stride, start);
+      if (found) out.push(found);
+    }
+    return out;
+  };
+  for (const stride of strideCandidates(view, texts, counter)) {
+    const found = fits(stride);
+    if (found.length) return found;
+  }
+  // Nothing recurs usefully, as in a table of constants: fall back to what the file's length allows.
+  for (let stride = Math.min(1024, Math.floor(bytes.length / n)); stride >= 1; stride--) {
+    const found = fits(stride);
+    if (found.length) return found;
+  }
+  return [];
 }
 
-function widthSlot(file: Buffer, table: { start: number; entry: number }, fields: Located[], counter: { n: number }): number | null {
-  const ordered = fields.filter((f) => f.offset >= 0);
-  const widths = ordered.map((f, i) => (i + 1 < ordered.length ? ordered[i + 1].offset - f.offset : null));
+function integerSlots(files: Buffer[], want: Array<Set<number>>, limit: number, counter: { n: number }): Slot[] {
+  const out: Slot[] = [];
+  for (let offset = 0; offset < Math.min(limit, 64); offset++) {
+    for (const bytes of [4, 2, 1]) for (const little of bytes === 1 ? [true] : [true, false]) {
+      const s: Slot = { offset, bytes, little };
+      counter.n++;
+      if (files.every((f, i) => offset + bytes <= f.length && want[i].has(readInt(f, s)))) out.push(s);
+    }
+  }
+  // Across several files only real slots survive. On one file, prefer the reading with the most
+  // room: a wider slot that matches is less likely to be a coincidence than a narrow one.
+  return out.sort((a, b) => Number(b.little) - Number(a.little) || b.bytes - a.bytes || a.offset - b.offset);
+}
+
+const NAME = /^[A-Za-z_][\w ]*$/;
+
+/** The name at the start of a table entry, read up to the first byte that cannot be in a name. */
+function entryName(file: Buffer, at: number, entry: number): string {
+  const raw = file.subarray(at, at + entry);
+  const end = raw.findIndex((c) => c < 0x20 || c > 0x7e);
+  return raw.subarray(0, end < 0 ? raw.length : end).toString("latin1").trim();
+}
+
+interface Table {
+  start: number;
+  entry: number;
+  names: string[];
+}
+
+/** A table of equal-sized entries in the header, each beginning with a field name, found from the
+ *  names the example says exist. The file's own order and full list come from the table itself. */
+function findDescriptorTable(file: Buffer, headerEnd: number, names: string[], counter: { n: number }): Table | null {
+  const usable = names.filter((n) => n.length >= 2);
+  if (usable.length < 2) return null;
+  const header = file.subarray(0, headerEnd);
+  for (const a of usable.slice(0, 4)) for (const b of usable.slice(1, 6)) {
+    if (a === b) continue;
+    for (const p of occurrences(header, Buffer.from(`${a}\0`))) for (const q of occurrences(header, Buffer.from(`${b}\0`))) {
+      const entry = Math.abs(q - p);
+      counter.n++;
+      if (entry < 8 || entry > 256) continue;
+      let start = Math.min(p, q);
+      while (start - entry >= 0 && NAME.test(entryName(file, start - entry, entry))) start -= entry;
+      const found: string[] = [];
+      for (let at = start; at + entry <= headerEnd; at += entry) {
+        const name = entryName(file, at, entry);
+        if (!NAME.test(name)) break;
+        found.push(name);
+      }
+      const known = names.filter((n) => found.includes(n)).length;
+      if (known >= names.length * 0.7) return { start, entry, names: found };
+    }
+  }
+  return null;
+}
+
+/** The byte in each entry that is that field's width: added up in table order, the widths must
+ *  fill the record, up to a small lead-in, and land inside every located field's possible start. */
+function widthSlot(file: Buffer, table: Table, located: Located[], stride: number, counter: { n: number }): { slot: number; lead: number } | null {
   for (let k = 0; k < table.entry; k++) {
     counter.n++;
-    if (ordered.every((_, i) => widths[i] === null || file[table.start + i * table.entry + k] === widths[i])) return k;
+    let total = 0;
+    const at = new Map<string, number>();
+    for (const [i, name] of table.names.entries()) {
+      at.set(name, total);
+      total += file[table.start + i * table.entry + k] ?? 0;
+    }
+    const lead = stride - total;
+    if (lead < 0 || lead > 8) continue;
+    if (located.every((f) => {
+      const start = at.get(f.name);
+      return start === undefined || (start + lead >= f.lowest && start + lead <= f.offset);
+    })) return { slot: k, lead };
   }
   return null;
 }
@@ -143,7 +235,7 @@ export function transform(input) {
     const raw = b.subarray(p, p + ${o.table.entry});
     const end = raw.findIndex((c) => c < 0x20 || c > 0x7e);
     const name = raw.subarray(0, end < 0 ? raw.length : end).toString("latin1").trim();
-    if (!name) break; // the first entry that names nothing ends the table
+    if (!/^[A-Za-z_][\\w ]*$/.test(name)) break; // the first entry that names nothing ends the table
     const width = b[p + ${o.widthAt}];
     fields.push({ name, offset, width });
     offset += width;
@@ -183,38 +275,39 @@ export function transform(input) {
 export function induceLayout(pairs: Array<{ input: string; output: string; binary?: boolean }>): LayoutResult {
   const counter = { n: 0 };
   if (!pairs.length) return { ok: false, reason: "no worked examples", explored: 0 };
-  const files = pairs.map((p) => Buffer.from(p.input, "base64"));
-  const truth = pairs.map((p) => parseRecords(p.output, sniffSyntax(p.output)));
-  const names = Object.keys(truth[0][0] ?? {});
-  if (!names.length) return { ok: false, reason: "the examples contain no records", explored: 0 };
-  const per = files.map((f, i) => {
-    const anchor = findStride(f, truth[i], Object.keys(truth[i][0] ?? {}), counter);
-    if (!anchor) return null;
-    const placed = locate(f, truth[i], Object.keys(truth[i][0] ?? {}), anchor.origin, anchor.stride);
-    return placed ? { ...anchor, ...placed } : null;
+  const worked = pairs.map((p) => {
+    const file = Buffer.from(p.input, "base64");
+    const rows = parseRecords(p.output, sniffSyntax(p.output));
+    const names = Object.keys(rows[0] ?? {});
+    return { file, rows, names, layouts: rows.length ? findLayouts(file, rows, names, counter) : [] };
   });
-  const ok = per.findIndex((p) => p);
-  if (ok < 0) return { ok: false, reason: "no fixed record stride explains where the known values occur", explored: counter.n };
-  const usable = per.flatMap((p, i) => (p ? [{ p, file: files[i], rows: truth[i] }] : []));
+  const usable = worked.filter((w) => w.layouts.length);
+  if (!usable.length) return { ok: false, reason: "no fixed record layout explains where the known values occur", explored: counter.n };
+  const files = usable.map((u) => u.file);
+  const count = integerSlots(files, usable.map((u) => new Set([u.rows.length])), 32, counter);
+  const recordSize = integerSlots(files, usable.map((u) => new Set(u.layouts.map((l) => l.stride))), 32, counter);
+  const headerSize = integerSlots(files, usable.map((u) => new Set(u.layouts.map((l) => l.start))), 32, counter);
   const programs: LayoutProgram[] = [];
-  const count = integerSlots(usable.map((u) => u.file), usable.map((u) => u.rows.length), 32, counter);
-  const recordSize = integerSlots(usable.map((u) => u.file), usable.map((u) => u.p.stride), 32, counter);
-  const headerSize = integerSlots(usable.map((u) => u.file), usable.map((u) => u.p.start), 32, counter);
-  const headerSizes = headerSize.length ? headerSize : usable[0].p.start > 0 ? integerSlots(usable.map((u) => u.file), usable.map((u) => u.p.start + 0), 32, counter) : [];
-  const first = usable[0];
-  const table = findDescriptorTable(first.file, first.p.start, first.p.fields.filter((f) => f.offset >= 0).map((f) => f.name), counter);
-  const widthAt = table ? widthSlot(first.file, table, first.p.fields, counter) : null;
-  if (count.length && recordSize.length && headerSizes.length && table && widthAt !== null) {
-    const firstField = first.p.fields.filter((f) => f.offset >= 0)[0];
-    // Bytes in a record before its first described field, such as a status marker.
+  const settled = (u: (typeof usable)[number]): Layout => u.layouts.find((l) => headerSize[0] && l.start === readInt(u.file, headerSize[0])) ?? u.layouts[0];
+  const described = usable.flatMap((u) => {
+    const layout = settled(u);
+    const table = findDescriptorTable(u.file, layout.start, u.names, counter);
+    const width = table ? widthSlot(u.file, table, layout.fields, layout.stride, counter) : null;
+    return table && width ? [{ table, width }] : [];
+  })[0];
+  if (count.length && recordSize.length && headerSize.length && described) {
+    const { table, width } = described;
     programs.push({
-      source: emitDescribed({ count: count[0], headerSize: headerSizes[0], recordSize: recordSize[0], table, widthAt, firstOffset: firstField.offset }),
-      explanation: [`record count at byte ${count[0].offset} (${count[0].bytes} bytes)`, `header size at byte ${headerSizes[0].offset}`, `record size at byte ${recordSize[0].offset}`, `field table at byte ${table.start} with ${table.entry}-byte entries`, `field width at entry byte ${widthAt}`],
+      source: emitDescribed({ count: count[0], headerSize: headerSize[0], recordSize: recordSize[0], table, widthAt: width.slot, firstOffset: width.lead }),
+      explanation: [`record count at byte ${count[0].offset} (${count[0].bytes} bytes)`, `header size at byte ${headerSize[0].offset}`, `record size at byte ${recordSize[0].offset}`, `field table at byte ${table.start}, ${table.entry}-byte entries`, `field width at entry byte ${width.slot}`, `${width.lead} byte(s) of lead-in before the first field`],
     });
   }
-  programs.push({
-    source: emitFixed(first.p.start, first.p.stride, first.p.fields, count[0] ?? null),
-    explanation: [`fixed layout: ${first.p.fields.length} fields, ${first.p.stride}-byte records from byte ${first.p.start}`],
+  const first = usable[0];
+  const fixed = settled(first);
+  if (fixed.fields.length === first.names.length) programs.push({
+    source: emitFixed(fixed.start, fixed.stride, fixed.fields, count[0] ?? null),
+    explanation: [`fixed layout: ${fixed.fields.length} fields in ${fixed.stride}-byte records from byte ${fixed.start}`],
   });
+  if (!programs.length) return { ok: false, reason: "a record layout was found, but neither a self-description nor all field positions could be established", explored: counter.n };
   return { ok: true, programs, explored: counter.n };
 }

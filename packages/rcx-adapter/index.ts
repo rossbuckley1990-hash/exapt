@@ -130,10 +130,11 @@ export class RcxHost {
     const check = await checkProgram(ref.bin, this.programs);
     if (!check.ok) throw new Error(check.reason);
     if (opts.pinned !== false && this.programHash(ref.bin) !== ref.sha256) throw new ProgramChanged(ref);
-    const text = typeof input === "string" ? input : input.toString("utf8");
     const args = [...ref.args, ...(opts.args ?? [])];
-    const files = ref.channel === "stdin" ? undefined : { [ref.channel.file]: text };
-    const r = await this.sandbox.run(ref.bin, ref.channel === "stdin" ? args : [...args, ref.channel.file], { stdin: ref.channel === "stdin" ? text : "", files, limits: { timeoutMs: opts.timeoutMs ?? 5000 }, purpose: "execution" });
+    // Bytes pass through unchanged: the sandbox's stream and file writers both accept a Buffer.
+    const data = input as string;
+    const files = ref.channel === "stdin" ? undefined : { [ref.channel.file]: data };
+    const r = await this.sandbox.run(ref.bin, ref.channel === "stdin" ? args : [...args, ref.channel.file], { stdin: ref.channel === "stdin" ? data : "", files, limits: { timeoutMs: opts.timeoutMs ?? 5000 }, purpose: "execution" });
     return { ok: r.code === 0 && !r.limit, code: r.code, stdout: r.stdout, stderr: r.stderr, ms: r.durationMs, ...(r.limit ? { limit: r.limit } : {}) };
   }
 

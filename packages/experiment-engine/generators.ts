@@ -33,12 +33,27 @@ function freshValue(f: Field, rng: Rng): string {
     }
     case "bool":
       return rng.bool() ? "true" : "false";
-    default: {
-      if (!sample) return rng.pick(WORDS);
-      // Keep the shape of the value: replace alphabetic runs, keep punctuation and digits' places.
-      return rng.bool(0.35) ? sample : sample.replace(/[A-Za-z]{2,}/g, (w) => matchCase(rng.pick(WORDS), w)).replace(/\d+/g, (d) => String(rng.int(0, 10 ** Math.min(d.length, 6) - 1)).padStart(d.length, "0"));
-    }
+    default:
+      return f.samples.length ? varyText(f.samples, rng) : rng.pick(WORDS);
   }
+}
+
+const TOKEN = /[A-Za-z]{2,}|\d+/g;
+
+/** A new value shaped like the samples. Only what varies among them is varied: a token that is the
+ *  same in every sample is structure, such as a prefix, and changing it would leave the domain. */
+function varyText(samples: string[], rng: Rng): string {
+  const base = rng.pick(samples);
+  if (samples.length < 2) return base.replace(/\d+/g, (d) => String(rng.int(0, 10 ** Math.min(d.length, 6) - 1)).padStart(d.length, "0"));
+  const tokenised = samples.map((x) => x.match(TOKEN) ?? []);
+  let i = -1;
+  return base.replace(TOKEN, (tok) => {
+    i++;
+    const here = tokenised.map((t) => t[i]);
+    if (here.every((t) => t === tok)) return tok;
+    if (/^\d/.test(tok)) return String(rng.int(0, 10 ** Math.min(tok.length, 6) - 1)).padStart(tok.length, "0");
+    return rng.bool(0.3) ? tok : matchCase(rng.pick(WORDS), tok);
+  });
 }
 
 const matchCase = (word: string, like: string): string => (like === like.toUpperCase() ? word.toUpperCase() : like[0] === like[0].toUpperCase() ? word[0].toUpperCase() + word.slice(1) : word);
@@ -67,10 +82,15 @@ export function generateRecords(sample: string, repr: Repr, rng: Rng, rows: numb
  *  numbers and words. Used for an upstream program's own input format. */
 export function generateLines(sample: string, rng: Rng, rows: number): string {
   const lines = sample.split(/\r?\n/).filter((l) => l.trim());
+  const SHAPE = /-?\d+(?:\.\d+)?|[A-Za-z]{3,}/g;
+  const tokenised = lines.map((l) => l.match(SHAPE) ?? []);
   const out: string[] = [];
-  for (let i = 0; i < rows; i++) {
-    const template = rng.pick(lines);
-    out.push(template.replace(/-?\d+(?:\.\d+)?|[A-Za-z]{3,}/g, (tok) => {
+  for (let n = 0; n < rows; n++) {
+    let i = -1;
+    out.push(rng.pick(lines).replace(SHAPE, (tok) => {
+      i++;
+      const here = tokenised.map((t) => t[i]);
+      if (lines.length > 1 && here.every((t) => t === tok)) return tok;
       if (/^-?\d/.test(tok)) {
         if (tok.length >= 9 && !tok.includes(".")) return String(Number(tok) + rng.int(-2_000_000, 2_000_000));
         return perturbNumber(tok, rng, Math.max(1, Math.abs(Number(tok)) * 0.4));
@@ -86,6 +106,8 @@ export const generateLike = (sample: string, repr: Repr, rng: Rng, rows: number)
 export interface NamedInput {
   name: string;
   input: string;
+  /** Text this case appends to a field; a correct program must carry it through intact. */
+  mark?: string;
 }
 
 /** Valid but extreme: every oracle still applies to these. */
@@ -100,11 +122,19 @@ export function boundaryInputs(sample: string, repr: Repr, rng: Rng): NamedInput
     { name: "windows line endings", input: render(records).replace(/\n/g, "\r\n") },
     { name: "no trailing newline", input: render(records).replace(/\n$/, "") },
   ];
+  // Appended, not prepended: a value's leading structure is part of what makes it valid.
   const text = repr.fields.find((f) => f.kind === "string");
   if (text) {
-    out.push({ name: "non-ascii text", input: render(records.map((r) => ({ ...r, [text.name]: `Zürich-東京-${cellText(r[text.name])}` }))) });
-    out.push({ name: "spaces inside text", input: render(records.map((r) => ({ ...r, [text.name]: `two words ${cellText(r[text.name])}` }))) });
+    const appended = (name: string, mark: string) => out.push({ name, mark, input: render(records.map((r) => ({ ...r, [text.name]: `${cellText(r[text.name])}${mark}` }))) });
+    appended("non-ascii text", "-Zürich東京");
+    appended("spaces inside text", " two words");
   }
+  if (repr.syntax.format === "delimited" && text) {
+    const { delimiter } = repr.syntax;
+    const appended = (name: string, mark: string) => out.push({ name, mark, input: render(records.map((r) => ({ ...r, [text.name]: `${cellText(r[text.name])}${mark}` }))) });
+    appended("delimiter and quotes inside text", `${delimiter}say "hi"`);
+  }
+  out.push({ name: "blank lines between records", input: render(records).replace(/\n(?=.)/g, "\n\n") });
   const numeric = repr.fields.find((f) => f.kind === "decimal" || (f.kind === "int" && (f.min ?? 0) < 1e8));
   if (numeric) {
     out.push({ name: "zero values", input: render(records.map((r) => ({ ...r, [numeric.name]: typeof r[numeric.name] === "number" ? 0 : (0).toFixed(numeric.decimals ?? 0) }))) });
@@ -120,7 +150,7 @@ export function malformedInputs(sample: string, repr: Repr, rng: Rng): NamedInpu
   const records = parseRecords(sample, repr.syntax);
   const names = repr.fields.map((f) => f.name);
   const render = (rs: Rec[]) => renderRecords(rs, repr.syntax, names);
-  const out: NamedInput[] = [{ name: "not this format at all", input: garbage(rng) }];
+  const out: NamedInput[] = [{ name: "not this format at all", input: garbage(rng) }, { name: "empty input", input: "" }];
   const full = render(records).trimEnd();
   // Cut the last record early enough that it has visibly lost fields.
   const lastLine = full.lastIndexOf("\n") + 1;

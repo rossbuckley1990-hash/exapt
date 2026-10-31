@@ -37,7 +37,9 @@ export interface EvidenceReport {
 const VALUE = new Set(["ground-truth", "stated-examples", "inverse-pair", "inverse-route", "operator-checker", "terminal-differential"]);
 const INDEPENDENT = new Set([...VALUE, "consumer-acceptance"]);
 
-/** Below this share of killed mutants, the suite is too weak to support the strongest label. */
+/** Below this share of value faults caught, the suite is too weak to support the strongest label.
+ *  Some faults are equivalent to the original and cannot be caught by any test, so this is not
+ *  near 1. A suite without a value-level oracle catches almost none, which is what this separates. */
 export const MIN_MUTATION_SCORE = 0.6;
 const MIN_VALUE_CASES = 3;
 
@@ -99,7 +101,7 @@ export async function verify(o: { universe: Universe; contract: BehaviouralContr
   const seen = await run("visible", visible);
   const independentCases = await bench.independent(1000 + o.seed);
   const independent = await run("independent", independentCases);
-  const boundaryCases = bench.boundary();
+  const boundaryCases = await bench.boundary();
   const edge = await run("boundary", boundaryCases);
   const malformedCases = bench.malformed();
   const refused = await run("malformed", malformedCases);
@@ -123,18 +125,19 @@ export async function verify(o: { universe: Universe; contract: BehaviouralContr
   const mid = (independent.length === 0 || passed(independent)) && edge.every((r) => r.passed) && refused.every((r) => r.passed) && metaOk;
   if (level === "passed-visible" && independent.length > 0 && mid) level = "passed-independent";
   if (level === "passed-independent" && passed(held)) level = "passed-holdout";
-  const mutationStrength = mutation.total ? mutation.killed / mutation.total : 0;
+  const mutationStrength = mutation.value.total ? mutation.value.killed / mutation.value.total : 0;
   const consumerHeld = !contract.consumer || !oracleRuns.get("consumer-acceptance")?.failures;
   const hasValue = valueCasesInHoldout >= Math.min(MIN_VALUE_CASES, heldCases.length);
-  const strongEnough = mutation.total === 0 || mutationStrength >= MIN_MUTATION_SCORE;
+  const strongEnough = mutation.value.total === 0 || mutationStrength >= MIN_MUTATION_SCORE;
   if (level === "passed-holdout" && hasValue && consumerHeld && strongEnough) level = "verified-in-domain";
 
   const oracles: OracleTally[] = [...oracleRuns].map(([name, v]) => ({ name, independent: INDEPENDENT.has(name), valueLevel: VALUE.has(name), ...v }));
   const limitations = [
     "Evidence comes from finite testing. This does not establish correctness outside the stated domain, or universally.",
     ...(hasValue ? [] : ["No value-level independent oracle ran on the held-out cases, so values in the output are unconfirmed."]),
-    ...(strongEnough ? [] : [`The test suite killed only ${mutation.killed} of ${mutation.total} injected faults, so it may not be testing what it appears to test.`]),
+    ...(strongEnough ? [] : [`The test suite caught only ${mutation.value.killed} of ${mutation.value.total} injected value faults, so it may not be testing what it appears to test.`]),
     ...(contract.consumer ? [`Correct relative to ${o.universe.tool(contract.consumer)?.name} as it behaved when pinned.`] : []),
+    ...bench.limitations,
   ];
   const fields = fieldRecovery(recoveryCases, allOutputs);
   if (fields) {
@@ -142,7 +145,7 @@ export async function verify(o: { universe: Universe; contract: BehaviouralContr
     if (lost.length) limitations.push(`Not fully recovered: ${lost.map(([k, v]) => `${k} (${v.matched}/${v.total})`).join(", ")}.`);
   }
   const worded: Record<EvidenceLevel, string> = {
-    "verified-in-domain": `Independently verified within the stated domain: ${tiers.holdout?.total} held-out cases passed with value-level oracles, and ${mutation.killed}/${mutation.total} injected faults were caught.`,
+    "verified-in-domain": `Independently verified within the stated domain: ${tiers.holdout?.total} held-out cases passed with value-level oracles, and ${mutation.value.killed}/${mutation.value.total} injected value faults were caught.`,
     "passed-holdout": "Passed held-out tests, but the evidence does not reach the bar for independent verification.",
     "passed-independent": "Passed independently generated tests. It did not pass held-out tests in this assessment.",
     "passed-visible": "Passed visible examples only. Independent tests refuted or could not assess it.",

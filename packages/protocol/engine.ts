@@ -7,10 +7,10 @@ import { EventEmitter } from "node:events";
 import fs from "node:fs";
 import path from "node:path";
 import { RcxHost, ProgramChanged, type Capability } from "../rcx-adapter/index.ts";
-import { Universe, reprLabel, accepted, type CapabilityNode, type EvidenceLevel, type GeneratedNodeInfo, type Goal, type Tool, levelRank } from "../capability-universe/index.ts";
+import { Universe, reprLabel, accepted, type CapabilityNode, type EvidenceLevel, type GeneratedNodeInfo, type Goal, type SampleRef, type Tool, levelRank } from "../capability-universe/index.ts";
 import { analyse, loadSample, type Analysis, type Gap } from "../gap-reasoner/index.ts";
 import { dockerStatus, openBackend, reapOrphans, selfTest, DockerBackend, IMAGE, type ExecutionBackend, type SelfTestReport } from "../execution/index.ts";
-import { invent, Judge, runCases, specFor, TestBench, type BehaviouralContract, type CandidateAssessment, type EventSink, type InventionResult, type TestCase } from "../experiment-engine/index.ts";
+import { invent, Judge, metamorphicChecks, runCases, specFor, TestBench, type BehaviouralContract, type CandidateAssessment, type EventSink, type InventionResult, type TestCase } from "../experiment-engine/index.ts";
 import { Budget, modelFromEnv, type BudgetLimits, type ModelAdapter } from "../model-adapters/index.ts";
 import { digest, newId, readJson, Refused, sha256, writeJson } from "../shared/index.ts";
 import type { Candidate, Strategy } from "../synthesiser/index.ts";
@@ -22,13 +22,16 @@ export interface ExaptConfig {
   home: string;
   /** Operator-authorised programs: exact paths or directories. */
   programs: string[];
-  /** What may become an executable operation. Operator-owned. */
-  publish: "verified" | "experimental";
+  /** Who may turn verified evidence into an operation. "verified": it happens automatically.
+   *  "operator": only the operator's own command does; an agent can never approve it. */
+  publish: "verified" | "operator";
   strategy: Strategy;
   budget: BudgetLimits;
   model: ModelAdapter | null;
   backend?: ExecutionBackend;
   persistGraph?: boolean;
+  /** Directories agent-supplied goals may name by path. Empty: inline data only. */
+  dataRoots?: string[];
 }
 
 export type RunStatus = "queued" | "running" | "completed" | "failed" | "refused" | "unresolved";
@@ -57,6 +60,8 @@ export interface RunRecord {
   budget?: ReturnType<Budget["snapshot"]>;
   notes: string[];
   seed: number;
+  /** Trimmed refutations, kept with the run. */
+  counterexamples?: Array<{ problem: string; input: string }>;
 }
 
 export interface CompactGap {
@@ -120,15 +125,36 @@ export interface Doctor {
   selfTest?: SelfTestReport;
 }
 
+/** Goals from agents and over HTTP carry their data inline. A path would let a caller read any file
+ *  this process can read, so paths are refused unless they fall inside an operator-declared root. */
+export function assertGoalSafe(goal: Goal, roots: string[]): void {
+  const check = (s: SampleRef | undefined) => {
+    if (!s?.path) return;
+    const real = path.resolve(s.path);
+    if (!path.isAbsolute(s.path) || !roots.some((r) => real === r || real.startsWith(`${r}/`))) throw new Refused("path-not-allowed", `goal refers to the file ${s.path}, which is outside the operator's data roots`, "Pass the data inline as text or base64.");
+  };
+  for (const s of goal.have?.samples ?? []) check(s);
+  check(goal.want.sample);
+  for (const e of goal.want.examples ?? []) {
+    check(e.input);
+    check(e.output);
+  }
+  for (const c of goal.corpus ?? []) {
+    check(c.input);
+    check(c.truth);
+  }
+}
+
 const slugify = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
 
 export function configFromEnv(env: NodeJS.ProcessEnv = process.env, overrides: Partial<ExaptConfig> = {}): ExaptConfig {
-  const file = readJson<{ programs?: string[]; publish?: ExaptConfig["publish"]; strategy?: Strategy; budget?: Partial<BudgetLimits> }>(env.EXAPT_CONFIG ?? path.join(process.cwd(), "exapt.config.json")) ?? {};
+  const file = readJson<{ programs?: string[]; dataRoots?: string[]; publish?: ExaptConfig["publish"]; strategy?: Strategy; budget?: Partial<BudgetLimits> }>(env.EXAPT_CONFIG ?? path.join(process.cwd(), "exapt.config.json")) ?? {};
   const programs = env.EXAPT_PROGRAMS ? env.EXAPT_PROGRAMS.split(":").filter(Boolean) : file.programs ?? [];
   const numeric = (v: string | undefined, fallback: number) => (v !== undefined && Number.isFinite(Number(v)) ? Number(v) : fallback);
   return {
     home: env.EXAPT_HOME ?? path.join(process.cwd(), ".exapt"),
     programs,
+    dataRoots: file.dataRoots ?? [],
     publish: (env.EXAPT_PUBLISH as ExaptConfig["publish"]) ?? file.publish ?? "verified",
     strategy: (env.EXAPT_STRATEGY as Strategy) ?? file.strategy ?? "auto",
     budget: {
@@ -168,7 +194,7 @@ export class Exapt {
   }
 
   get backend(): ExecutionBackend {
-    return (this.backendCache ??= this.config.backend ?? openBackend());
+    return (this.backendCache ??= this.config.backend ?? openBackend(process.env, path.join(this.config.home, "sandbox-attestation.json")));
   }
 
   // ---------------------------------------------------------- runs
@@ -342,6 +368,7 @@ export class Exapt {
       onModelCall: (entry) => fs.appendFileSync(modelLog, `${JSON.stringify({ at: new Date().toISOString(), ...entry })}\n`),
     });
     run.contract = result.contract;
+    run.counterexamples = result.counterexamples.slice(-12).map((c) => ({ problem: c.problem.slice(0, 300), input: c.binary ? "(binary)" : c.input.slice(0, 400) }));
     run.notes = [...new Set(result.notes)];
     run.budget = budget.snapshot();
     run.attempts = result.attempts.map(({ source, ...a }) => a);
@@ -349,6 +376,7 @@ export class Exapt {
       const hash = this.vault.put(a.source ?? "");
       if (!a.survived) this.vault.record({ run: run.id, gap: gap.id, producer: a.candidate.producer, kind: a.candidate.kind, level: a.level, rejectedAt: a.rejectedAt ?? "?", reason: (a.reason ?? "").slice(0, 400), sha256: hash });
     }
+    if (result.accepted) this.vault.put(result.accepted.source);
     if (result.status !== "accepted" || !result.accepted) {
       run.status = "completed";
       run.outcome = `Not established: ${result.reason}`;
@@ -362,8 +390,8 @@ export class Exapt {
     stage("verifying independently");
     const evidence = await verify({ universe: this.universe, contract: result.contract, bench: new TestBench({ universe: this.universe, goal: run.goal, gap, contract: result.contract, base: run.base, seed: run.seed + 104729 }), backend: this.backend, source: accepted.source, producer: accepted.producer, kind: accepted.kind, seed: run.seed + 104729, libs });
     run.evidence = evidence;
-    emit("verified", { level: evidence.level, tiers: evidence.tiers, mutation: { killed: evidence.mutation.killed, total: evidence.mutation.total }, assessment: evidence.assessment });
-    if (opts.publish === false) {
+    emit("verified", { level: evidence.level, tiers: evidence.tiers, mutation: evidence.mutation, assessment: evidence.assessment });
+    if (opts.publish === false || this.config.publish === "operator") {
       run.status = "completed";
       run.outcome = `Candidate awaits publication: ${evidence.assessment}`;
       return this.finish(run, emit);
@@ -408,7 +436,7 @@ export class Exapt {
   }
 
   private async conformanceSuite(bench: TestBench, source: string, contract: BehaviouralContract, libs: Record<string, string>): Promise<{ cases: TestCase[]; witnesses: ConsumerWitness[] }> {
-    const cases = [...await bench.visible(), ...await bench.independent(5000), ...bench.boundary(), ...bench.malformed()];
+    const cases = [...await bench.visible(), ...await bench.independent(5000), ...await bench.boundary(), ...bench.malformed()];
     const witnesses: ConsumerWitness[] = [];
     if (contract.consumer) {
       const consumer = this.universe.tool(contract.consumer)!;
@@ -477,7 +505,7 @@ export class Exapt {
     const cand: Candidate = { ...(best.candidate as Candidate), source: best.source! };
     const evidence: EvidenceReport = {
       format: "exapt/evidence@1", candidate: { sha256: sha256(cand.source), producer: cand.producer, kind: cand.kind }, level: best.level, checkedAt: new Date().toISOString(), seed: run.seed,
-      tiers: best.tiers as EvidenceReport["tiers"], oracles: [], metamorphic: { passed: 0, total: 0, failures: [] }, mutation: { killed: 0, total: 0, survivors: [] }, domain: [], limitations: [`Rejected at ${best.rejectedAt}: ${best.reason}`], assessment: `Best attempt reached ${best.level}; it is retained for inspection only and cannot be invoked.`,
+      tiers: best.tiers as EvidenceReport["tiers"], oracles: [], metamorphic: { passed: 0, total: 0, failures: [] }, mutation: { killed: 0, total: 0, value: { killed: 0, total: 0 }, survivors: [] }, domain: [], limitations: [`Rejected at ${best.rejectedAt}: ${best.reason}`], assessment: `Best attempt reached ${best.level}; it is retained for inspection only and cannot be invoked.`,
       execution: { backend: this.backend.name, enforces: this.backend.enforces, notEstablished: this.backend.notEstablished }, failures: best.failures,
     };
     const m = this.manifestFor(run, result, cand, evidence, "synthesised-unverified", { cases: [], witnesses: [] }, {});
@@ -719,6 +747,59 @@ export class Exapt {
     for (const dep of this.vault.dependents(m.id)) this.invalidate(dep, `depends on ${m.id}@${m.version}, which was invalidated`);
   }
 
+  // ---------------------------------------------------------- explicit lifecycle steps
+
+  private async rehydrate(id: string): Promise<{ run: RunRecord; gap: Gap; contract: BehaviouralContract; source: string }> {
+    const run = this.run(id);
+    if (!run) throw new Refused("unknown-run", `no run ${id}`);
+    if (!run.accepted || !run.contract) throw new Refused("no-candidate", `run ${id} has no surviving candidate to work with (${run.outcome})`);
+    const contract = this.localise(run.contract);
+    const analysis = await this.analyse(run.goal, run.base);
+    const gap = analysis.gaps.find((g) => g.id === run.gap);
+    if (!gap) throw new Refused("gap-closed", `the gap this run addressed no longer exists here: ${analysis.summary}`);
+    return { run, gap, contract, source: this.vault.get(run.accepted.sha256).toString("utf8") };
+  }
+
+  /** Another round of falsification on a run's candidate, from a fresh seed. */
+  async experiment(id: string, opts: { seed?: number } = {}) {
+    const { run, gap, contract, source } = await this.rehydrate(id);
+    const seed = opts.seed ?? Math.floor(Math.random() * 1e9);
+    const bench = new TestBench({ universe: this.universe, goal: run.goal, gap, contract, base: run.base, seed });
+    const judge = new Judge(this.universe, contract);
+    const { libs } = this.helpers();
+    const cases = [...await bench.independent(1), ...await bench.boundary(), ...bench.malformed(), ...await bench.holdout(1)];
+    const results = await runCases(this.backend, judge, source, cases, libs);
+    const meta = await metamorphicChecks(this.backend, source, contract, cases.filter((c) => c.tier === "independent"), seed, libs);
+    const failed = results.filter((r) => !r.passed);
+    this.sink(run)("experiment", { seed, passed: results.length - failed.length, total: results.length });
+    return { run: id, seed, passed: results.length - failed.length, total: results.length, metamorphic: { passed: meta.results.filter((m) => m.passed).length, total: meta.results.length }, failures: failed.slice(0, 5).flatMap((r) => r.failures.slice(0, 1).map((f) => ({ tier: r.tier, oracle: f.oracle, detail: f.detail.slice(0, 240) }))), note: "No failure here is evidence of correctness outside these inputs." };
+  }
+
+  /** A fresh, complete, independent assessment of a run's candidate. */
+  async verifyRun(id: string): Promise<EvidenceReport> {
+    const { run, gap, contract, source } = await this.rehydrate(id);
+    const seed = Math.floor(Math.random() * 1e9);
+    const { libs } = this.helpers();
+    const evidence = await verify({ universe: this.universe, contract, bench: new TestBench({ universe: this.universe, goal: run.goal, gap, contract, base: run.base, seed }), backend: this.backend, source, producer: run.accepted!.producer, kind: run.accepted!.kind, seed, libs });
+    run.evidence = evidence;
+    this.saveRun(run);
+    return evidence;
+  }
+
+  /** Publication. `operator` is set only by the operator's own command line, never by a tool call. */
+  async publishRun(id: string, actor: "agent" | "operator"): Promise<RunRecord> {
+    if (actor === "agent" && this.config.publish === "operator") throw new Refused("operator-approval-required", "this installation publishes only by the operator's own command", "The operator can run `exapt publish <run-id>`.");
+    const { run, gap, contract, source } = await this.rehydrate(id);
+    if (!run.evidence) throw new Refused("not-verified", "this run has no verification report yet", "Call exapt_verify first.");
+    if (run.capability?.status === "verified-within-scope") return run;
+    const { libs } = this.helpers();
+    const result = { contract, attempts: [], counterexamples: [] } as unknown as InventionResult;
+    const accepted: Candidate = { id: run.accepted!.sha256.slice(0, 12), source, sha256: run.accepted!.sha256, kind: run.accepted!.kind as Candidate["kind"], round: 0, producer: run.accepted!.producer, explanation: [] };
+    await this.publishCandidate(run, result, gap, accepted, run.evidence, libs);
+    this.saveRun(run);
+    return run;
+  }
+
   // ---------------------------------------------------------- evolution and repair
 
   /** A bounded improvement attempt. Only a new version of a generated artefact can result. */
@@ -784,7 +865,7 @@ export class Exapt {
       const summary = {
         id: m.id, version: m.version, status: m.status, level: m.evidence.level, purpose: m.purpose, title: m.title,
         how: "exapt_use with input as a string (encoding base64 for bytes)",
-        input: m.inputs[0], output: m.outputs[0], domain: m.evidence.domain, oracles: m.evidence.oracles, tiers: m.evidence.tiers, mutation: { killed: m.evidence.mutation.killed, total: m.evidence.mutation.total },
+        input: m.inputs[0], output: m.outputs[0], domain: m.evidence.domain, oracles: m.evidence.oracles, tiers: m.evidence.tiers, mutation: m.evidence.mutation,
         assessment: m.evidence.assessment, limitations: m.limitations, dependencies: m.dependencies.map((d) => (d.kind === "program" ? { program: d.name, role: d.role, sha256: d.sha256.slice(0, 12) } : { capability: d.id, version: d.version })),
         provenance: m.provenance, permissions: m.permissions, sourceBytes: m.artefact.bytes, sourceSha256: m.artefact.sha256, rejectedAttempts: m.rejected.length, versions: state.versions, pinned: state.pinned ?? null,
       };

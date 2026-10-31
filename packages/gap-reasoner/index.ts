@@ -121,8 +121,7 @@ async function forward(tools: Tool[], seeds: Buffer[], depth: number): Promise<W
     for (const v of frontier) {
       for (const t of tools) {
         if (v.lineage.some((l) => l.tool === t.id)) continue;
-        if (v.repr.syntax.format === "binary") continue; // programs here read text
-        const r = await t.run(v.bytes.toString("utf8")).catch(() => null);
+        const r = await t.run(v.repr.syntax.format === "binary" ? v.bytes : v.bytes.toString("utf8")).catch(() => null);
         if (!r || !accepted(r)) continue;
         const bytes = Buffer.from(r.stdout);
         const repr = sniff(bytes);
@@ -304,7 +303,7 @@ export async function analyse(universe: Universe, goal: Goal, opts: AnalyseOptio
   const gaps: Gap[] = [];
   for (const from of reached) {
     for (const to of required) {
-      if (from.repr.syntax.format === "text" && to.repr.syntax.format !== "text" && from.lineage.length) continue; // a report is not a source
+      if (from.repr.syntax.format === "text" && to.repr.syntax.format !== "text" && from.lineage.length) continue; // a report or a dump is not a source
       const oracles: OracleSpec[] = [];
       if (to.consumer) oracles.push({ kind: "consumer-acceptance", tool: to.consumer, independent: true, valueLevel: false });
       if (goal.corpus?.length) oracles.push({ kind: "ground-truth", items: goal.corpus.length, independent: true, valueLevel: true });

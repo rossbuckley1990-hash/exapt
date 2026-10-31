@@ -18,6 +18,7 @@ export type Expr =
   | { op: "epoch"; e: Expr; scale: number }
   | { op: "iso"; e: Expr; scale: number; dateOnly: boolean }
   | { op: "datefmt"; e: Expr; pattern: string }
+  | { op: "strip"; e: Expr; prefix: string; suffix: string }
   | { op: "part"; e: Expr; sep: string; index: number }
   | { op: "replace"; e: Expr; from: string; to: string }
   | { op: "concat"; a: Expr; sep: string; b: Expr }
@@ -99,6 +100,10 @@ function evaluate(e: Expr, r: Rec): Scalar {
       const t = Date.parse(cellText(evaluate(e.e, r)));
       return Number.isNaN(t) ? null : formatDate(new Date(t), e.pattern);
     }
+    case "strip": {
+      const v = cellText(evaluate(e.e, r));
+      return v.startsWith(e.prefix) && v.endsWith(e.suffix) ? v.slice(e.prefix.length, v.length - e.suffix.length) : null;
+    }
     case "part":
       return cellText(evaluate(e.e, r)).split(e.sep)[e.index] ?? null;
     case "replace":
@@ -179,6 +184,19 @@ function textSeparators(values: string[]): string[] {
   return [...seen].slice(0, 6);
 }
 
+/** The longest text every value starts (or ends) with, cut back to a separator, so that a run of
+ *  letters two values happen to share is not mistaken for structure. */
+function sharedAffix(values: string[], end: boolean): string {
+  const texts = end ? values.map((v) => [...v].reverse().join("")) : values;
+  let n = 0;
+  while (texts.every((v) => n < v.length && v[n] === texts[0][n])) n++;
+  let shared = texts[0].slice(0, n);
+  const cut = Math.max(...[...shared].map((c, i) => (/[^A-Za-z0-9]/.test(c) ? i + 1 : 0)), 0);
+  shared = shared.slice(0, cut);
+  if (!shared) return "";
+  return end ? [...shared].reverse().join("") : shared;
+}
+
 /** Expressions over the source fields, smallest first, one per distinct behaviour on the rows. */
 function* bank(rows: Rec[], names: string[], counter: { n: number }): Generator<Expr> {
   const seen = new Set<string>();
@@ -203,6 +221,10 @@ function* bank(rows: Rec[], names: string[], counter: { n: number }): Generator<
       candidates.push({ op: "epoch", e, scale: 1000 }, { op: "epoch", e, scale: 1 });
       for (const pattern of DATE_PATTERNS) candidates.push({ op: "datefmt", e, pattern });
     }
+    const prefix = sharedAffix(values, false);
+    const suffix = sharedAffix(values, true);
+    if (prefix) candidates.push({ op: "strip", e, prefix, suffix: "" });
+    if (suffix) candidates.push({ op: "strip", e, prefix: "", suffix });
     for (const sep of textSeparators(values)) {
       const widest = Math.max(...values.map((v) => v.split(sep).length));
       for (let index = 0; index < Math.min(widest, 5); index++) candidates.push({ op: "part", e, sep, index });
@@ -364,6 +386,8 @@ function emitExpr(e: Expr): string {
     }
     case "datefmt":
       return `dateText(${emitExpr(e.e)}, ${lit(e.pattern)})`;
+    case "strip":
+      return `stripped(${emitExpr(e.e)}, ${lit(e.prefix)}, ${lit(e.suffix)})`;
     case "part":
       return `partOf(${emitExpr(e.e)}, ${lit(e.sep)}, ${e.index})`;
     case "replace":
@@ -511,6 +535,11 @@ const render = (rows) => [${s.header ? `columns.map((c, i) => i === columns.leng
 function emitHelpers(fields: FieldProgram[]): string {
   const used = JSON.stringify(fields.map((f) => f.expr));
   const parts: string[] = [];
+  if (used.includes('"strip"')) parts.push(`const stripped = (v, prefix, suffix) => {
+  const t = text(v);
+  if (!t.startsWith(prefix) || !t.endsWith(suffix)) throw new Error("unexpected value: " + t);
+  return t.slice(prefix.length, t.length - suffix.length);
+};`);
   if (used.includes('"part"')) parts.push(`const partOf = (v, sep, i) => {
   const p = text(v).split(sep);
   if (i >= p.length) throw new Error("no part " + i + " in " + text(v));

@@ -123,6 +123,17 @@ export async function mineContract(tool: string, name: string, docs: string, run
       if (accepted(moved) && moved.stdout !== base) influential.push(field);
       else if (!accepted(moved) && rejected.length < 8) rejected.push({ variant: `${field} perturbed`, error: (moved.stderr || moved.stdout).trim().slice(0, 160) });
     }
+    // Samples show what happened to be written, not what is allowed. Whole numbers in every sample
+    // say nothing about whether a field is integral, so ask the program. Reading a field's domain
+    // too narrowly from samples would let a wrong precision pass every test built from that domain.
+    for (const f of repr.fields.filter((x) => x.kind === "int" && (x.min ?? 0) < 1e8)) {
+      const fractional = await attempt(render(withValue(records, f.name, (v) => (Number(v) || 0) + 0.25)));
+      if (accepted(fractional)) {
+        f.kind = "decimal";
+        f.decimals = Math.max(f.decimals ?? 0, 2);
+        claims.push({ claim: `${f.name} accepts fractional values`, status: "experimentally-supported", detail: "every sample was whole, so the program was asked" });
+      }
+    }
     if (required.length) claims.push({ claim: `requires fields ${required.join(", ")}`, status: "experimentally-supported", detail: "removing each one made the program refuse" });
     if (influential.length) claims.push({ claim: `output depends on ${influential.join(", ")}`, status: "experimentally-supported", detail: "perturbing each one changed the output" });
     const rng = new Rng(7);

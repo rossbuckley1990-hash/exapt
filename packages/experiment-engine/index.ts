@@ -8,7 +8,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { type EvidenceLevel, type Goal, type Rec, type Universe, compareRecords, isRecordRepr, parseRecords, renderRecords, sniffSyntax } from "../capability-universe/index.ts";
-import type { ExecutionBackend, RunResult } from "../execution/index.ts";
+import type { ExecutionBackend, Limits, RunResult } from "../execution/index.ts";
 import type { Gap } from "../gap-reasoner/index.ts";
 import type { Budget, ModelAdapter } from "../model-adapters/index.ts";
 import { pool, Rng, sha256 } from "../shared/index.ts";
@@ -85,8 +85,13 @@ export function syntaxValid(source: string): { ok: boolean; error?: string } {
 const inputOf = (t: TestCase): string | Buffer => (t.binary ? Buffer.from(t.input, "base64") : t.input);
 
 /** Run and judge a batch. Concurrency is bounded so limits stay meaningful. */
-export async function runCases(backend: ExecutionBackend, judge: Judge, source: string, cases: TestCase[], libs?: Record<string, string>): Promise<CaseResult[]> {
-  return pool(cases, 6, async (c) => judge.judge(c, await backend.run({ source, input: inputOf(c), libs })));
+export async function runCases(backend: ExecutionBackend, judge: Judge, source: string, cases: TestCase[], libs?: Record<string, string>, limits?: Partial<Limits>): Promise<CaseResult[]> {
+  return pool(cases, 6, async (c) => {
+    let run = await backend.run({ source, input: inputOf(c), libs, limits });
+    // A hang hangs twice. One timeout on a busy machine says nothing about the program.
+    if (run.status === "timeout" || run.status === "crash") run = await backend.run({ source, input: inputOf(c), libs, limits });
+    return judge.judge(c, run);
+  });
 }
 
 const tally = (rs: CaseResult[]) => ({ passed: rs.filter((r) => r.passed).length, total: rs.length });
@@ -184,7 +189,7 @@ export async function invent(o: InventionOptions): Promise<InventionResult> {
 
   const visible = await bench.visible();
   const known: Pair[] = visible.filter((c) => c.expected !== undefined).map((c) => ({ input: c.input, output: c.expected!, ...(c.binary ? { binary: true } : {}) }));
-  const boundary = bench.boundary();
+  const boundary = await bench.boundary();
   const malformed = bench.malformed();
   emit("tests.prepared", { visible: visible.length, boundary: boundary.length, malformed: malformed.length, knownPairs: known.length });
 
@@ -329,7 +334,8 @@ export async function invent(o: InventionOptions): Promise<InventionResult> {
       break;
     }
   }
-  const best = [...attempts].sort((x, y) => levelIndex(y.level) - levelIndex(x.level))[0];
+  // A negative control is never a capability, however far it got.
+  const best = attempts.filter((a) => a.candidate.kind !== "injected-control").sort((x, y) => levelIndex(y.level) - levelIndex(x.level))[0];
   return { status: "exhausted", reason: attempts.length ? `no candidate survived; last: ${lastOutcome}` : lastOutcome, contract, bench, best, attempts, counterexamples, holdoutDraws, notes };
 }
 
@@ -340,12 +346,17 @@ const levelIndex = (l: EvidenceLevel): number => LEVEL_ORDER.indexOf(l);
 
 /** Small faults injected into an accepted program. A suite that cannot tell them apart from the
  *  original was not testing what it appeared to test. */
-export function mutantsOf(source: string, seed: number, limit = 12): Array<{ name: string; source: string }> {
-  const out: Array<{ name: string; source: string }> = [];
-  const at = (pattern: RegExp, make: (m: RegExpMatchArray) => string, name: string) => {
+export function mutantsOf(source: string, seed: number, limit = 12): Mutant[] {
+  const out: Mutant[] = [];
+  const inErrorMessage = (i: number): boolean => {
+    const start = source.lastIndexOf("\n", i) + 1;
+    return source.slice(start, i).includes("throw new Error(");
+  };
+  const at = (pattern: RegExp, make: (m: RegExpMatchArray) => string, name: string, kind: Mutant["kind"] = "value") => {
     for (const m of source.matchAll(pattern)) {
       const i = m.index!;
-      out.push({ name: `${name} at ${i}`, source: source.slice(0, i) + make(m) + source.slice(i + m[0].length) });
+      if (inErrorMessage(i)) continue; // an altered message is not a behavioural fault
+      out.push({ name: `${name} at ${i}`, kind, source: source.slice(0, i) + make(m) + source.slice(i + m[0].length) });
     }
   };
   const body = source.indexOf("transform(");
@@ -355,35 +366,50 @@ export function mutantsOf(source: string, seed: number, limit = 12): Array<{ nam
   at(/ \+ (?=\d|-)/g, () => " - ", "offset sign flipped");
   at(/\.toFixed\((\d+)\)/g, (m) => `.toFixed(${Math.max(0, Number(m[1]) - 1)})`, "precision reduced");
   at(/\.toUpperCase\(\)/g, () => "", "case change removed");
-  at(/\.trim\(\)/g, () => "", "trim removed");
-  at(/throw new Error\(/g, () => "void String(", "validation removed");
+  at(/\.trim\(\)/g, () => "", "trim removed", "robustness");
+  at(/throw new Error\(/g, () => "void String(", "validation removed", "robustness");
   const names = [...source.slice(Math.max(0, body)).matchAll(/field\(r, ("[^"]+")\)/g)].map((m) => m[1]);
   for (let i = 1; i < names.length; i++) {
-    if (names[i] !== names[0]) out.push({ name: `fields swapped: ${names[0]} and ${names[i]}`, source: source.replace(`field(r, ${names[0]})`, "field(r, \0)").replace(`field(r, ${names[i]})`, `field(r, ${names[0]})`).replace("field(r, \0)", `field(r, ${names[i]})`) });
+    if (names[i] !== names[0]) out.push({ name: `fields swapped: ${names[0]} and ${names[i]}`, kind: "value", source: source.replace(`field(r, ${names[0]})`, "field(r, \0)").replace(`field(r, ${names[i]})`, `field(r, ${names[0]})`).replace("field(r, \0)", `field(r, ${names[i]})`) });
   }
   const rng = new Rng(seed);
-  const unique = [...new Map(out.filter((m) => m.source !== source && syntaxOk(m.source)).map((m) => [sha256(m.source), m])).values()];
-  return rng.shuffle(unique).slice(0, limit);
+  const unique = [...new Map(out.filter((m) => m.source !== source).map((m) => [sha256(m.source), m])).values()];
+  const valueFaults = rng.shuffle(unique.filter((m) => m.kind === "value")).slice(0, Math.ceil(limit * 0.75));
+  const robustness = rng.shuffle(unique.filter((m) => m.kind === "robustness"));
+  return [...valueFaults, ...robustness].slice(0, limit);
 }
 
-const syntaxOk = (s: string): boolean => /export/.test(s);
+export interface Mutant {
+  name: string;
+  source: string;
+  /** A value fault changes what comes out. A robustness fault weakens defensive code, and is often
+   *  equivalent to the original, so the two are counted apart. */
+  kind: "value" | "robustness";
+}
 
 export interface MutationScore {
   killed: number;
   total: number;
+  value: { killed: number; total: number };
   survivors: string[];
 }
 
 export async function mutationScore(backend: ExecutionBackend, judge: Judge, source: string, cases: TestCase[], seed: number, libs?: Record<string, string>): Promise<MutationScore> {
   const mutants = mutantsOf(source, seed);
   // Every kind of test must be present: a fault in validation shows only on malformed input.
-  const quota: Record<string, number> = { visible: 2, independent: 6, boundary: 4, malformed: 6, holdout: 4 };
-  const suite = Object.entries(quota).flatMap(([tier, n]) => cases.filter((c) => c.tier === tier).slice(0, n));
+  const batches: Array<[string, number]> = [["visible", 2], ["independent", 6], ["holdout", 4], ["boundary", 12], ["malformed", 8]];
   const outcomes = await pool(mutants, 2, async (m) => {
-    const rs = await runCases(backend, judge, m.source, suite, libs);
-    return { name: m.name, killed: rs.some((r) => !r.passed) };
+    // Most faults die on the first batch, so stop there. A fault can loop forever; it gets less rope.
+    for (const [tier, n] of batches) {
+      const suite = cases.filter((c) => c.tier === tier).slice(0, n);
+      if (!suite.length) continue;
+      const rs = await runCases(backend, judge, m.source, suite, libs, { timeoutMs: 3000 });
+      if (rs.some((r) => !r.passed)) return { name: m.name, kind: m.kind, killed: true };
+    }
+    return { name: m.name, kind: m.kind, killed: false };
   });
-  return { killed: outcomes.filter((o) => o.killed).length, total: outcomes.length, survivors: outcomes.filter((o) => !o.killed).map((o) => o.name) };
+  const value = outcomes.filter((o) => o.kind === "value");
+  return { killed: outcomes.filter((o) => o.killed).length, total: outcomes.length, value: { killed: value.filter((o) => o.killed).length, total: value.length }, survivors: outcomes.filter((o) => !o.killed).map((o) => o.name) };
 }
 
 export type { RunResult };

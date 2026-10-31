@@ -1,6 +1,6 @@
 // Judging a program's output. Every check here is computed by EXAPT or by a program that existed
 // before the candidate did. The model is never asked whether its own answer is right.
-import { accepted, compareRecords, isRecordRepr, parseRecords, sameSyntax, sniff, type RecordDiff, type Universe } from "../capability-universe/index.ts";
+import { accepted, cellText, compareRecords, isRecordRepr, parseRecords, sameSyntax, sniff, type RecordDiff, type Universe } from "../capability-universe/index.ts";
 import type { RunResult } from "../execution/index.ts";
 import type { BehaviouralContract, TestCase } from "./bench.ts";
 
@@ -69,9 +69,19 @@ export class Judge {
       const r = await consumer.run(output).catch((e) => ({ ok: false, stdout: "", stderr: String(e) }));
       if (!accepted(r)) failures.push({ oracle: "consumer-acceptance", detail: `${consumer.name} refused the output: ${(r.stderr || r.stdout).trim().slice(0, 200)}` });
     }
+    if (test.mark !== undefined) {
+      exercised.push("text-preservation");
+      let found = false;
+      try {
+        found = parseRecords(output, target.repr.syntax).every((r) => Object.values(r).some((v) => cellText(v).includes(test.mark!)));
+      } catch {
+        found = false;
+      }
+      if (!found) failures.push({ oracle: "text-preservation", detail: `"${test.note}": the input's text did not survive intact` });
+    }
     if (!test.binary && isRecordRepr(this.contract.source.repr)) {
       for (const o of this.contract.oracles) {
-        if (o.kind === "inverse-route" && !failures.length) {
+        if (o.kind === "inverse-route" && !failures.length && !test.disqualified?.includes("inverse-route")) {
           exercised.push("inverse-route");
           const verdict = await this.throughInverse(o.route, test.input, output);
           if (verdict) failures.push({ oracle: "inverse-route", ...verdict });
@@ -120,7 +130,9 @@ export class Judge {
     const output = textOf(run) ?? "";
     // Returning normally is acceptable only if nothing was invented or lost.
     if (/\b(NaN|undefined)\b/.test(output)) return { ...base, passed: false, failures: [{ oracle: "malformed-refusal", detail: `"${test.note}": returned NaN or undefined instead of refusing` }], exercised };
-    if (output.trim() === "") return { ...base, passed: true, failures: [], exercised };
+    // Nothing out for nothing in is not a fabrication.
+    if (output.trim() === "" && (test.note === "empty input" || test.input.trim() === "")) return { ...base, passed: true, failures: [], exercised };
+    if (output.trim() === "") return { ...base, passed: false, failures: [{ oracle: "malformed-refusal", detail: `"${test.note}": returned nothing instead of refusing` }], exercised };
     return { ...base, passed: false, failures: [{ oracle: "malformed-refusal", detail: `"${test.note}": returned data instead of refusing` }], exercised };
   }
 }

@@ -12,9 +12,10 @@
 // silent fallback. Docker Desktop on macOS adds a Linux VM between the container and the host.
 import { spawn, spawnSync } from "node:child_process";
 import { randomBytes } from "node:crypto";
+import fs from "node:fs";
 
 
-import { pool, Refused, sha256 } from "../shared/index.ts";
+import { pool, Refused, sha256, writeJson } from "../shared/index.ts";
 
 export const IMAGE = "node@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da";
 export const IMAGE_TAG = "node:22-bookworm-slim";
@@ -61,6 +62,8 @@ export interface ExecutionBackend {
 }
 
 const MARK = "@@EXAPT-RESULT@@";
+/** A passing self-test stands for a day, for this image and this Docker. `doctor` always re-attacks. */
+const ATTESTATION_MS = 24 * 3600 * 1000;
 
 // The constant in-container harness. It is not a boundary, only the calling convention.
 const HARNESS = `
@@ -124,10 +127,28 @@ export class DockerBackend implements ExecutionBackend {
     "attestation of the timing and memory figures, which are reported from inside the container",
   ];
   private ready: Promise<void> | undefined;
+  /** Where a passing self-test is remembered, so each process need not repeat it. */
+  private readonly attestation?: string;
+
+  constructor(opts: { attestation?: string } = {}) {
+    this.attestation = opts.attestation;
+  }
+
+  private attested(): boolean {
+    if (!this.attestation || !fs.existsSync(this.attestation)) return false;
+    try {
+      const a = JSON.parse(fs.readFileSync(this.attestation, "utf8")) as { image: string; server: string; at: number };
+      return a.image === IMAGE && a.server === dockerStatus().serverVersion && Date.now() - a.at < ATTESTATION_MS;
+    } catch {
+      return false;
+    }
+  }
 
   private assertReady(): Promise<void> {
     return (this.ready ??= (async () => {
+      if (this.attested()) return;
       const report = await selfTest(this);
+      if (report.ok && this.attestation) writeJson(this.attestation, { image: IMAGE, server: dockerStatus().serverVersion, at: Date.now(), checks: report.checks.length });
       if (!report.ok) throw new Refused("sandbox-unverified", `execution boundary failed its self-test: ${report.failures.join("; ")}`, "Run `exapt doctor` and fix the listed containment failure.");
     })());
   }
@@ -239,10 +260,10 @@ export async function selfTest(backend: DockerBackend): Promise<SelfTestReport> 
 }
 
 /** The operator's chosen boundary. Only Docker is accepted for generated code today. */
-export function openBackend(env: NodeJS.ProcessEnv = process.env): ExecutionBackend {
+export function openBackend(env: NodeJS.ProcessEnv = process.env, attestation?: string): ExecutionBackend {
   const choice = env.EXAPT_SANDBOX ?? "docker";
   if (choice !== "docker") throw new Refused("sandbox-unsupported", `EXAPT_SANDBOX=${choice} is not an accepted boundary for generated code`, "Unset it to use Docker. Generated code is refused rather than run with weaker containment.");
-  return new DockerBackend();
+  return new DockerBackend({ attestation });
 }
 
 /** Remove containers a crashed EXAPT left behind. */
