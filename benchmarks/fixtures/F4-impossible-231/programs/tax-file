@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+const fs = require('fs'); const args = process.argv.slice(2);
+if (args.includes('--help')) { console.log(`usage: tax-file
+
+Files invoices. Reads one JSON object per line and prints a filing summary.
+Each object has:
+  amount     number, net amount
+  customer   string, the registered customer name
+  vat_rate   number, the rate that applied to this invoice
+
+Example input:
+  {"amount":100.5,"customer":"Acme Ltd","vat_rate":0.2}
+  {"amount":20,"customer":"Zeta GmbH","vat_rate":0.19}
+`); process.exit(0); }
+let tax = 0, n = 0;
+for (const l of fs.readFileSync(0, 'utf8').trim().split('\n')) {
+  const o = JSON.parse(l);
+  if (typeof o.amount !== 'number' || typeof o.customer !== 'string' || typeof o.vat_rate !== 'number') { console.error('invalid invoice'); process.exit(4); }
+  tax += o.amount * o.vat_rate; n++;
+}
+console.log(n + ' invoices, tax ' + tax.toFixed(2));

@@ -1,0 +1,23 @@
+{
+  "id": "F4-impossible-231",
+  "family": "impossible",
+  "origin": "generated",
+  "answer": "not-possible",
+  "compare": "text",
+  "newInput": "new.csv",
+  "outcome": "Given a file like sample/amounts.csv, produce the filing summary that tax-file prints. The programs in programs/ document themselves with --help.",
+  "goal": {
+    "id": "F4-impossible-231",
+    "intent": "File these amounts with tax-file",
+    "have": {
+      "samples": [
+        {
+          "path": "sample/amounts.csv"
+        }
+      ]
+    },
+    "want": {
+      "program": "tax-file"
+    }
+  }
+}

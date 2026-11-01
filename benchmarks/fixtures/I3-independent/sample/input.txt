@@ -1,0 +1,14 @@
+# spring round, home apiary
+2026-04-02  A1   queen: seen    brood: 4   temp: 32.8C  weight: 28.4kg  mites: 1/300
+2026-04-02  A2   queen: eggs    brood: 3   temp: 33.1C  weight: 25.9kg  mites: 2/300
+2026-04-09  B7   queen: seen    brood: 6   temp: 34.0C  weight: 31.2kg  mites: 0/200
+2026-04-16  A1   queen: seen    brood: 7   temp: 34.5C  weight: 30.7kg  mites: 2/300
+2026-04-16  C12  queen: absent  brood: 1   temp: 29.6C  weight: 19.8kg  mites: 5/250
+2026-05-03  A2   queen: seen    brood: 6   temp: 34.2C  weight: 33.5kg  mites: 3/300
+2026-05-03  B7   queen: seen    brood: 8   temp: 35.0C  weight: 38.1kg  mites: 1/200
+2026-05-21  A1   queen: seen    brood: 9   temp: 35.3C  weight: 41.0kg  mites: 4/300
+2026-05-21  N3   queen: eggs    brood: 5   temp: 33.7C  weight: 27.6kg  mites: 0/100
+2026-06-10  C12  queen: absent  brood: 0   temp: 28.9C  weight: 17.2kg  mites: 9/250
+2026-06-10  B7   queen: seen    brood: 10  temp: 35.6C  weight: 46.3kg  mites: 8/200
+2026-07-01  A2   queen: seen    brood: 8   temp: 34.9C  weight: 44.8kg  mites: 2/300
+2026-07-01  N3   queen: seen    brood: 7   temp: 34.4C  weight: 36.0kg  mites: 1/100

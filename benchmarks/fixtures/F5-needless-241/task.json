@@ -1,0 +1,24 @@
+{
+  "id": "F5-needless-241",
+  "family": "needless",
+  "origin": "generated",
+  "answer": "done",
+  "needless": true,
+  "compare": "text",
+  "newInput": "new.csv",
+  "outcome": "Given a file like sample/bins.csv, produce the totals that stock-count prints. The programs in programs/ document themselves with --help.",
+  "goal": {
+    "id": "F5-needless-241",
+    "intent": "Total these bins with stock-count",
+    "have": {
+      "samples": [
+        {
+          "path": "sample/bins.csv"
+        }
+      ]
+    },
+    "want": {
+      "program": "stock-count"
+    }
+  }
+}

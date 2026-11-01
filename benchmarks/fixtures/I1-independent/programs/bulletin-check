@@ -1,0 +1,56 @@
+#!/usr/bin/env node
+const HELP = `bulletin-check - strictly validate a SEISQ/2 bulletin and print a summary report
+
+READS (stdin): exactly this layout, tab-separated, LF line endings:
+  line 1:   SEISQ/2
+  lines:    STA<TAB>CHAN<TAB>EPOCH_MS<TAB>PHASE<TAB>AMP_NM<TAB>FREQ_HZ<TAB>WEIGHT_PCT
+  last:     END<TAB>N     (N = number of pick lines; nothing may follow)
+  STA        2-5 upper-case letters/digits
+  CHAN       3-character channel code
+  EPOCH_MS   UTC arrival time, integer milliseconds since 1970-01-01T00:00:00Z
+  PHASE      P, S, Pn, Pg, Sn or Sg
+  AMP_NM     ground displacement amplitude in nanometres, one decimal, > 0
+  FREQ_HZ    dominant frequency in hertz, three decimals, > 0
+  WEIGHT_PCT pick weight 0, 25, 50, 75 or 100 (100 = best)
+
+WRITES (stdout): a report with pick count, time span (UTC), and per-station
+  pick count, phase mix, largest amplitude and mean weight.
+
+Exit status 0 if valid; 1 with a message on stderr on the first violation.
+`;
+if (process.argv.includes('--help') || process.argv.includes('-h')) { process.stdout.write(HELP); process.exit(0); }
+const fail = (m) => { console.error('invalid: ' + m); process.exit(1); };
+const text = require('fs').readFileSync(0, 'utf8');
+if (!text.endsWith('\n') || text.includes('\r')) fail('must be LF-terminated');
+const L = text.slice(0, -1).split('\n');
+if (L[0] !== 'SEISQ/2') fail('bad header');
+const last = L[L.length - 1].split('\t');
+if (L.length < 2 || last[0] !== 'END' || last.length !== 2 || !/^(0|[1-9]\d*)$/.test(last[1])) fail('bad trailer');
+const picks = L.slice(1, -1);
+if (picks.length !== +last[1]) fail(`END count ${last[1]} != ${picks.length} picks`);
+const st = {};
+let tmin = Infinity, tmax = -Infinity;
+picks.forEach((l, i) => {
+  const f = l.split('\t'), n = i + 2;
+  if (f.length !== 7) fail(`line ${n}: expected 7 fields`);
+  const [sta, ch, ep, ph, amp, fq, w] = f;
+  if (!/^[A-Z0-9]{2,5}$/.test(sta)) fail(`line ${n}: station`);
+  if (!/^[A-Z][A-Z0-9]{2}$/.test(ch)) fail(`line ${n}: channel`);
+  if (!/^[1-9]\d{9,12}$/.test(ep)) fail(`line ${n}: epoch`);
+  if (!/^(P[ng]?|S[ng]?)$/.test(ph)) fail(`line ${n}: phase`);
+  if (!/^\d+\.\d$/.test(amp) || !(+amp > 0)) fail(`line ${n}: amplitude`);
+  if (!/^\d+\.\d{3}$/.test(fq) || !(+fq > 0)) fail(`line ${n}: frequency`);
+  if (!['0', '25', '50', '75', '100'].includes(w)) fail(`line ${n}: weight`);
+  const t = +ep; tmin = Math.min(tmin, t); tmax = Math.max(tmax, t);
+  const s = st[sta] ||= { n: 0, ph: {}, max: 0, w: 0 };
+  s.n++; s.ph[ph] = (s.ph[ph] || 0) + 1; s.max = Math.max(s.max, +amp); s.w += +w;
+});
+const iso = (t) => new Date(t).toISOString();
+const out = ['SEISMIC PICK BULLETIN', `picks: ${picks.length}`];
+if (picks.length) out.push(`span: ${iso(tmin)} .. ${iso(tmax)}`);
+for (const k of Object.keys(st).sort()) {
+  const s = st[k];
+  const mix = Object.keys(s.ph).sort().map((p) => `${p}x${s.ph[p]}`).join(' ');
+  out.push(`${k.padEnd(6)} n=${s.n} phases=${mix} max_amp=${s.max.toFixed(1)}nm mean_weight=${(s.w / s.n).toFixed(1)}%`);
+}
+process.stdout.write(out.join('\n') + '\n');

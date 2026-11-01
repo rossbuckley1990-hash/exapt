@@ -1,0 +1,23 @@
+{
+  "id": "I1-independent",
+  "family": "independent",
+  "origin": "independent",
+  "answer": "done",
+  "compare": "text",
+  "newInput": "new.txt",
+  "outcome": "I have a raw pick log from our stations and need a validated bulletin summary showing picks per station and the largest ground motion at each. The input looks like sample/input.txt. The programs in programs/ document themselves with --help.",
+  "goal": {
+    "id": "I1-independent",
+    "intent": "I have a raw pick log from our stations and need a validated bulletin summary showing picks per station and the largest ground motion at each.",
+    "have": {
+      "samples": [
+        {
+          "path": "sample/input.txt"
+        }
+      ]
+    },
+    "want": {
+      "program": "bulletin-check"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "input": "YnBsaXN0MDDVAQIDBAUGBwgNEFVidWlsZFdlbmFibGVkVmxpbWl0c1R0YWdzVXRpdGxlEQJoCdIJCgsMU21heFVyYXRpbxBjIz/0AAAAAAAAog4PV0xlYXNpbmdUUmVudFdQYXlyb2xsCBMZISgtMzY3PEBGSFFUXGEAAAAAAAABAQAAAAAAAAARAAAAAAAAAAAAAAAAAAAAaQ==",
+    "binary": true,
+    "expected": "{\"title\":\"Payroll\",\"build\":616,\"enabled\":true,\"tags\":[\"Leasing\",\"Rent\"],\"limits\":{\"max\":99,\"ratio\":1.25}}\n"
+  },
+  {
+    "input": "YnBsaXN0MDDVAQIDBAUGBwgNDlVidWlsZFdlbmFibGVkVmxpbWl0c1R0YWdzVXRpdGxlEQIdCNIJCgsMU21heFVyYXRpbxA9I0AngAAAAAAAog4PVVBhcnRzV1BheXJvbGwIExkhKC0zNjc8QEZIUVRaAAAAAAAAAQEAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAGI=",
+    "binary": true,
+    "expected": "{\"title\":\"Parts\",\"build\":541,\"enabled\":false,\"tags\":[\"Parts\",\"Payroll\"],\"limits\":{\"max\":61,\"ratio\":11.75}}\n"
+  },
+  {
+    "input": "YnBsaXN0MDDVAQIDBAUGBwgNEFVidWlsZFdlbmFibGVkVmxpbWl0c1R0YWdzVXRpdGxlEQNBCNIJCgsMU21heFVyYXRpbxBMI0ADAAAAAAAAog4PVFJlbnRVQXVkaXRURnVlbAgTGSEoLTM2NzxARkhRVFlfAAAAAAAAAQEAAAAAAAAAEQAAAAAAAAAAAAAAAAAAAGQ=",
+    "binary": true,
+    "expected": "{\"title\":\"Fuel\",\"build\":833,\"enabled\":false,\"tags\":[\"Rent\",\"Audit\"],\"limits\":{\"max\":76,\"ratio\":2.375}}\n"
+  },
+  {
+    "input": "YnBsaXN0MDDVAQIDBAUGBwgNEFVidWlsZFdlbmFibGVkVmxpbWl0c1R0YWdzVXRpdGxlEQJoCNIJCgsMU21heFVyYXRpbxBWI0AiwAAAAAAAog4PVEZ1ZWxXTGVhc2luZ1dQZXJtaXRzCBMZISgtMzY3PEBGSFFUWWEAAAAAAAABAQAAAAAAAAARAAAAAAAAAAAAAAAAAAAAaQ==",
+    "binary": true,
+    "expected": "{\"title\":\"Permits\",\"build\":616,\"enabled\":false,\"tags\":[\"Fuel\",\"Leasing\"],\"limits\":{\"max\":86,\"ratio\":9.375}}\n"
+  },
+  {
+    "input": "YnBsaXN0MDDVAQIDBAUGBwgNEFVidWlsZFdlbmFibGVkVmxpbWl0c1R0YWdzVXRpdGxlEGMI0gkKCwxTbWF4VXJhdGlvEFYjQCiAAAAAAACiDg9XTGVhc2luZ1VQYXJ0c1dQYXlyb2xsCBMZISgtMzU2Oz9FR1BTW2EAAAAAAAABAQAAAAAAAAARAAAAAAAAAAAAAAAAAAAAaQ==",
+    "binary": true,
+    "expected": "{\"title\":\"Payroll\",\"build\":99,\"enabled\":false,\"tags\":[\"Leasing\",\"Parts\"],\"limits\":{\"max\":86,\"ratio\":12.25}}\n"
+  }
+]

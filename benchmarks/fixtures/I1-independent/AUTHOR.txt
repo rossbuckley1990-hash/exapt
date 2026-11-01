@@ -1,0 +1,1 @@
+Written by a fresh sonnet session from preregistration/authoring-brief.md. Domain: seismology station bulletins. Producer: pickpack. Consumer: bulletin-check. Cost: 0.

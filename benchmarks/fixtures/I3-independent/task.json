@@ -1,0 +1,23 @@
+{
+  "id": "I3-independent",
+  "family": "independent",
+  "origin": "independent",
+  "answer": "done",
+  "compare": "text",
+  "newInput": "new.txt",
+  "outcome": "I want the apiary report showing each hive's visit count, latest weight and any alerts, built from my raw inspection notes. The input looks like sample/input.txt. The programs in programs/ document themselves with --help.",
+  "goal": {
+    "id": "I3-independent",
+    "intent": "I want the apiary report showing each hive's visit count, latest weight and any alerts, built from my raw inspection notes.",
+    "have": {
+      "samples": [
+        {
+          "path": "sample/input.txt"
+        }
+      ]
+    },
+    "want": {
+      "program": "hive-report"
+    }
+  }
+}

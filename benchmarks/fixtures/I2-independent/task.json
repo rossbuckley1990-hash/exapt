@@ -1,0 +1,23 @@
+{
+  "id": "I2-independent",
+  "family": "independent",
+  "origin": "independent",
+  "answer": "done",
+  "compare": "text",
+  "newInput": "new.txt",
+  "outcome": "I have the week's box office sales log and need the settlement report showing what the production is owed after commission. The input looks like sample/input.txt. The programs in programs/ document themselves with --help.",
+  "goal": {
+    "id": "I2-independent",
+    "intent": "I have the week's box office sales log and need the settlement report showing what the production is owed after commission.",
+    "have": {
+      "samples": [
+        {
+          "path": "sample/input.txt"
+        }
+      ]
+    },
+    "want": {
+      "program": "settle"
+    }
+  }
+}

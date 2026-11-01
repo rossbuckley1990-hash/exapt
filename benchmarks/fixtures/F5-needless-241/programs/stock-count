@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+const fs = require('fs'); const args = process.argv.slice(2);
+if (args.includes('--help')) { console.log(`usage: stock-count [--from FORMAT]
+
+Totals stock per bin from standard input.
+
+Options:
+  --from FORMAT   input format, one of: json, csv
+
+Example input:
+  {"bin":"A1","qty":4}
+  {"bin":"A1","qty":5}
+`); process.exit(0); }
+const raw = fs.readFileSync(0, 'utf8').trim();
+const csv = args.includes('--from=csv') || (args.includes('--from') && args[args.indexOf('--from') + 1] === 'csv');
+const rows = csv ? raw.split('\n').slice(1).map((l) => { const [bin, qty] = l.split(','); return { bin, qty: Number(qty) }; }) : raw.split('\n').map((l) => { try { return JSON.parse(l); } catch { console.error('expected JSON lines'); process.exit(4); } });
+const t = new Map();
+for (const r of rows) { if (!r.bin || !Number.isFinite(r.qty)) { console.error('invalid row'); process.exit(4); } t.set(r.bin, (t.get(r.bin) ?? 0) + r.qty); }
+console.log([...t.keys()].sort().map((k) => k + ' ' + t.get(k)).join('\n'));

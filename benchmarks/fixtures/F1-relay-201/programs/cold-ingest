@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const args = process.argv.slice(2);
+const read = () => fs.readFileSync(0, 'utf8');
+const lines = (t) => t.split(/\r?\n/).filter((l) => l.trim() !== '');
+const fail = (m) => { process.stderr.write(m + '\n'); process.exit(3); };
+
+const HELP = "usage: cold-ingest\n\nReads readings from standard input as newline-delimited JSON, one object per\nreading, and writes a tab-separated summary per location and unit.\n\nEach object has:\n  unit  string   unit identifier\n  at_seconds  integer  seconds since 1970-01-01\n  amount  number   measured value in degrees Celsius\n  site  string   location code\n\nExample input:\n  {\"unit\":\"1a\",\"at_seconds\":1772619300,\"amount\":-7.15,\"site\":\"North-Wing\"}\n  {\"unit\":\"2b\",\"at_seconds\":1772619360,\"amount\":-6.15,\"site\":\"East-Wing\"}\n";
+if (args.includes('--help') || args.includes('-h')) { process.stdout.write(HELP); process.exit(0); }
+if (args.includes('--version')) { process.stdout.write("cold-ingest 2.3.1" + '\n'); process.exit(0); }
+
+const totals = new Map();
+for (const [i, l] of lines(read()).entries()) {
+  let r;
+  try { r = JSON.parse(l); } catch { fail('line ' + (i + 1) + ': not a JSON object'); }
+  for (const k of ["unit", "at_seconds", "amount", "site"]) if (!(k in r)) fail('line ' + (i + 1) + ': missing ' + k);
+  if (typeof r["amount"] !== 'number' || !Number.isFinite(r["amount"])) fail('line ' + (i + 1) + ': ' + "amount" + ' must be a number');
+  if (!Number.isInteger(r["at_seconds"]) || r["at_seconds"] < 1e9) fail('line ' + (i + 1) + ': ' + "at_seconds" + ' must be integer unix seconds');
+  const key = r["site"] + '/' + r["unit"];
+  const e = totals.get(key) ?? { n: 0, sum: 0, max: -Infinity, first: Infinity, last: -Infinity };
+  e.n++; e.sum += r["amount"]; e.max = Math.max(e.max, r["amount"]);
+  e.first = Math.min(e.first, r["at_seconds"]); e.last = Math.max(e.last, r["at_seconds"]);
+  totals.set(key, e);
+}
+const keys = [...totals.keys()].sort();
+if (!keys.length) fail('no readings');
+process.stdout.write(['key\treadings\tmean\tmax\tspan_s', ...keys.map((k) => { const e = totals.get(k); return [k, e.n, (e.sum / e.n).toFixed(3), e.max.toFixed(3), e.last - e.first].join('\t'); })].join('\n') + '\n');
+

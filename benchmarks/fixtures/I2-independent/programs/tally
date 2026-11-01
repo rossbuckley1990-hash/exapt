@@ -1,0 +1,47 @@
+#!/usr/bin/env node
+// tally: box office sales log -> P ("tally ledger") on stdout
+const HELP = `tally - turn a box office sales log into a tally ledger (format P)
+
+READS (stdin): one sale per line, fields separated by " | ":
+  <day> <Mon> <year> | <section> | <qty> | <price> | <channel>
+  e.g.  14 Mar 2026 | Dress Circle | 2 | £45.00 | web
+  Blank lines and lines starting with # are ignored.
+  section: Stalls, Dress Circle, Balcony, Boxes
+  qty: tickets in the sale (whole number, 1-500)
+  price: per-ticket price in pounds sterling, optional £ sign
+  channel: card, cash, web, comp
+
+WRITES (stdout): first line "#P1", then one record per sale:
+  d=<n>;s=<code>;q=<n>;p=<n>;c=<code>
+  d  performance date as a day count; day 0 is 1 Jan 2020
+  s  section code: S stalls, C dress circle, B balcony, X boxes
+  q  tickets sold
+  p  per-ticket price in pence (integer)
+  c  channel code: C card, K cash, W web, F comp (free)
+Exits non-zero with a message on stderr for a malformed line.
+`;
+if (process.argv.includes('--help')) { process.stdout.write(HELP); process.exit(0); }
+const MON = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+const SEC = { 'stalls':'S', 'dress circle':'C', 'balcony':'B', 'boxes':'X' };
+const CH = { card:'C', cash:'K', web:'W', comp:'F' };
+const text = require('fs').readFileSync(0, 'utf8');
+const out = ['#P1'];
+text.split('\n').forEach((raw, i) => {
+  const line = raw.trim();
+  if (!line || line.startsWith('#')) return;
+  const bad = (m) => { process.stderr.write(`line ${i+1}: ${m}\n`); process.exit(1); };
+  const f = line.split('|').map(s => s.trim());
+  if (f.length !== 5) bad('expected 5 fields');
+  const m = /^(\d{1,2}) ([A-Za-z]{3}) (\d{4})$/.exec(f[0]);
+  if (!m) bad('bad date');
+  const mi = MON.indexOf(m[2].toLowerCase());
+  if (mi < 0) bad('bad month');
+  const d = Math.round((Date.UTC(+m[3], mi, +m[1]) - Date.UTC(2020, 0, 1)) / 86400000);
+  const s = SEC[f[1].toLowerCase()]; if (!s) bad('bad section');
+  if (!/^\d+$/.test(f[2]) || +f[2] < 1 || +f[2] > 500) bad('bad qty');
+  const pm = /^£?(\d+)(?:\.(\d{1,2}))?$/.exec(f[3]); if (!pm) bad('bad price');
+  const p = +pm[1] * 100 + (pm[2] ? +pm[2].padEnd(2, '0') : 0);
+  const c = CH[f[4].toLowerCase()]; if (!c) bad('bad channel');
+  out.push(`d=${d};s=${s};q=${+f[2]};p=${p};c=${c}`);
+});
+process.stdout.write(out.join('\n') + '\n');

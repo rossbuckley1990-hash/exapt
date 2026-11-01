@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const args = process.argv.slice(2);
+const read = () => fs.readFileSync(0, 'utf8');
+const lines = (t) => t.split(/\r?\n/).filter((l) => l.trim() !== '');
+const fail = (m) => { process.stderr.write(m + '\n'); process.exit(3); };
+
+const HELP = "usage: shout\n\nUpper-cases standard input.\n\nExample input:\n  quiet words\n";
+if (args.includes('--help') || args.includes('-h')) { process.stdout.write(HELP); process.exit(0); }
+if (args.includes('--version')) { process.stdout.write("shout 1.0.0" + '\n'); process.exit(0); }
+process.stdout.write(read().toUpperCase());

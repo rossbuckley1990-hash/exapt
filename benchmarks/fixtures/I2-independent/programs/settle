@@ -1,0 +1,62 @@
+#!/usr/bin/env node
+// settle: strictly validates format Q and prints a settlement report
+const HELP = `settle - validate a box office settlement sheet (format Q) and report
+
+READS (stdin), exactly:
+  line 1:  BOXOFFICE 1
+  then one line per sale:
+    @<YYYY-MM-DD> <SECTION> x<qty> <unit> <channel>
+      SECTION: STALLS, CIRCLE, BALCONY, BOX
+      qty: tickets, 1-500
+      unit: per-ticket price in pounds, two decimals (0.00 only for comp)
+      channel: card, cash, online, comp
+  last line: TOTAL <sales> <gross>
+      sales = number of sale lines; gross = sum of qty*unit in pounds, 2 decimals
+Any deviation (bad date, unknown word, wrong count or gross, extra lines,
+comp with a price, non-comp at 0.00) is rejected: message on stderr, exit 1.
+
+WRITES (stdout): a report of tickets and gross (pounds) by date, by section
+and by channel, then the card/online commission (card 1.5%, online 6%,
+rounded to the penny per channel) and the net due to the production, in pounds.
+`;
+if (process.argv.includes('--help')) { process.stdout.write(HELP); process.exit(0); }
+const fail = (m) => { process.stderr.write('invalid: ' + m + '\n'); process.exit(1); };
+const text = require('fs').readFileSync(0, 'utf8');
+if (!text.endsWith('\n')) fail('missing final newline');
+const lines = text.slice(0, -1).split('\n');
+if (lines[0] !== 'BOXOFFICE 1') fail('bad header');
+const tl = lines[lines.length - 1];
+const body = lines.slice(1, -1);
+const SECS = ['STALLS','CIRCLE','BALCONY','BOX'], CHS = ['card','cash','online','comp'];
+const byD = {}, byS = {}, byC = {};
+let gross = 0;
+const add = (o, k, q, g) => { o[k] ??= [0, 0]; o[k][0] += q; o[k][1] += g; };
+body.forEach((l, i) => {
+  const m = /^@(\d{4})-(\d\d)-(\d\d) (STALLS|CIRCLE|BALCONY|BOX) x([1-9]\d{0,2}) (\d+)\.(\d\d) (card|cash|online|comp)$/.exec(l);
+  if (!m) fail(`line ${i+2}: malformed`);
+  const [, y, mo, d, sec, q, pw, pp, ch] = m;
+  const dt = new Date(Date.UTC(+y, +mo - 1, +d));
+  if (dt.getUTCFullYear() !== +y || dt.getUTCMonth() !== +mo - 1 || dt.getUTCDate() !== +d) fail(`line ${i+2}: no such date`);
+  if (+q > 500) fail(`line ${i+2}: qty too large`);
+  const unit = +pw * 100 + +pp;
+  if ((ch === 'comp') !== (unit === 0)) fail(`line ${i+2}: price/comp mismatch`);
+  const g = unit * +q;
+  gross += g;
+  add(byD, `${y}-${mo}-${d}`, +q, g); add(byS, sec, +q, g); add(byC, ch, +q, g);
+});
+const tm = /^TOTAL (\d+) (\d+)\.(\d\d)$/.exec(tl);
+if (!tm) fail('bad total line');
+if (+tm[1] !== body.length) fail('sale count mismatch');
+if (+tm[2] * 100 + +tm[3] !== gross) fail('gross mismatch');
+const gbp = (p) => (p / 100).toFixed(2);
+const sect = (title, o) => {
+  console.log(title);
+  for (const k of Object.keys(o).sort()) console.log(`  ${k.padEnd(10)} ${String(o[k][0]).padStart(6)} tickets  £${gbp(o[k][1]).padStart(10)}`);
+};
+console.log(`SETTLEMENT: ${body.length} sales, gross £${gbp(gross)}`);
+sect('By date', byD); sect('By section', byS); sect('By channel', byC);
+const rate = { card: 0.015, online: 0.06 };
+let comm = 0;
+for (const [ch, r] of Object.entries(rate)) if (byC[ch]) comm += Math.round(byC[ch][1] * r);
+console.log(`Commission: £${gbp(comm)}`);
+console.log(`Net due to production: £${gbp(gross - comm)}`);

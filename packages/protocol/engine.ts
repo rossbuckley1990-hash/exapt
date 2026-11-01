@@ -91,7 +91,7 @@ export const compactGap = (g: Gap): CompactGap => ({
 
 export interface WorkflowResult {
   id: string;
-  steps: Array<{ tool: string; kind: string; ok: boolean; ms: number; receipt?: string }>;
+  steps: Array<{ tool: string; args?: string[]; kind: string; ok: boolean; ms: number; receipt?: string }>;
   output: string;
   ok: boolean;
 }
@@ -154,7 +154,7 @@ export function configFromEnv(env: NodeJS.ProcessEnv = process.env, overrides: P
   return {
     home: env.EXAPT_HOME ?? path.join(process.cwd(), ".exapt"),
     programs,
-    dataRoots: file.dataRoots ?? [],
+    dataRoots: env.EXAPT_DATA_ROOTS ? env.EXAPT_DATA_ROOTS.split(":").filter(Boolean) : file.dataRoots ?? [],
     publish: (env.EXAPT_PUBLISH as ExaptConfig["publish"]) ?? file.publish ?? "verified",
     strategy: (env.EXAPT_STRATEGY as Strategy) ?? file.strategy ?? "auto",
     budget: {
@@ -344,13 +344,19 @@ export class Exapt {
     const analysis = await this.analyse(run.goal, run.base);
     run.analysis = { ...analysis, gaps: analysis.gaps.map(compactGap) };
     emit("analysis", { status: analysis.status, summary: analysis.summary, gaps: analysis.gaps.slice(0, 5).map(compactGap), reachable: analysis.reachable, required: analysis.required, rcx: analysis.rcx });
-    if (analysis.status !== "gap-found") {
+    // With nothing to check values against, an attempt can still be useful if it stays labelled as
+    // unverified. It needs a model, and it can never become an operation.
+    const canAttemptUnverified = analysis.status === "unverifiable" && !!this.config.model && (opts.strategy ?? this.config.strategy) !== "deterministic-only";
+    if (analysis.status !== "gap-found" && !canAttemptUnverified) {
       run.status = analysis.status === "achievable-existing" || analysis.status === "achievable-composition" ? "completed" : "refused";
       run.outcome = analysis.summary;
-      if (analysis.route) run.workflow = await this.executeRoute(analysis.route.steps.map((s) => ({ tool: s.tool, args: s.args })), run.goal, run.base);
+      if (analysis.route) {
+        run.workflow = await this.executeRoute(analysis.route.steps.map((s) => ({ tool: s.tool, args: s.args })), run.goal, run.base);
+        this.saveWorkflow(run);
+      }
       return this.finish(run, emit);
     }
-    const gap = opts.gap ? analysis.gaps.find((g) => g.id === opts.gap) : analysis.gaps.find((g) => g.worthAttempting);
+    const gap = opts.gap ? analysis.gaps.find((g) => g.id === opts.gap) : analysis.gaps.find((g) => g.worthAttempting) ?? (canAttemptUnverified ? analysis.gaps.find((g) => g.constructible) : undefined);
     if (!gap) {
       const top = analysis.gaps[0];
       run.status = "refused";
@@ -579,20 +585,20 @@ export class Exapt {
 
   private saveWorkflow(run: RunRecord): void {
     if (!run.workflow) return;
-    writeJson(path.join(this.config.home, "workflows", `${slugify(run.goal.id)}.json`), { goal: run.goal.id, intent: run.goal.intent, steps: run.workflow.steps.map((s) => s.tool), capability: run.capability });
+    writeJson(path.join(this.config.home, "workflows", `${slugify(run.goal.id)}.json`), { goal: run.goal.id, intent: run.goal.intent, steps: run.workflow.steps.map((s) => ({ tool: s.tool, ...(s.args ? { args: s.args } : {}) })), capability: run.capability });
   }
 
-  workflows(): Array<{ goal: string; intent: string; steps: string[] }> {
+  workflows(): Array<{ goal: string; intent: string; steps: Array<{ tool: string; args?: string[] }> }> {
     const dir = path.join(this.config.home, "workflows");
     if (!fs.existsSync(dir)) return [];
-    return fs.readdirSync(dir).map((f) => readJson<{ goal: string; intent: string; steps: string[] }>(path.join(dir, f))!);
+    return fs.readdirSync(dir).map((f) => readJson<{ goal: string; intent: string; steps: Array<{ tool: string; args?: string[] }> }>(path.join(dir, f))!);
   }
 
   async runWorkflow(goalId: string, input: string): Promise<WorkflowResult> {
     await this.ensureDiscovered();
-    const w = readJson<{ steps: string[] }>(path.join(this.config.home, "workflows", `${slugify(goalId)}.json`));
+    const w = readJson<{ steps: Array<{ tool: string; args?: string[] }> }>(path.join(this.config.home, "workflows", `${slugify(goalId)}.json`));
     if (!w) throw new Refused("unknown-workflow", `no retained workflow for ${goalId}`);
-    return this.runSteps(w.steps.map((tool) => ({ tool })), input);
+    return this.runSteps(w.steps, input);
   }
 
   private async executeRoute(steps: Array<{ tool: string; args?: string[] }>, goal: Goal, base: string): Promise<WorkflowResult> {
@@ -616,7 +622,7 @@ export class Exapt {
       const direct = rec ? null : await t.run(value, { args: step.args });
       const ok = rec ? rec.status === "completed" && typeof rec.output === "string" : !!direct && accepted(direct);
       const receipt = (rec as { receipt?: { hash?: string } } | null)?.receipt?.hash;
-      out.push({ tool: t.id, kind: t.kind, ok, ms: Math.round(performance.now() - t0), ...(receipt ? { receipt } : {}) });
+      out.push({ tool: t.id, ...(step.args?.length ? { args: step.args } : {}), kind: t.kind, ok, ms: Math.round(performance.now() - t0), ...(receipt ? { receipt } : {}) });
       if (!ok) return { id: newId("wf"), steps: out, output: "", ok: false };
       value = rec ? String(rec.output) : direct!.stdout;
     }
@@ -895,7 +901,7 @@ export class Exapt {
       if (q && !`${m.id} ${m.purpose} ${m.title}`.toLowerCase().includes(q)) return [];
       return [{ id: m.id, version: m.version, status: m.status, level: m.evidence.level, purpose: m.purpose.slice(0, 120), input: m.inputs[0].representation, output: m.outputs[0].representation, producer: m.provenance.producer }];
     });
-    return { capabilities: out.slice(0, opts.limit ?? 20), total: out.length };
+    return { capabilities: out.slice(0, opts.limit ?? 20), total: out.length, workflows: this.workflows().filter((w) => !q || `${w.goal} ${w.intent}`.toLowerCase().includes(q)).map((w) => ({ id: w.goal, intent: w.intent, how: "exapt_use with workflow set to this id" })) };
   }
 
   evolution(id?: string): EvolutionAttempt[] {

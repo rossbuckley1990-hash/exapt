@@ -1,0 +1,68 @@
+{
+  "id": "R1-dbf-natural-earth",
+  "family": "dbf",
+  "origin": "real",
+  "answer": "done",
+  "compare": "records",
+  "newInput": "new-file.dbf",
+  "outcome": "These table files come from an old system. sample/ holds some of them, each with its contents as NDJSON. Recover any such file, whatever its columns, as NDJSON with the file's own field names.",
+  "goal": {
+    "id": "R1-dbf-natural-earth",
+    "intent": "Recover the records in these old table files as NDJSON",
+    "corpus": [
+      {
+        "input": {
+          "path": "sample/ne_110m_admin_0_pacific_groupings.dbf"
+        },
+        "truth": {
+          "path": "sample/ne_110m_admin_0_pacific_groupings.truth.ndjson"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/ne_110m_lakes.dbf"
+        },
+        "truth": {
+          "path": "sample/ne_110m_lakes.truth.ndjson"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/ne_110m_admin_1_states_provinces_scale_rank.dbf"
+        },
+        "truth": {
+          "path": "sample/ne_110m_admin_1_states_provinces_scale_rank.truth.ndjson"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/ne_110m_coastline.dbf"
+        },
+        "truth": {
+          "path": "sample/ne_110m_coastline.truth.ndjson"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/ne_110m_land.dbf"
+        },
+        "truth": {
+          "path": "sample/ne_110m_land.truth.ndjson"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/ne_110m_rivers_lake_centerlines.dbf"
+        },
+        "truth": {
+          "path": "sample/ne_110m_rivers_lake_centerlines.truth.ndjson"
+        }
+      }
+    ],
+    "want": {}
+  },
+  "hostPrograms": [
+    "/usr/bin/od",
+    "/usr/bin/file"
+  ]
+}

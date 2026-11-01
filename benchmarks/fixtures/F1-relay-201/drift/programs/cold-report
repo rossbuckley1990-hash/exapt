@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const args = process.argv.slice(2);
+const read = () => fs.readFileSync(0, 'utf8');
+const lines = (t) => t.split(/\r?\n/).filter((l) => l.trim() !== '');
+const fail = (m) => { process.stderr.write(m + '\n'); process.exit(3); };
+
+const HELP = "usage: cold-report\n\nReads the summary written by cold-ingest from standard input and prints\na compliance line per location. A location is over limit when its maximum\nexceeds 13.35.\n";
+if (args.includes('--help') || args.includes('-h')) { process.stdout.write(HELP); process.exit(0); }
+if (args.includes('--version')) { process.stdout.write("cold-report 1.1.0" + '\n'); process.exit(0); }
+
+const ls = lines(read());
+if (!ls.length || ls[0] !== 'key\treadings\tmean\tmax\tspan_s') fail('expected a summary table with header key, readings, mean, max, span_s');
+const out = [];
+for (const l of ls.slice(1)) {
+  const [key, n, mean, max, span] = l.split('\t');
+  if (!key || !Number.isFinite(Number(mean))) fail('bad row: ' + l);
+  out.push(key + ': ' + (Number(max) > 13.350000000000023 ? 'OVER LIMIT' : 'WITHIN LIMIT') + ' mean=' + mean + ' over ' + n + ' readings in ' + span + 's');
+}
+process.stdout.write(out.join('\n') + '\n');
+

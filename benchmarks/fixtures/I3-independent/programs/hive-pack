@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+const HELP = `hive-pack - pack raw hive inspection notes into BKP1 records
+
+Reads (stdin): one inspection per line, whitespace-separated, e.g.
+  2026-05-03  A12  queen: seen  brood: 6  temp: 34.5C  weight: 42.1kg  mites: 3/300
+  date     YYYY-MM-DD
+  hive     hive label (letter + digits, e.g. A12)
+  queen    seen | eggs (eggs but no queen sighted) | absent
+  brood    frames of brood (integer)
+  temp     brood-box temperature, degrees Celsius
+  weight   whole-hive weight, kilograms
+  mites    mites counted / bees in sample (alcohol wash)
+Blank lines and lines starting with # are ignored.
+
+Writes (stdout): BKP1 text. First line "BKP1", then one record per line,
+fields separated by ';':
+  hive;YYYY.DDD;queen;brood;temp;weight;mites
+  YYYY.DDD  year and day-of-year (001 = 1 Jan)
+  queen     S = seen, E = eggs only, N = absent
+  brood     frames of brood
+  temp      tenths of a degree Celsius (345 = 34.5 C)
+  weight    whole ounces
+  mites     counted:sample (e.g. 3:300)
+`;
+if (process.argv.includes('--help')) { process.stdout.write(HELP); process.exit(0); }
+const fs = require('fs');
+const fail = (n, m) => { console.error(`line ${n}: ${m}`); process.exit(1); };
+const QC = { seen: 'S', eggs: 'E', absent: 'N' };
+const out = ['BKP1'];
+fs.readFileSync(0, 'utf8').split('\n').forEach((raw, i) => {
+  const line = raw.trim();
+  if (!line || line.startsWith('#')) return;
+  const m = line.match(/^(\d{4})-(\d\d)-(\d\d)\s+([A-Za-z]\d+)\s+queen:\s*(\w+)\s+brood:\s*(\d+)\s+temp:\s*(\d+(?:\.\d)?)C\s+weight:\s*(\d+(?:\.\d+)?)kg\s+mites:\s*(\d+)\/(\d+)$/);
+  if (!m) fail(i + 1, 'unparseable');
+  const [, y, mo, d, hive, q, brood, temp, kg, mc, ms] = m;
+  if (!(q in QC)) fail(i + 1, 'bad queen');
+  if (+ms === 0) fail(i + 1, 'empty sample');
+  const t = Date.UTC(+y, +mo - 1, +d);
+  const doy = Math.round((t - Date.UTC(+y, 0, 1)) / 864e5) + 1;
+  out.push([hive, `${y}.${String(doy).padStart(3, '0')}`, QC[q], brood,
+    Math.round(parseFloat(temp) * 10), Math.round(parseFloat(kg) * 35.27396), `${mc}:${ms}`].join(';'));
+});
+console.log(out.join('\n'));

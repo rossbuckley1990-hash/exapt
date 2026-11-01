@@ -1,0 +1,56 @@
+{
+  "id": "F3-binary-221",
+  "family": "binary",
+  "origin": "generated",
+  "answer": "done",
+  "compare": "records",
+  "newInput": "new-table.bin",
+  "outcome": "These binary table files come from a retired system. sample/ holds some of them, each with its contents as NDJSON. Recover any such file, whatever its columns, as NDJSON with the file's own field names.",
+  "goal": {
+    "id": "F3-binary-221",
+    "intent": "Recover the records in these binary table files as NDJSON",
+    "corpus": [
+      {
+        "input": {
+          "path": "sample/table-0.bin"
+        },
+        "truth": {
+          "path": "sample/table-0.ndjson"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/table-1.bin"
+        },
+        "truth": {
+          "path": "sample/table-1.ndjson"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/table-2.bin"
+        },
+        "truth": {
+          "path": "sample/table-2.ndjson"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/table-3.bin"
+        },
+        "truth": {
+          "path": "sample/table-3.ndjson"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/table-4.bin"
+        },
+        "truth": {
+          "path": "sample/table-4.ndjson"
+        }
+      }
+    ],
+    "want": {}
+  }
+}

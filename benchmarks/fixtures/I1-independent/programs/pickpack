@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+const HELP = `pickpack - convert a raw station pick log into SBP1 pick lines
+
+READS (stdin): one pick per line, whitespace separated:
+  STA CHAN YYYYMMDD HHMMSS.ss PHASE COUNTS PERIOD_S QUAL
+  STA      station code, 2-5 upper-case letters/digits
+  CHAN     3-character channel code, e.g. BHZ
+  date/time  UTC arrival time of the pick
+  PHASE    P, S, Pn, Pg, Sn or Sg
+  COUNTS   peak amplitude in digitiser counts (integer, not yet calibrated)
+  PERIOD_S dominant period in seconds
+  QUAL     analyst quality 0..4 (0 = best/sharpest onset, 4 = worst)
+  Blank lines and lines starting with # are skipped.
+
+WRITES (stdout): first line "#SBP1", then one line per pick:
+  STA.CHAN  YYYY-DDDThh:mm:ss.mmm  PHASE  <counts>ct  <period>s  q<QUAL>
+  The timestamp is GPS time (the station clock), which runs 18 s ahead of
+  UTC; DDD is day of year (001-366). Amplitude stays in raw counts; the
+  instrument response is 0.61 nm of ground displacement per count.
+  Period is passed through unchanged. Quality is passed through unchanged.
+
+Exits 1 with a message on stderr for any malformed input line.
+`;
+if (process.argv.includes('--help') || process.argv.includes('-h')) { process.stdout.write(HELP); process.exit(0); }
+const re = /^([A-Z0-9]{2,5})\s+([A-Z][A-Z0-9]{2})\s+(\d{8})\s+(\d{6}\.\d{1,2})\s+(P[ng]?|S[ng]?)\s+(\d+)\s+(\d+(?:\.\d+)?)\s+([0-4])$/;
+const p2 = (n, w = 2) => String(n).padStart(w, '0');
+const lines = require('fs').readFileSync(0, 'utf8').split('\n');
+const out = ['#SBP1'];
+lines.forEach((raw, i) => {
+  const l = raw.trim();
+  if (!l || l.startsWith('#')) return;
+  const m = re.exec(l);
+  if (!m) { console.error(`line ${i + 1}: malformed pick`); process.exit(1); }
+  const [, sta, chan, d, t, ph, cnt, per, q] = m;
+  const frac = Math.round(parseFloat('0.' + (t.split('.')[1])) * 1000);
+  const ms = Date.UTC(+d.slice(0, 4), +d.slice(4, 6) - 1, +d.slice(6, 8), +t.slice(0, 2), +t.slice(2, 4), +t.slice(4, 6), frac) + 18000;
+  const dt = new Date(ms);
+  const y = dt.getUTCFullYear();
+  const doy = Math.floor((Date.UTC(y, dt.getUTCMonth(), dt.getUTCDate()) - Date.UTC(y, 0, 1)) / 86400000) + 1;
+  const ts = `${y}-${p2(doy, 3)}T${p2(dt.getUTCHours())}:${p2(dt.getUTCMinutes())}:${p2(dt.getUTCSeconds())}.${p2(dt.getUTCMilliseconds(), 3)}`;
+  out.push(`${sta}.${chan}  ${ts}  ${ph}  ${cnt}ct  ${per}s  q${q}`);
+});
+process.stdout.write(out.join('\n') + '\n');

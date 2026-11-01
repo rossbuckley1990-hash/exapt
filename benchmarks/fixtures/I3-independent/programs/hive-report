@@ -1,0 +1,60 @@
+#!/usr/bin/env node
+const HELP = `hive-report - validate HQ2 inspection files and print an apiary report
+
+Reads (stdin): HQ2 text, strictly validated; any deviation exits 1.
+  line 1:   HQ2
+  line 2:   hive<TAB>date<TAB>queen<TAB>brood<TAB>temp_f<TAB>weight_kg<TAB>mites_per_100
+  records:  tab-separated, same 7 columns
+  last:     "#<record count>"
+  hive          letter + digits (e.g. A12)
+  date          ISO YYYY-MM-DD, real calendar date
+  queen         seen | eggs | absent
+  brood         frames of brood, integer 0-20
+  temp_f        brood-box temperature, degrees Fahrenheit, 1 decimal
+  weight_kg     whole-hive weight in kilograms, 1 decimal
+  mites_per_100 mites per 100 bees, 2 decimals
+
+Writes (stdout): per-hive summary (inspections, latest date, latest weight,
+mean brood), then alerts: hives with absent queen on latest visit and hives
+whose latest mite level exceeds 3.00 per 100 bees.
+`;
+if (process.argv.includes('--help')) { process.stdout.write(HELP); process.exit(0); }
+const die = m => { console.error('invalid: ' + m); process.exit(1); };
+const txt = require('fs').readFileSync(0, 'utf8');
+if (!txt.endsWith('\n')) die('missing final newline');
+const L = txt.slice(0, -1).split('\n');
+if (L[0] !== 'HQ2') die('bad magic');
+if (L[1] !== 'hive\tdate\tqueen\tbrood\ttemp_f\tweight_kg\tmites_per_100') die('bad header');
+const foot = L[L.length - 1].match(/^#(\d+)$/);
+if (!foot) die('missing footer');
+const recs = L.slice(2, -1);
+if (+foot[1] !== recs.length) die('count mismatch');
+const H = new Map();
+recs.forEach((r, i) => {
+  const f = r.split('\t'); const n = i + 3;
+  if (f.length !== 7) die(`line ${n}: field count`);
+  const [hive, date, q, br, tf, kg, mt] = f;
+  if (!/^[A-Za-z]\d+$/.test(hive)) die(`line ${n}: hive`);
+  const dm = date.match(/^(\d{4})-(\d\d)-(\d\d)$/);
+  if (!dm) die(`line ${n}: date`);
+  const dt = new Date(Date.UTC(+dm[1], +dm[2] - 1, +dm[3]));
+  if (dt.toISOString().slice(0, 10) !== date) die(`line ${n}: date not real`);
+  if (!['seen', 'eggs', 'absent'].includes(q)) die(`line ${n}: queen`);
+  if (!/^\d+$/.test(br) || +br > 20) die(`line ${n}: brood`);
+  if (!/^-?\d+\.\d$/.test(tf) || +tf < 32 || +tf > 120) die(`line ${n}: temp_f`);
+  if (!/^\d+\.\d$/.test(kg) || +kg > 120) die(`line ${n}: weight_kg`);
+  if (!/^\d+\.\d\d$/.test(mt) || +mt > 100) die(`line ${n}: mites_per_100`);
+  if (!H.has(hive)) H.set(hive, []);
+  H.get(hive).push({ date, q, br: +br, kg: +kg, mt: +mt });
+});
+console.log(`Apiary report: ${recs.length} inspections, ${H.size} hives`);
+const alerts = [];
+for (const [h, a] of [...H].sort()) {
+  a.sort((x, y) => x.date.localeCompare(y.date));
+  const l = a[a.length - 1];
+  const mean = a.reduce((s, x) => s + x.br, 0) / a.length;
+  console.log(`${h}: ${a.length} visits, last ${l.date}, ${l.kg.toFixed(1)} kg, mean brood ${mean.toFixed(1)} frames`);
+  if (l.q === 'absent') alerts.push(`${h}: queen absent at ${l.date}`);
+  if (l.mt > 3) alerts.push(`${h}: mites ${l.mt.toFixed(2)}/100 at ${l.date}`);
+}
+console.log(alerts.length ? 'Alerts:\n  ' + alerts.join('\n  ') : 'Alerts: none');

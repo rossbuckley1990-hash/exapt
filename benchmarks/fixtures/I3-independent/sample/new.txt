@@ -1,0 +1,22 @@
+# inspections batch 1
+2023-07-07  B17  queen: eggs  brood: 5  temp: 36.8C  weight: 55.8kg  mites: 4/100
+2023-09-25  N1  queen: eggs  brood: 2  temp: 28.3C  weight: 36.0kg  mites: 6/100
+2023-03-01  C9  queen: seen  brood: 1  temp: 31.3C  weight: 26.8kg  mites: 6/100
+2023-08-08  A9  queen: eggs  brood: 2  temp: 36.4C  weight: 36.4kg  mites: 4/100
+2023-05-04  W17  queen: absent  brood: 5  temp: 36C  weight: 29.2kg  mites: 6/100
+2023-07-07  C9  queen: seen  brood: 10  temp: 37C  weight: 70.8kg  mites: 4/100
+2023-04-02  N1  queen: eggs  brood: 2  temp: 28.6C  weight: 42.8kg  mites: 0/100
+2023-05-04  C25  queen: seen  brood: 1  temp: 34.6C  weight: 50.8kg  mites: 0/100
+2023-04-18  W9  queen: seen  brood: 6  temp: 28C  weight: 20.4kg  mites: 6/100
+2023-07-07  W17  queen: eggs  brood: 7  temp: 34.8C  weight: 49.2kg  mites: 0/100
+2023-03-17  N25  queen: seen  brood: 5  temp: 37.1C  weight: 45.2kg  mites: 8/100
+2023-10-11  W25  queen: seen  brood: 0  temp: 30.7C  weight: 32.4kg  mites: 8/100
+2023-06-21  A25  queen: seen  brood: 10  temp: 30.1C  weight: 50.8kg  mites: 8/100
+2023-04-18  A17  queen: seen  brood: 0  temp: 33.3C  weight: 69.8kg  mites: 0/100
+2023-06-05  W33  queen: eggs  brood: 8  temp: 30.2C  weight: 36.4kg  mites: 2/100
+2023-04-02  N25  queen: seen  brood: 2  temp: 33.8C  weight: 26.4kg  mites: 8/100
+2023-09-09  C1  queen: eggs  brood: 7  temp: 34.8C  weight: 59.6kg  mites: 4/100
+2023-08-24  N25  queen: seen  brood: 1  temp: 30.8C  weight: 59.0kg  mites: 6/100
+2023-08-24  A33  queen: seen  brood: 11  temp: 30.2C  weight: 47.8kg  mites: 2/100
+2023-09-25  C9  queen: seen  brood: 2  temp: 30.8C  weight: 40.4kg  mites: 2/100
+2023-05-20  A33  queen: absent  brood: 12  temp: 35.9C  weight: 42.6kg  mites: 4/100

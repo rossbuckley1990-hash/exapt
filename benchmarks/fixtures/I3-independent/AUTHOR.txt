@@ -1,0 +1,1 @@
+Written by a fresh sonnet session from preregistration/authoring-brief.md. Domain: beekeeping hive inspection records. Producer: hive-pack. Consumer: hive-report. Cost: 0.

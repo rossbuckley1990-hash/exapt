@@ -1,0 +1,60 @@
+{
+  "id": "R2-plist-macos",
+  "family": "plist",
+  "origin": "real",
+  "answer": "done",
+  "needless": true,
+  "compare": "json",
+  "newInput": "new.plist",
+  "outcome": "sample/ holds settings files, each with its contents as JSON. Convert any such file to JSON. /usr/bin/plutil is available to you.",
+  "goal": {
+    "id": "R2-plist-macos",
+    "intent": "Convert these settings files to JSON",
+    "corpus": [
+      {
+        "input": {
+          "path": "sample/settings-0.plist"
+        },
+        "truth": {
+          "path": "sample/settings-0.json"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/settings-1.plist"
+        },
+        "truth": {
+          "path": "sample/settings-1.json"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/settings-2.plist"
+        },
+        "truth": {
+          "path": "sample/settings-2.json"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/settings-3.plist"
+        },
+        "truth": {
+          "path": "sample/settings-3.json"
+        }
+      },
+      {
+        "input": {
+          "path": "sample/settings-4.plist"
+        },
+        "truth": {
+          "path": "sample/settings-4.json"
+        }
+      }
+    ],
+    "want": {}
+  },
+  "hostPrograms": [
+    "/usr/bin/plutil"
+  ]
+}

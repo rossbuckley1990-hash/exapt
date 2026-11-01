@@ -1,0 +1,14 @@
+# Box office log, The Winter Assembly, week 1
+12 Mar 2026 | Stalls | 2 | £45.00 | card
+12 Mar 2026 | Dress Circle | 4 | £38.50 | web
+12 Mar 2026 | Balcony | 6 | £22.00 | cash
+12 Mar 2026 | Boxes | 1 | £70 | card
+13 Mar 2026 | Stalls | 3 | £45.00 | web
+13 Mar 2026 | Stalls | 2 | 0.00 | comp
+13 Mar 2026 | Balcony | 10 | £18.50 | web
+14 Mar 2026 | Dress Circle | 2 | £38.50 | card
+14 Mar 2026 | Balcony | 4 | £22.00 | card
+14 Mar 2026 | Boxes | 4 | £70.00 | web
+14 Mar 2026 | Stalls | 8 | £41.25 | cash
+15 Mar 2026 | Dress Circle | 1 | 0 | comp
+15 Mar 2026 | Stalls | 5 | £45.00 | card

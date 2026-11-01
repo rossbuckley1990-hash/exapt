@@ -1,6 +1,7 @@
 // Negative controls for the execution boundary and the authority model.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { writeEnvironment } from "../demos/missing-transformation/environment.ts";
@@ -112,6 +113,29 @@ test("a model's self-assessment has no effect: a wrong program claiming success 
   const run = await e.startInvention(env.goal, env.base, { seed: 16, strategy: "model-only", rounds: 2 });
   assert.ok(run.attempts.every((a) => !a.survived));
   assert.equal(run.capability, undefined);
+  await e.host.rc.flush();
+});
+
+test("with no value-level oracle, a good candidate stays unverified and cannot be invoked", { skip: sandboxSkip }, async () => {
+  const dir = tempDir("sec");
+  const env = writeEnvironment(16, dir);
+  fs.rmSync(path.join(env.programs, env.params.programs.archiver));
+  const first = await engine(tempDir("sec"), [env.programs]);
+  const a = await first.analyseCompact(env.goal, env.base);
+  assert.equal(a.status, "unverifiable");
+  await first.host.rc.flush();
+  const full = tempDir("sec");
+  const complete = writeEnvironment(16, full);
+  const maker = await engine(full, [complete.programs]);
+  const good = maker.vault.source(maker.vault.manifest((await maker.startInvention(complete.goal, complete.base, { seed: 16 })).capability!.id)!);
+  await maker.host.rc.flush();
+  const e = await engine(dir, [env.programs], { model: new Scripted(Array(6).fill(`\`\`\`js\n${good}\`\`\``)) });
+  const run = await e.startInvention(env.goal, env.base, { seed: 16 });
+  assert.equal(run.capability?.status, "synthesised-unverified");
+  assert.notEqual(run.evidence?.level, "verified-in-domain");
+  assert.ok(run.evidence?.limitations.some((l) => l.includes("value-level")));
+  assert.equal(run.workflow, undefined, "no route runs through it");
+  await assert.rejects(() => e.use(run.capability!.id, "x"), /synthesised-unverified/);
   await e.host.rc.flush();
 });
 

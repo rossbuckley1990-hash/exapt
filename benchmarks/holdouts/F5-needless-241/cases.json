@@ -1,0 +1,22 @@
+[
+  {
+    "input": "bin,qty\nA2,33\nA2,68\nA3,31\nB3,76\nB4,55\nA3,17\nB5,88\nB2,71\nC5,60\nC5,60\n",
+    "expected": "A2 101\nA3 48\nB2 71\nB3 76\nB4 55\nB5 88\nC5 120\n"
+  },
+  {
+    "input": "bin,qty\nC5,12\nA3,90\nC4,22\nB3,82\nC3,42\nC2,10\nC2,48\nB3,19\nB5,80\nC2,54\nC5,25\nA2,20\nB5,86\nC4,60\nA2,84\n",
+    "expected": "A2 104\nA3 90\nB3 101\nB5 166\nC2 112\nC3 42\nC4 82\nC5 37\n"
+  },
+  {
+    "input": "bin,qty\nB1,20\nC3,54\nA1,27\nA4,47\nC2,26\nA2,17\nB5,54\nC2,27\nB1,66\nA1,16\nC3,48\nB4,73\nC3,59\nB2,84\nB3,76\nB2,43\nA1,37\nA1,26\nB2,52\nC2,83\n",
+    "expected": "A1 106\nA2 17\nA4 47\nB1 86\nB2 179\nB3 76\nB4 73\nB5 54\nC2 136\nC3 161\n"
+  },
+  {
+    "input": "bin,qty\nC4,87\nC4,10\nA4,21\nB3,28\nA5,80\nA4,59\nB4,30\nB5,20\nC3,19\nC2,60\nA3,89\nA3,89\nC5,58\nB2,77\nB1,82\nA3,10\nC5,82\nA5,45\nA3,40\nA4,45\nB4,27\nB4,73\nC4,17\nC2,67\nA3,23\n",
+    "expected": "A3 251\nA4 125\nA5 125\nB1 82\nB2 77\nB3 28\nB4 130\nB5 20\nC2 127\nC3 19\nC4 114\nC5 140\n"
+  },
+  {
+    "input": "bin,qty\nC1,9\nA1,7\nA5,89\nC3,74\nA2,39\nB3,78\nC5,42\nB1,5\nC3,29\nA2,28\nB5,85\nC3,40\nC1,22\nB1,86\nB1,73\nB1,22\nC5,89\nC2,17\nA3,10\nB2,18\nC4,67\nA4,40\nB5,5\nC1,46\nA5,49\nA4,7\nC5,68\nC4,14\nA4,49\nB2,69\n",
+    "expected": "A1 7\nA2 67\nA3 10\nA4 96\nA5 138\nB1 186\nB2 87\nB3 78\nB5 90\nC1 77\nC2 17\nC3 143\nC4 81\nC5 199\n"
+  }
+]
