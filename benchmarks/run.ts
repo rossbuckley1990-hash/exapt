@@ -48,7 +48,8 @@ function workspace(task: TaskSpec, name: string): string {
   fs.rmSync(dir, { recursive: true, force: true });
   fs.mkdirSync(path.join(dir, "out"), { recursive: true });
   const from = path.join(FIXTURES, task.id);
-  fs.cpSync(path.join(from, "programs"), path.join(dir, "programs"), { recursive: true });
+  fs.mkdirSync(path.join(dir, "programs"), { recursive: true });
+  if (fs.existsSync(path.join(from, "programs"))) fs.cpSync(path.join(from, "programs"), path.join(dir, "programs"), { recursive: true });
   fs.cpSync(path.join(from, "sample"), path.join(dir, "sample"), { recursive: true });
   fs.rmSync(path.join(dir, "sample", task.newInput), { force: true });
   return dir;
