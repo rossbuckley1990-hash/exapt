@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "warm",
+  "task": "R1-dbf-natural-earth",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.09307579999999999,
+  "inputTokens": 102399,
+  "outputTokens": 3638,
+  "turns": 10,
+  "ms": 38371,
+  "codeBytes": 0,
+  "notes": [
+    "he record count in the header matches the file size. The output has no decoding errors.\n\nFields in the input are `scalerank`, `featurecla`, `labelrank`, `sr_sov_a3`, `sr_adm0_a3`, `sr_gu_a3` and `sr_geounit`. This is the same layout as the `admin_1_states_provinces_scale_rank` sample, which matched."
+  ],
+  "unauthorised": []
+}

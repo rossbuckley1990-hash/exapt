@@ -49,7 +49,7 @@ function hexView(bytes: Buffer, limit = 512): string {
   return `${rows.join("\n")}\n(${bytes.length} bytes in total)`;
 }
 
-export const showInput = (value: string, binary: boolean, limit = 1200): string => (binary ? hexView(Buffer.from(value, "base64")) : clip(value, limit));
+export const showInput = (value: string, binary: boolean, limit = 6000): string => (binary ? hexView(Buffer.from(value, "base64")) : clip(value, limit));
 
 export function buildPrompt(r: ModelRequest): string {
   const { spec } = r;
@@ -64,14 +64,14 @@ export function buildPrompt(r: ModelRequest): string {
   }
   if (r.pairs.length) {
     out.push(`\n# Examples`);
-    for (const [i, p] of r.pairs.slice(0, 6).entries()) out.push(`## Example ${i + 1}\nInput:\n\`\`\`\n${showInput(p.input, !!p.binary)}\n\`\`\`\nOutput:\n\`\`\`\n${clip(p.output, 1500)}\n\`\`\``);
+    for (const [i, p] of r.pairs.slice(0, 6).entries()) out.push(`## Example ${i + 1}\nInput:\n\`\`\`\n${showInput(p.input, !!p.binary)}\n\`\`\`\nOutput:\n\`\`\`\n${clip(p.output, 3000)}\n\`\`\``);
   }
   if (r.helpers.length) out.push(`\n# Verified capabilities available in lib\n${r.helpers.map((h) => `- lib[${JSON.stringify(h.name)}]: ${h.purpose}`).join("\n")}`);
   if (r.starting) out.push(`\n# Current implementation\nImprove on this; do not regress its behaviour.\n\`\`\`js\n${r.starting}\n\`\`\``);
   if (r.objective) out.push(`\n# Objective\n${r.objective}`);
   if (r.counterexamples.length) {
     out.push(`\n# Counterexamples from experiments on earlier attempts\nThese were found by independent tests. Fix the cause, not the instance.`);
-    for (const c of r.counterexamples.slice(-6)) out.push(`- Input:\n\`\`\`\n${showInput(c.input, !!c.binary, 500)}\n\`\`\`\n  Problem: ${c.problem}${c.expected !== undefined ? `\n  Expected: ${clip(c.expected, 300)}` : ""}${c.actual !== undefined ? `\n  Actual: ${clip(c.actual, 300)}` : ""}`);
+    for (const c of r.counterexamples.slice(-6)) out.push(`- Input:\n\`\`\`\n${showInput(c.input, !!c.binary, 2000)}\n\`\`\`\n  Problem: ${c.problem}${c.expected !== undefined ? `\n  Expected: ${c.expected}` : ""}${c.actual !== undefined ? `\n  Actual: ${c.actual}` : ""}`);
   }
   if (r.rejected.length) {
     const last = r.rejected[r.rejected.length - 1];

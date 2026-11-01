@@ -1,0 +1,26 @@
+{
+  "arm": "D",
+  "stage": "warm",
+  "task": "F3-binary-221",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0426006,
+  "inputTokens": 63363,
+  "outputTokens": 1001,
+  "turns": 6,
+  "ms": 17174,
+  "codeBytes": 0,
+  "notes": [
+    "built for a different column set (`route`, `shelf`, `lot`, `depot`), so this file's different columns are an untested case. Two values look truncated, `Leasin59` and `Permit38`, which may just be fixed-width text fields. I had no ground truth for this file, so I couldn't confirm they're right.\n\nDONE"
+  ],
+  "unauthorised": [],
+  "toolCalls": [
+    "exapt_discover",
+    "exapt_explain",
+    "exapt_use",
+    "exapt_use"
+  ]
+}

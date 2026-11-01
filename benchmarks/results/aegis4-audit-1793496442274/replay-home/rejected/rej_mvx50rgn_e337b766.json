@@ -1,0 +1,12 @@
+{
+  "run": "run_mvx50aqj_83f3ed7d",
+  "gap": "gap-4d0a23b708",
+  "producer": "negative control: x86-4kb-hallucination",
+  "kind": "injected-control",
+  "level": "executed",
+  "rejectedAt": "visible",
+  "reason": "ground-truth: 6 difference(s), first: row 1, value: expected 196608000, got 49152000",
+  "sha256": "762daac37382986909c0cc5a30f86f724b8eaba2f47a4f14cd3b090492843929",
+  "id": "rej_mvx50rgn_e337b766",
+  "at": "2026-11-01T01:14:40.007Z"
+}

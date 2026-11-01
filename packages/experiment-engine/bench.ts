@@ -11,7 +11,7 @@
 import { accepted, cellText, isRecordRepr, parseRecords, renderRecords, reprLabel, sniff, type Goal, type Repr, type Universe } from "../capability-universe/index.ts";
 import { digest, Rng, pool } from "../shared/index.ts";
 import { loadSample, type Gap, type OracleSpec } from "../gap-reasoner/index.ts";
-import { boundaryInputs, generateLike, malformedBinary, malformedInputs } from "./generators.ts";
+import { boundaryInputs, generateLike, malformedBinary, malformedInputs, malformedText } from "./generators.ts";
 import type { SynthesisSpec } from "../synthesiser/index.ts";
 
 export type Tier = "visible" | "independent" | "boundary" | "malformed" | "holdout";
@@ -184,10 +184,12 @@ export class TestBench {
     this.sizes = { ...DEFAULT_SIZES, ...o.sizes };
     // Fixed partition: which file is held out never depends on what any candidate did.
     const rng = new Rng(o.seed ^ 0x51ed);
-    const corpus = rng.shuffle((o.goal.corpus ?? []).map((_, i) => i));
-    const nVisible = Math.max(1, Math.round(corpus.length * 0.3));
+    // Items that refuted a retained capability are already public: they are why this run exists.
+    const pinned = (o.goal.corpus ?? []).flatMap((c, i) => (c.pinned ? [i] : []));
+    const corpus = rng.shuffle((o.goal.corpus ?? []).map((_, i) => i).filter((i) => !pinned.includes(i)));
+    const nVisible = Math.max(pinned.length ? 0 : 1, Math.round(corpus.length * 0.3));
     const nHold = Math.max(1, Math.round(corpus.length * 0.4));
-    this.corpusTiers = { visible: corpus.slice(0, nVisible), holdout: corpus.slice(nVisible, nVisible + nHold), independent: corpus.slice(nVisible + nHold) };
+    this.corpusTiers = { visible: [...pinned, ...corpus.slice(0, nVisible)], holdout: corpus.slice(nVisible, nVisible + nHold), independent: corpus.slice(nVisible + nHold) };
     const examples = rng.shuffle((o.goal.want.examples ?? []).map((_, i) => i));
     const held = Math.floor(examples.length / 2);
     this.exampleTiers = { holdout: examples.slice(0, held), visible: examples.slice(held) };
@@ -232,7 +234,9 @@ export class TestBench {
   private async upstreamInputs(tier: Tier, n: number, rng: Rng, rows: () => number): Promise<TestCase[]> {
     const lineage = this.contract.upstream;
     const seeds = this.goal.have?.samples?.map((s) => loadSample(s, this.base).toString("utf8")) ?? [];
-    if (this.contract.inputKind === "binary" || !isRecordRepr(this.contract.source.repr)) return [];
+    // With a corpus, truth exists only for real inputs. A generated one has no oracle, and rests on
+    // a guess at the format, so it can only punish a program for being strict.
+    if (this.goal.corpus?.length || this.contract.inputKind === "binary" || !isRecordRepr(this.contract.source.repr)) return [];
     if (!lineage.length) {
       return Array.from({ length: n }, () => ({ id: this.next(tier), tier, input: generateLike(this.contract.source.sample, this.contract.source.repr, rng, rows()), origin: "generated" as const }));
     }
@@ -300,7 +304,7 @@ export class TestBench {
   }
 
   async boundary(): Promise<TestCase[]> {
-    if (this.contract.inputKind === "binary") return [];
+    if (this.contract.inputKind === "binary" || this.goal.corpus?.length) return [];
     const rng = new Rng(this.seed + 41);
     const sample = this.contract.source.sample;
     const out: TestCase[] = [];
@@ -318,6 +322,7 @@ export class TestBench {
       const file = Buffer.from(this.contract.source.sample, "base64");
       return malformedBinary(file, rng).map((b) => ({ id: this.next("malformed"), tier: "malformed", input: b.input.toString("base64"), binary: true, origin: "malformed", note: b.name }));
     }
+    if (this.goal.corpus?.length) return malformedText(this.contract.source.sample, rng).map((b) => ({ id: this.next("malformed"), tier: "malformed", input: b.input, origin: "malformed", note: b.name }));
     return malformedInputs(this.contract.source.sample, this.contract.source.repr, rng).map((b) => ({ id: this.next("malformed"), tier: "malformed", input: b.input, origin: "malformed", note: b.name }));
   }
 

@@ -1,0 +1,21 @@
+{
+  "arm": "D",
+  "stage": "drift",
+  "task": "F1-relay-202",
+  "claimed": "none",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.021714900000000002,
+  "inputTokens": 3445,
+  "outputTokens": 1047,
+  "turns": 1,
+  "ms": 42850,
+  "codeBytes": 0,
+  "notes": [
+    "name=\"Bash\">\n<parameter name=\"command\">echo hello; whoami</parameter>\n</invoke>\n\n\n\n<invoke name=\"Glob\">\n<parameter name=\"pattern\">**/*</parameter>\n<parameter name=\"path\">/private/var/folders/tz/y04t4d0900xdbmz96jp608180000gn/T/exapt-benchmark/primary-sonnet/F1-relay-202/D-drift</parameter>\n</invoke>"
+  ],
+  "unauthorised": [],
+  "toolCalls": []
+}

@@ -1,0 +1,156 @@
+{
+  "name": "equality inverted at 201",
+  "kind": "mutant-value",
+  "sha256": "b09ba569d1b8e1540b730b892a63c4acba8bfd884b9b2b15482a1f104e043bd4",
+  "passed": 7,
+  "total": 21,
+  "rows": [
+    {
+      "id": "original-snap-active.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.863042
+    },
+    {
+      "id": "original-snap-heavy.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.349459000000003
+    },
+    {
+      "id": "original-snap-idle.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 2.610916000000003
+    },
+    {
+      "id": "page-4096-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.392000000000003
+    },
+    {
+      "id": "page-4096-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.674083000000003
+    },
+    {
+      "id": "page-4096-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 2.191041999999996
+    },
+    {
+      "id": "page-16384-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.8613750000000024
+    },
+    {
+      "id": "page-16384-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.3775419999999983
+    },
+    {
+      "id": "page-16384-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.210708000000004
+    },
+    {
+      "id": "page-65536-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 2.635124999999995
+    },
+    {
+      "id": "page-65536-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.6642499999999956
+    },
+    {
+      "id": "page-65536-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.3673750000000027
+    },
+    {
+      "id": "empty",
+      "pass": true,
+      "status": "threw",
+      "error": "Cannot read properties of undefined (reading 'match')",
+      "ms": 1.833833999999996
+    },
+    {
+      "id": "header-only",
+      "pass": true,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.5481670000000065
+    },
+    {
+      "id": "one-invalid-line",
+      "pass": true,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.6984170000000063
+    },
+    {
+      "id": "missing-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.640625
+    },
+    {
+      "id": "zero-page-size",
+      "pass": true,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.9842919999999964
+    },
+    {
+      "id": "duplicate-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.3462079999999972
+    },
+    {
+      "id": "invalid-header-prefix",
+      "pass": true,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.2887919999999937
+    },
+    {
+      "id": "blank-line",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.207333999999996
+    },
+    {
+      "id": "live-host",
+      "pass": false,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.2719169999999949
+    }
+  ]
+}

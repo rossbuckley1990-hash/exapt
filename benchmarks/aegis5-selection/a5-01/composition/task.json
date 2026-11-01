@@ -1,0 +1,49 @@
+{
+  "id": "a5-01-composition",
+  "intent": "Second-stage composition: Rotate a supported BMP image 90 degrees clockwise and expose its RGB raster",
+  "inputKind": "text",
+  "software": [
+    {
+      "name": "Apple sips / ImageIO",
+      "version": "316 / macOS 27.0.1 build 26A434",
+      "source": "https://support.apple.com/guide/terminal/welcome/mac"
+    },
+    {
+      "name": "Microsoft BMP BITMAPINFOHEADER format",
+      "version": "40-byte header / BI_RGB",
+      "source": "https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfoheader"
+    }
+  ],
+  "examples": [
+    {
+      "input": "examples/01.input.txt",
+      "truth": "examples/01.truth.json"
+    },
+    {
+      "input": "examples/02.input.txt",
+      "truth": "examples/02.truth.json"
+    },
+    {
+      "input": "examples/03.input.txt",
+      "truth": "examples/03.truth.json"
+    },
+    {
+      "input": "examples/04.input.txt",
+      "truth": "examples/04.truth.json"
+    },
+    {
+      "input": "examples/05.input.txt",
+      "truth": "examples/05.truth.json"
+    },
+    {
+      "input": "examples/06.input.txt",
+      "truth": "examples/06.truth.json"
+    }
+  ],
+  "targetSample": "examples/01.input.txt",
+  "comparison": "json",
+  "limitations": [
+    "Inputs satisfy the composition schema. No unsupported composition inputs are scored."
+  ],
+  "instructions": "Implement transform(input:string,lib)->string. Parse {version:1,images:[base64BMP,...],background:\"rrggbb\"}; 1..4 supported BMPs, six lowercase background hex digits. Call retained lib[\"a5-01\"](Buffer.from(image,\"base64\")) to obtain each clockwise rotated raster. Lay them left-to-right in input order, top aligned, with no gap. Pad under each shorter image with the background color. Return {width:sumOfRotatedWidths,height:maxRotatedHeight,rgb:rowMajorLowercaseRGBHex}. The heldout suite measures output and separately records actual retained-call counts; full composition-reuse credit requires >=1 call for every input image."
+}

@@ -1,0 +1,647 @@
+{
+  "id": "run_mvx50aqj_83f3ed7d",
+  "kind": "invent",
+  "goal": {
+    "id": "darwin-kernel-telemetry-induction",
+    "intent": "Convert raw Darwin Mach VM kernel telemetry from vm_stat into normalized OpenTelemetry-style NDJSON metrics with exact byte conversions satisfying the kernel conservation law",
+    "have": {
+      "samples": [
+        {
+          "path": "sample-vmstat.txt"
+        }
+      ],
+      "description": "Raw /usr/bin/vm_stat text output with hardware page size header and trailing-dot formatted page counts"
+    },
+    "want": {
+      "program": "kernel-telemetry-collector",
+      "sample": {
+        "path": "sample-target.ndjson"
+      },
+      "description": "NDJSON metrics with keys {metric, value} in bytes, satisfying hardware page scale and conservation invariants"
+    },
+    "corpus": [
+      {
+        "name": "snap-idle",
+        "input": {
+          "path": "corpus/snap-idle.input.txt"
+        },
+        "truth": {
+          "path": "corpus/snap-idle.truth.ndjson"
+        }
+      },
+      {
+        "name": "snap-active",
+        "input": {
+          "path": "corpus/snap-active.input.txt"
+        },
+        "truth": {
+          "path": "corpus/snap-active.truth.ndjson"
+        }
+      },
+      {
+        "name": "snap-heavy",
+        "input": {
+          "path": "corpus/snap-heavy.input.txt"
+        },
+        "truth": {
+          "path": "corpus/snap-heavy.truth.ndjson"
+        }
+      }
+    ]
+  },
+  "base": "/private/var/folders/tz/y04t4d0900xdbmz96jp608180000gn/T/exapt-demo4-invariant-telemetry-7UALsP",
+  "status": "completed",
+  "stage": "finished",
+  "pid": 47934,
+  "startedAt": "2026-11-01T01:14:18.331Z",
+  "attempts": [
+    {
+      "candidate": {
+        "id": "cand_mvx50ap5_5d9d945f",
+        "sha256": "762daac37382986909c0cc5a30f86f724b8eaba2f47a4f14cd3b090492843929",
+        "kind": "injected-control",
+        "round": 0,
+        "producer": "negative control: x86-4kb-hallucination",
+        "explanation": [
+          "hardcodes 4096 bytes per page; fails hardware page scale verification"
+        ]
+      },
+      "level": "executed",
+      "survived": false,
+      "tiers": {
+        "visible": {
+          "passed": 0,
+          "total": 1
+        }
+      },
+      "failures": [
+        {
+          "tier": "visible",
+          "oracle": "ground-truth",
+          "detail": "6 difference(s), first: row 1, value: expected 196608000, got 49152000"
+        }
+      ],
+      "rejectedAt": "visible",
+      "reason": "ground-truth: 6 difference(s), first: row 1, value: expected 196608000, got 49152000"
+    },
+    {
+      "candidate": {
+        "id": "cand_mvx50ap5_88f6efd5",
+        "sha256": "7e1e7ee03c0348b511b1156c4fd4d30f5bd1d08064c97856a4fb2dddc5a36d31",
+        "kind": "injected-control",
+        "round": 0,
+        "producer": "negative control: unstripped-trailing-dot",
+        "explanation": [
+          "leaves trailing dot on page counts; fails strict integer schema"
+        ]
+      },
+      "level": "executed",
+      "survived": false,
+      "tiers": {
+        "visible": {
+          "passed": 0,
+          "total": 1
+        }
+      },
+      "failures": [
+        {
+          "tier": "visible",
+          "oracle": "ground-truth",
+          "detail": "6 difference(s), first: row 1, value: expected 196608000, got \"12000.\""
+        },
+        {
+          "tier": "visible",
+          "oracle": "consumer-acceptance",
+          "detail": "kernel-telemetry-collector refused the output: line 1: value must be a non-negative integer in bytes (got 12000.)"
+        }
+      ],
+      "rejectedAt": "visible",
+      "reason": "ground-truth: 6 difference(s), first: row 1, value: expected 196608000, got \"12000.\""
+    },
+    {
+      "candidate": {
+        "id": "cand_mvx50ap5_f9dfa911",
+        "sha256": "40d759ba63f47ce72e672e98e31d576ef9037e136acbea06f51b02304b090f91",
+        "kind": "injected-control",
+        "round": 0,
+        "producer": "negative control: broken-conservation-law",
+        "explanation": [
+          "omits compressor metric; fails physical conservation invariant"
+        ]
+      },
+      "level": "executed",
+      "survived": false,
+      "tiers": {
+        "visible": {
+          "passed": 0,
+          "total": 1
+        }
+      },
+      "failures": [
+        {
+          "tier": "visible",
+          "oracle": "ground-truth",
+          "detail": "1 difference(s), first: (record count): expected 6, got 5"
+        },
+        {
+          "tier": "visible",
+          "oracle": "consumer-acceptance",
+          "detail": "kernel-telemetry-collector refused the output: missing required telemetry metric: memory.compressor_bytes"
+        }
+      ],
+      "rejectedAt": "visible",
+      "reason": "ground-truth: 1 difference(s), first: (record count): expected 6, got 5"
+    },
+    {
+      "candidate": {
+        "id": "cand_mvx50klb_bfa42c39",
+        "sha256": "4de6e1a7b9df71bac9a080fcf5e3b61ce4a1599ffd767249c0b9b2a58bf77a8a",
+        "kind": "model",
+        "round": 2,
+        "producer": "claude-cli/sonnet",
+        "explanation": []
+      },
+      "level": "passed-holdout",
+      "survived": true,
+      "tiers": {
+        "visible": {
+          "passed": 1,
+          "total": 1
+        },
+        "independent": {
+          "passed": 1,
+          "total": 1
+        },
+        "metamorphic": {
+          "passed": 3,
+          "total": 3
+        },
+        "boundary": {
+          "passed": 0,
+          "total": 0
+        },
+        "malformed": {
+          "passed": 2,
+          "total": 2
+        },
+        "holdout": {
+          "passed": 1,
+          "total": 1
+        }
+      },
+      "failures": []
+    }
+  ],
+  "outcome": "New capability exapt:fixed-width-to-kernel-telemetry-collector-4d0a23@1: Independently verified within the stated domain: 1 held-out cases passed with value-level oracles, and 2/3 injected value faults were caught.",
+  "notes": [
+    "enumerative search: an example maps 23 records to 6: filtering and aggregation are outside this language (0 expressions explored)"
+  ],
+  "seed": 2026,
+  "analysis": {
+    "goal": "darwin-kernel-telemetry-induction",
+    "rcx": {
+      "plans": 1,
+      "best": "kernel-telemetry-collector (contract mined by EXAP",
+      "note": "RightClick X found a type-level plan; its text ports say nothing about representation, so this is not evidence the route works"
+    },
+    "reachable": [
+      {
+        "label": "fixed-width{Mach Virtual Memory Statistics: (page,size of 16384 bytes)}",
+        "lineage": []
+      },
+      {
+        "label": "fixed-width{col1,col2,col3}",
+        "lineage": []
+      }
+    ],
+    "required": [
+      {
+        "label": "ndjson{metric,value}",
+        "consumer": null,
+        "downstream": [],
+        "requiredFields": [
+          "metric",
+          "value"
+        ]
+      },
+      {
+        "label": "ndjson{metric,value}",
+        "consumer": "cli:kernel-telemetry-collector:mined",
+        "downstream": [
+          "cli:kernel-telemetry-collector:mined"
+        ],
+        "requiredFields": [
+          "metric",
+          "value"
+        ]
+      }
+    ],
+    "limitations": [],
+    "questions": [],
+    "status": "gap-found",
+    "summary": "Missing transformation: fixed-width{Mach Virtual Memory Statistics: (page,size of 16384 bytes)} -> ndjson{metric,value}.",
+    "gaps": [
+      {
+        "id": "gap-4d0a23b708",
+        "title": "fixed-width{Mach Virtual Memory Statistics: (page,size of 16384 bytes)} -> ndjson{metric,value}",
+        "score": 0.549,
+        "scores": {
+          "feasibility": 0.5,
+          "complexity": 0.6649999999999999,
+          "oracle": 0.85,
+          "reusability": 0.25,
+          "downstream": 0.3333333333333333,
+          "runtimeCost": 0.9,
+          "securityRisk": 0.95,
+          "semanticConfidence": 0
+        },
+        "oracles": [
+          "consumer-acceptance",
+          "ground-truth",
+          "metamorphic"
+        ],
+        "valueOracle": true,
+        "constructible": true,
+        "verifiable": true,
+        "worthAttempting": true,
+        "needsModel": false,
+        "missingInformation": [],
+        "reasons": [],
+        "minimumImplementation": "a pure transformation from fixed-width{Mach Virtual Memory Statistics: (page,size of 16384 bytes)} to ndjson{metric,value}",
+        "evidenceNeeded": [
+          "ground-truth agreement on inputs the implementation has never seen",
+          "cli:kernel-telemetry-collector:mined accepts every output",
+          "deterministic behaviour; correct refusal of malformed input"
+        ]
+      },
+      {
+        "id": "gap-91a186dd48",
+        "title": "fixed-width{col1,col2,col3} -> ndjson{metric,value}",
+        "score": 0.46,
+        "scores": {
+          "feasibility": 0.1,
+          "complexity": 0.6649999999999999,
+          "oracle": 0.85,
+          "reusability": 0.25,
+          "downstream": 0.3333333333333333,
+          "runtimeCost": 0.9,
+          "securityRisk": 0.95,
+          "semanticConfidence": 0
+        },
+        "oracles": [
+          "consumer-acceptance",
+          "ground-truth",
+          "metamorphic"
+        ],
+        "valueOracle": true,
+        "constructible": false,
+        "verifiable": true,
+        "worthAttempting": false,
+        "needsModel": false,
+        "missingInformation": [
+          "value"
+        ],
+        "reasons": [
+          "nothing in fixed-width{col1,col2,col3} appears to determine: value"
+        ],
+        "minimumImplementation": "a pure transformation from fixed-width{col1,col2,col3} to ndjson{metric,value}",
+        "evidenceNeeded": [
+          "ground-truth agreement on inputs the implementation has never seen",
+          "cli:kernel-telemetry-collector:mined accepts every output",
+          "deterministic behaviour; correct refusal of malformed input"
+        ]
+      }
+    ]
+  },
+  "gap": "gap-4d0a23b708",
+  "contract": {
+    "id": "contract-6b872429a6cb",
+    "title": "Convert raw Darwin Mach VM kernel telemetry from vm_stat into normalized OpenTelemetry-style NDJSON metrics with exact byte conversions satisfying the kernel conservation law",
+    "gap": "gap-4d0a23b708",
+    "goal": "darwin-kernel-telemetry-induction",
+    "inputKind": "text",
+    "source": {
+      "label": "fixed-width{Mach Virtual Memory Statistics: (page,size of 16384 bytes)}",
+      "repr": {
+        "syntax": {
+          "format": "fixed-width",
+          "header": true,
+          "columns": [
+            {
+              "name": "Mach Virtual Memory Statistics: (page",
+              "start": 0,
+              "end": 38
+            },
+            {
+              "name": "size of 16384 bytes)",
+              "start": 38,
+              "end": 314
+            }
+          ]
+        },
+        "fields": [
+          {
+            "name": "Mach Virtual Memory Statistics: (page",
+            "kind": "string",
+            "cardinality": 33,
+            "samples": [
+              "Pages free:",
+              "Pages active:",
+              "Pages inactive:",
+              "Pages speculative:",
+              "Pages throttled:"
+            ]
+          },
+          {
+            "name": "size of 16384 bytes)",
+            "kind": "int",
+            "cardinality": 33,
+            "samples": [
+              "10235.",
+              "239013.",
+              "489960.",
+              "4199.",
+              "0."
+            ],
+            "min": 0,
+            "max": 8380051668
+          }
+        ],
+        "records": 33
+      },
+      "sample": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                    10235.\nPages active:                                 239013.\nPages inactive:                               489960.\nPages speculative:                              4199.\nPages throttled:                                   0.\nPages wired down:                             182679.\nPages purgeable:                                  44.\n\"Translation faults\":                     8380051668.\nPages copy-on-write:                       221985566.\nPages zero filled:                        3702805100.\nPages reactivated:                        1749581164.\nPages purged:                              121981006.\nFile-backed pages:                            142028.\nAnonymous pages:                              591144.\nPages stored in compressor:                   717352.\nPages occupied by compressor:                 339680.\nDecompressions:                           1980545640.\nCompressions:                             2126447835.\nPageins:                                   361022051.\nPageouts:                                     770732.\nSwapins:                                   132023962.\nSwapouts:                                  138384982.\nPages tagged:                                 114480.\nPages tagged resident:                         84798.\nPages tagged compressed:                       29682.\nPages tag-storage:                             32768.\nPages tag-storage holding tags:                 4513.\nPages tag-storage free:                            4.\nPages tag-storage non-tag pageable:            28114.\nPages tag-storage non-tag wired:                  85.\nBytes of compressed tags:                    4744960.\nTagged compressions:                        61955295.\nTagged decompressions:                      60349180.\n"
+    },
+    "target": {
+      "label": "ndjson{metric,value}",
+      "repr": {
+        "syntax": {
+          "format": "ndjson"
+        },
+        "fields": [
+          {
+            "name": "metric",
+            "kind": "string",
+            "cardinality": 6,
+            "samples": [
+              "memory.free_bytes",
+              "memory.active_bytes",
+              "memory.inactive_bytes",
+              "memory.speculative_bytes",
+              "memory.wired_bytes"
+            ]
+          },
+          {
+            "name": "value",
+            "kind": "int",
+            "cardinality": 5,
+            "samples": [
+              "134217728",
+              "2684354560",
+              "5368709120",
+              "33554432",
+              "4294967296"
+            ],
+            "min": 33554432,
+            "max": 5368709120
+          }
+        ],
+        "records": 6
+      },
+      "sample": "{\"metric\":\"memory.free_bytes\",\"value\":134217728}\n{\"metric\":\"memory.active_bytes\",\"value\":2684354560}\n{\"metric\":\"memory.inactive_bytes\",\"value\":5368709120}\n{\"metric\":\"memory.speculative_bytes\",\"value\":33554432}\n{\"metric\":\"memory.wired_bytes\",\"value\":4294967296}\n{\"metric\":\"memory.compressor_bytes\",\"value\":4294967296}\n",
+      "requiredFields": [
+        "metric",
+        "value"
+      ]
+    },
+    "consumer": "cli:kernel-telemetry-collector:mined",
+    "upstream": [],
+    "downstream": [
+      "cli:kernel-telemetry-collector:mined"
+    ],
+    "oracles": [
+      {
+        "kind": "consumer-acceptance",
+        "tool": "cli:kernel-telemetry-collector:mined",
+        "independent": true,
+        "valueLevel": false
+      },
+      {
+        "kind": "ground-truth",
+        "items": 3,
+        "independent": true,
+        "valueLevel": true
+      },
+      {
+        "kind": "metamorphic",
+        "relation": "record-count",
+        "independent": false,
+        "valueLevel": false
+      },
+      {
+        "kind": "metamorphic",
+        "relation": "permutation",
+        "independent": false,
+        "valueLevel": false
+      },
+      {
+        "kind": "metamorphic",
+        "relation": "determinism",
+        "independent": false,
+        "valueLevel": false
+      }
+    ],
+    "tolerance": {},
+    "notCarried": [],
+    "properties": [
+      "Pure and deterministic: the same input always gives the same output.",
+      "One output record per input record, in input order.",
+      "Every output is accepted by kernel-telemetry-collector."
+    ]
+  },
+  "counterexamples": [
+    {
+      "problem": "ground-truth: 6 difference(s), first: row 1, value: expected 196608000, got 49152000",
+      "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     12000.\nPages active:                                 140000.\nPages inactive:                               380000.\nPages speculative:                              3000.\nPages throttled:                                   0.\nPages wired down:                             220000.\nPages purgeable:"
+    },
+    {
+      "problem": "ground-truth: 6 difference(s), first: row 1, value: expected 196608000, got \"12000.\"",
+      "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     12000.\nPages active:                                 140000.\nPages inactive:                               380000.\nPages speculative:                              3000.\nPages throttled:                                   0.\nPages wired down:                             220000.\nPages purgeable:"
+    },
+    {
+      "problem": "ground-truth: 1 difference(s), first: (record count): expected 6, got 5",
+      "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     12000.\nPages active:                                 140000.\nPages inactive:                               380000.\nPages speculative:                              3000.\nPages throttled:                                   0.\nPages wired down:                             220000.\nPages purgeable:"
+    }
+  ],
+  "budget": {
+    "calls": 2,
+    "inputTokens": 8163,
+    "outputTokens": 1916,
+    "costUsd": 0.03721,
+    "limits": {
+      "maxCalls": 12,
+      "maxTokens": 120000,
+      "maxCostUsd": 2
+    }
+  },
+  "accepted": {
+    "sha256": "4de6e1a7b9df71bac9a080fcf5e3b61ce4a1599ffd767249c0b9b2a58bf77a8a",
+    "producer": "claude-cli/sonnet",
+    "kind": "model"
+  },
+  "synthesis": {
+    "mode": "model",
+    "producer": "claude-cli/sonnet"
+  },
+  "evidence": {
+    "format": "exapt/evidence@1",
+    "candidate": {
+      "sha256": "4de6e1a7b9df71bac9a080fcf5e3b61ce4a1599ffd767249c0b9b2a58bf77a8a",
+      "producer": "claude-cli/sonnet",
+      "kind": "model"
+    },
+    "level": "verified-in-domain",
+    "checkedAt": "2026-11-01T01:14:44.374Z",
+    "seed": 106755,
+    "tiers": {
+      "visible": {
+        "passed": 1,
+        "total": 1
+      },
+      "independent": {
+        "passed": 1,
+        "total": 1
+      },
+      "boundary": {
+        "passed": 0,
+        "total": 0
+      },
+      "malformed": {
+        "passed": 2,
+        "total": 2
+      },
+      "holdout": {
+        "passed": 1,
+        "total": 1
+      }
+    },
+    "oracles": [
+      {
+        "name": "target-representation",
+        "independent": false,
+        "valueLevel": false,
+        "runs": 3,
+        "failures": 0
+      },
+      {
+        "name": "ground-truth",
+        "independent": true,
+        "valueLevel": true,
+        "runs": 3,
+        "failures": 0
+      },
+      {
+        "name": "consumer-acceptance",
+        "independent": true,
+        "valueLevel": false,
+        "runs": 3,
+        "failures": 0
+      },
+      {
+        "name": "malformed-refusal",
+        "independent": false,
+        "valueLevel": false,
+        "runs": 2,
+        "failures": 0
+      }
+    ],
+    "metamorphic": {
+      "passed": 3,
+      "total": 3,
+      "failures": []
+    },
+    "mutation": {
+      "killed": 2,
+      "total": 11,
+      "value": {
+        "killed": 2,
+        "total": 3
+      },
+      "survivors": [
+        "literal changed at 206",
+        "trim removed at 166",
+        "validation removed at 567",
+        "validation removed at 399",
+        "validation removed at 307",
+        "validation removed at 73",
+        "validation removed at 209",
+        "trim removed at 629",
+        "validation removed at 1067"
+      ]
+    },
+    "fieldRecovery": {
+      "metric": {
+        "matched": 18,
+        "total": 18
+      },
+      "value": {
+        "matched": 18,
+        "total": 18
+      }
+    },
+    "domain": [
+      "source: fixed-width{Mach Virtual Memory Statistics: (page,size of 16384 bytes)}",
+      "tested from 22 to 22 records per input"
+    ],
+    "limitations": [
+      "Evidence comes from finite testing. This does not establish correctness outside the stated domain, or universally.",
+      "Correct relative to kernel-telemetry-collector as it behaved when pinned."
+    ],
+    "assessment": "Independently verified within the stated domain: 1 held-out cases passed with value-level oracles, and 2/3 injected value faults were caught.",
+    "execution": {
+      "backend": "docker",
+      "enforces": [
+        "no network (--network none)",
+        "no host mounts: source and input arrive over stdin, so the home directory and the Docker socket are unreachable",
+        "read-only root filesystem; writes only to a size-limited noexec tmpfs that disappears with the container",
+        "all Linux capabilities dropped, no-new-privileges, unprivileged uid 65534",
+        "no host environment variables are passed into the container",
+        "hard cgroup limits on memory, swap, process count and CPU",
+        "wall-clock timeout enforced by this process and inside the container; output capped by this process",
+        "image pinned by content digest"
+      ],
+      "notEstablished": [
+        "protection against a container-runtime or kernel escape",
+        "a covert channel through timing or resource use",
+        "attestation of the timing and memory figures, which are reported from inside the container"
+      ]
+    },
+    "failures": []
+  },
+  "capability": {
+    "id": "exapt:fixed-width-to-kernel-telemetry-collector-4d0a23",
+    "version": 1,
+    "status": "verified-within-scope"
+  },
+  "workflow": {
+    "id": "wf_mvx50vdc_1433bb5e",
+    "steps": [
+      {
+        "tool": "exapt:fixed-width-to-kernel-telemetry-collector-4d0a23",
+        "kind": "generated",
+        "ok": true,
+        "ms": 106,
+        "receipt": "cfd80f2cd7db80a4a6b6e34c5cdc7142388cb3fbe1acd6e916368eb00aea5386"
+      },
+      {
+        "tool": "cli:kernel-telemetry-collector:mined",
+        "kind": "program",
+        "ok": true,
+        "ms": 93,
+        "receipt": "e16e88e90328df18356c7f0f4797bc41f0ff787fe02953947dadcbfb2ccd65f2"
+      }
+    ],
+    "output": "OK: kernel-telemetry-collector ingested 6 metrics. Managed memory: 19.31 GiB (@ 16384B/page)\n",
+    "ok": true
+  },
+  "finishedAt": "2026-11-01T01:14:45.078Z"
+}

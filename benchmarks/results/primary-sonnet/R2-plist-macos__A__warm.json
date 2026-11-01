@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "warm",
+  "task": "R2-plist-macos",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0283184,
+  "inputTokens": 35483,
+  "outputTokens": 779,
+  "turns": 5,
+  "ms": 16898,
+  "codeBytes": 0,
+  "notes": [
+    "n the files in `sample/` use. All five sample `.json` files use `title`, `build`, `enabled`, `tags`, `limits`, in that order, with no whitespace. I reordered the keys to match that. I didn't run a script or program to produce the final line; I wrote it into the file by hand from the `plutil` output."
+  ],
+  "unauthorised": []
+}

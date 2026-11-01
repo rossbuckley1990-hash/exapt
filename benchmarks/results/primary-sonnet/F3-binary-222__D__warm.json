@@ -1,0 +1,26 @@
+{
+  "arm": "D",
+  "stage": "warm",
+  "task": "F3-binary-222",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0417002,
+  "inputTokens": 51791,
+  "outputTokens": 889,
+  "turns": 6,
+  "ms": 15308,
+  "codeBytes": 0,
+  "notes": [
+    "ion of this file, because I didn't compare it with the sample files. The capability was verified on files with a different column set (`route`, `region`, `grade`, `tariff`, `vendor`), and its mutation testing left some faults uncaught. The output looks consistent, but that is not a full check.\n\nDONE"
+  ],
+  "unauthorised": [],
+  "toolCalls": [
+    "exapt_discover",
+    "exapt_explain",
+    "exapt_use",
+    "exapt_use"
+  ]
+}

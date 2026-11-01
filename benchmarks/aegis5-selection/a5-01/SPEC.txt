@@ -1,0 +1,7 @@
+Rotate a supported BMP image 90 degrees clockwise and expose its RGB raster
+
+Implement synchronous transform(input:Buffer, lib?) -> string. Input is a complete BMP file. Accept only BM signature, 40-byte BITMAPINFOHEADER, one plane, 24 bits/pixel, BI_RGB (compression 0), width 1..64, absolute height 1..64. A positive height means bottom-up rows; a negative height means top-down. Rows contain BGR triples with stride ceil(width*3/4)*4; padding bytes are arbitrary. Pixel offset may exceed 54; skip the gap. File size field equals the input byte count; raster must fit. biSizeImage is either 0 or stride*abs(height). Resolution/reserved fields do not affect pixels. Rotate the logical top-down image exactly 90 degrees clockwise, without color conversion or interpolation. Return JSON {width:oldHeight,height:oldWidth,rgb:lowercaseHexOfRowMajorRGB}. Reject all unsupported formats or invalid supported headers by returning JSON {"error":"UNSUPPORTED_INPUT"}. Throwing is not refusal. JSON object key order/whitespace is ignored; rgb string is exact.
+
+Limitations:
+- Only the stated BMP subset is supported; PNG, indexed, 16/32-bit and compressed BMP are changes of capability scope.
+- At most 64x64 input pixels. No alpha, profiles, color management or image resampling.

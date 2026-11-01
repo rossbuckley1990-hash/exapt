@@ -1,0 +1,19 @@
+{
+  "id": "exapt:fixed-width-to-kernel-telemetry-collector-4d0a23",
+  "current": 1,
+  "versions": [
+    {
+      "version": 1,
+      "status": "verified-within-scope",
+      "at": "2026-11-01T01:14:44.863Z"
+    }
+  ],
+  "history": [
+    {
+      "at": "2026-11-01T01:14:44.863Z",
+      "event": "retained",
+      "detail": "version 1 (verified-within-scope, verified-in-domain)",
+      "version": 1
+    }
+  ]
+}

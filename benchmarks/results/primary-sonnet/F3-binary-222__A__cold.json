@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "cold",
+  "task": "F3-binary-222",
+  "claimed": "done",
+  "hidden": {
+    "passed": 6,
+    "total": 6
+  },
+  "costUsd": 0.1312872,
+  "inputTokens": 223558,
+  "outputTokens": 5000,
+  "turns": 15,
+  "ms": 63965,
+  "codeBytes": 722,
+  "notes": [
+    "dth, space-padded strings. The script trims the padding.\n\nTwo limits on how far this holds for new inputs:\n- **Flag byte:** it was 0 in every row of every sample, so I don't know what a nonzero value means. The script still outputs such rows and prints a warning to stderr.\n- **Column types:** every sample column was a string. If a new file has numeric columns, the script would output them as text."
+  ],
+  "unauthorised": []
+}

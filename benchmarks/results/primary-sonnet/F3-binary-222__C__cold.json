@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "stage": "cold",
+  "task": "F3-binary-222",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "turns": 0,
+  "ms": 40,
+  "codeBytes": 0,
+  "notes": [
+    "no text input and target program to compose from"
+  ]
+}

@@ -1,0 +1,98 @@
+AEGIS-5 SELECTOR PROTOCOL v1
+
+DISCLOSURE GATE
+The engine is not yet frozen. Do not open task directories, solutions, or sealed
+files until the parent states FROZEN. The initial handoff contains only directory
+locations, schema notes, commitment hashes and blockers. This is an agent-selected
+suite and is NOT independent human validation. The selector has no EXAPT engine
+access. All selector artifacts live under the two authorized directory roots.
+
+PUBLIC CONTRACT
+Each a5-NN/task.json uses the requested schema: id, intent, inputKind, software,
+examples (relative input and truth paths), targetSample, comparison, limitations,
+instructions. Every path is relative to its containing task directory. The separate
+composition/task.json has its own input files, truths and instructions. There are
+10 first-stage visible examples and 6 composition examples per task. targetSample
+is the first visible example (not an additional unlabeled test).
+
+SEALED CONTRACT
+/private/tmp/exapt-aegis5-sealed/a5-NN/cases.json is an array of exactly
+{id,input,binary,expected,phase,expect}. Binary input is base64. Text is literal
+UTF-8 content. expected is the exact output string, compared as specified. Each
+task has 12 cold, 4 warm (fresh-session), 4 compatible, 4 incompatible and 6
+composition cases. Incompatible cases expect the documented explicit refusal
+string; thrown exceptions, malformed outputs and timeouts fail. No hidden corpus,
+oracle code, test vectors, expected outputs, or hidden failure feedback is public.
+
+ACQUISITION AND RETENTION
+Freeze the engine, operation inventory, baseline acquisition policy, budgets,
+models and task order before reading task files. No paid model is used by this
+selector or evaluator. Supply first-stage visible examples to each arm with the
+same budget. Freeze each resulting artifact BEFORE evaluation. Cold measures
+unseen first-stage inputs. Warm measures FOUR NEW inputs in FOUR NEW containers,
+reloading only the byte-identical retained artifact; it does not claim to simulate
+the engine's dialogue/session store. Compatible inputs are covered by the original
+contract. Incompatible inputs alter the declared capability scope and require
+refusal. Do not repair from any hidden result. The separate composition stage may
+be acquired from its visible spec/examples and earlier retained artifacts only.
+Freeze its artifact before running composition holdouts. The lib keys are task IDs.
+
+ENTRYPOINT AND EQUAL RUNTIME
+A submitted UTF-8 CommonJS file exports a synchronous function or .transform
+with signature transform(input:string|Buffer, lib?) -> string. A global function
+named transform also works. lib[taskId](input) is synchronous and returns a string.
+Both candidate and saved-executable arms run through exactly the same runner and
+Node 22.23.4 image pinned by content ID. The only imports allowed by the interface
+are assert, buffer, crypto, util, zlib, string_decoder (with optional node: prefix).
+ECMAScript built-ins, Intl, Buffer, TextEncoder and TextDecoder are present. There
+is no fs, process, native executable launch, dependency installation or network
+interface exposed to transforms. Runtime globals can be attacked; node:vm is not
+a security boundary. Docker provides actual host isolation: no host mounts,
+network none, read-only root, non-root UID, all capabilities dropped,
+no-new-privileges, 256 MiB, 64 process limit, one CPU, 10-second case timeout,
+2 MiB transport-output limit and 1 MiB transform-result limit. Only the current
+input and code go into each container, never expectations or other cases.
+Allowed crypto randomness APIs exist but submitted transforms must be deterministic
+and side-effect-free. Baseline and candidate must obey the same contract; do not
+grant native oracle tools to the saved-executable arm. Oracle native tools run
+outside candidate containers and cannot be called by transforms.
+
+SCORING AND NOVELTY
+Report each phase separately and the unweighted mean of its five accuracies.
+Composition output accuracy and observed retained-call accuracy are separate.
+Call instrumentation demonstrates invocation, not causal necessity or absence of
+inlined solutions; provenance/code audit is required for a stronger reuse claim.
+Existing-tool solutions are disclosed per task; using one earns normal correctness
+credit. Do not force invention or call a wrapper a novel algorithm. Absolute
+novelty cannot be inferred from input/output tests. Provide a pre-acquisition
+operation inventory and --exposed-program NAME=PATH adapters where available;
+those controls use the same four first-stage phases and runtime. If an existing
+exposed operation solves all those cases, report no new capability. Otherwise
+the result is relative to the supplied tested set; without inventory/evidence the
+scorer reports novelty undetermined. The selector does not inspect engine internals.
+
+RUNNING (AFTER FROZEN)
+python3 /Users/ross/EXAPT/benchmarks/aegis5-selection/score.py verify
+python3 /Users/ross/EXAPT/benchmarks/aegis5-selection/score.py score --task a5-01 --arm candidate --program /Users/ross/EXAPT/benchmarks/aegis5-selection/submissions/a5-01.cjs --composition-program /Users/ross/EXAPT/benchmarks/aegis5-selection/submissions/a5-01-composition.cjs
+Use --arm saved-executable with the saved baseline artifact through this same path.
+The sealed source/baseline-NN.cjs and composition-NN.cjs are selector-owned oracle
+sanity controls, not engine-generated candidates or evidence of engine performance.
+--retained ID=PATH adds earlier transforms. --inventory PATH accepts frozen JSON
+with operations [{id,entrypoint,semantics,availableInCandidateContainer}] and
+freezeSha256. --exposed-program NAME=PATH measures already exposed solutions.
+All report files are sealed and newly created; never overwrite an earlier result.
+
+IMMUTABILITY AND REPRODUCTION
+PUBLIC-MANIFEST.json commits every public release file except itself and FREEZE.json.
+SEALED-MANIFEST.json commits each hidden corpus, full generator/oracle source,
+reference outputs, preserved generation failures and audit documents. FREEZE.json
+commits both manifests and per-task public-spec and hidden-corpus hashes; its own
+SHA256 is supplied separately. Report/run files and final verification logs live
+under sealed/runs and are excluded. Do not mutate committed files after evaluation.
+The deterministic generator refuses regeneration once FREEZE.json exists. Native
+tool versions are pinned/disclosed; byte-identical native image containers are not
+promised across OS releases, but case bytes and truth strings are frozen. The
+generator and all synthetic inputs are included; there are no manual hidden steps.
+The entire paths.txt inventory lists exact selector-created files. Incidental
+discovery failures are preserved, not silently dropped. No failure is repaired by
+altering a case after engine results.

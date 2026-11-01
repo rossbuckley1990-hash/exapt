@@ -11,6 +11,7 @@ import { Refused } from "../../packages/shared/index.ts";
 import type { Goal } from "../../packages/capability-universe/index.ts";
 import { runDemos } from "../../demos/run.ts";
 import { prepareLabEnvironment } from "../../demos/lab-environment.ts";
+import { inventionExitCode } from "./outcomes.ts";
 
 const HELP = `exapt — Exaptive Capability Engine
 
@@ -32,6 +33,7 @@ const HELP = `exapt — Exaptive Capability Engine
   exapt publish <run-id>              operator approval of a verified candidate
   exapt pin <capability-id> <version> | exapt unpin <capability-id>
   exapt revoke <capability-id> --reason words
+  exapt limit <capability-id> --note words     record a limit learned after publication
   exapt serve [--port 8799] [--lab]   HTTP API, MCP at /mcp, EXAPT LAB at /
   exapt mcp                           MCP over stdio
   exapt demo [1|2|3|all] [--seed N]   the three demonstrations
@@ -105,8 +107,7 @@ async function main(): Promise<number> {
       if (!quiet) exapt.events.on("event", (e) => console.error(`[${e.type}] ${String(e.stage ?? e.summary ?? e.reason ?? e.producer ?? e.problem ?? e.note ?? e.outcome ?? "").slice(0, 160)}`));
       const r = await exapt.startInvention(goal, base, { seed: flag("seed") ? Number(flag("seed")) : undefined, strategy: flag("strategy") as never, publish: flag("no-publish") === undefined });
       print({ run: r.id, status: r.status, outcome: r.outcome, capability: r.capability, synthesis: r.synthesis, level: r.evidence?.level, tiers: r.evidence?.tiers, workflow: r.workflow ? { ok: r.workflow.ok, output: r.workflow.output } : undefined });
-      if (r.status === "refused") return 3;
-      return r.capability?.status === "verified-within-scope" || r.workflow?.ok ? 0 : 4;
+      return inventionExitCode(r);
     }
     case "status": {
       const id = argv[0];
@@ -168,6 +169,9 @@ async function main(): Promise<number> {
       return 0;
     case "unpin":
       exapt.vault.pin(argv[0], null);
+      return 0;
+    case "limit":
+      exapt.vault.addLimitation(argv[0], flag("note") ?? "");
       return 0;
     case "revoke":
       exapt.vault.revoke(argv[0], flag("reason") ?? "revoked by the operator");

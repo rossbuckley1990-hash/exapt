@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "warm",
+  "task": "F5-needless-241",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0245552,
+  "inputTokens": 34415,
+  "outputTokens": 599,
+  "turns": 5,
+  "ms": 17032,
+  "codeBytes": 0,
+  "notes": [
+    "on `input/new.csv` and wrote its output to `out/result.txt`. I also checked the totals with a separate `awk` sum, and they matched.\n\n```\nA2 101\nA3 48\nB2 71\nB3 76\nB4 55\nB5 88\nC5 120\n```\n\nThe only line in the input that isn't a bin and quantity pair is the header. I marked `out/RESULT.json` as `done`."
+  ],
+  "unauthorised": []
+}

@@ -1,0 +1,91 @@
+{
+  "arm": "D",
+  "stage": "cold",
+  "task": "F1-relay-201",
+  "claimed": "done",
+  "hidden": {
+    "passed": 6,
+    "total": 6
+  },
+  "costUsd": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "turns": 0,
+  "ms": 173058,
+  "codeBytes": 2411,
+  "notes": [
+    "New capability exapt:delimited-to-cold-ingest-48b5da@1: Independently verified within the stated domain: 12 held-out cases passed with value-level oracles, and 7/9 injected value faults were caught.",
+    "analysis gap-found",
+    "synthesis deterministic enumerative lens search",
+    "level verified-in-domain",
+    "attempts 3"
+  ],
+  "detail": {
+    "capability": {
+      "id": "exapt:delimited-to-cold-ingest-48b5da",
+      "version": 1,
+      "status": "verified-within-scope"
+    },
+    "gap": "gap-48b5dacd9c",
+    "attempts": [
+      {
+        "producer": "enumerative lens search",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 5 difference(s), first: row 2, amount: expected -6.66, got -5.55"
+      },
+      {
+        "producer": "enumerative lens search",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 5 difference(s), first: row 2, amount: expected -6.66, got -5.55"
+      },
+      {
+        "producer": "enumerative lens search",
+        "level": "passed-holdout"
+      }
+    ],
+    "mutation": {
+      "killed": 7,
+      "total": 12,
+      "value": {
+        "killed": 7,
+        "total": 9
+      },
+      "survivors": [
+        "literal changed at 2279",
+        "offset sign flipped at 1039",
+        "validation removed at 564",
+        "trim removed at 124",
+        "validation removed at 1373"
+      ]
+    },
+    "tiers": {
+      "visible": {
+        "passed": 3,
+        "total": 3
+      },
+      "independent": {
+        "passed": 12,
+        "total": 12
+      },
+      "boundary": {
+        "passed": 10,
+        "total": 10
+      },
+      "malformed": {
+        "passed": 6,
+        "total": 6
+      },
+      "holdout": {
+        "passed": 12,
+        "total": 12
+      }
+    },
+    "limitations": [
+      "Evidence comes from finite testing. This does not establish correctness outside the stated domain, or universally.",
+      "Correct relative to cold-ingest as it behaved when pinned.",
+      "The inverse route cannot carry \"delimiter and quotes inside text\", so that case is judged by the consumer and by text preservation only."
+    ]
+  }
+}

@@ -5,7 +5,7 @@ import path from "node:path";
 import test from "node:test";
 import { negativeControls } from "../demos/missing-transformation/controls.ts";
 import { rawDump, referenceAdapter, writeEnvironment } from "../demos/missing-transformation/environment.ts";
-import { compareRecords, parseRecords, sniffSyntax } from "../packages/capability-universe/index.ts";
+import { compareRecords, parseRecords, sniff, sniffSyntax } from "../packages/capability-universe/index.ts";
 import { Scripted } from "../packages/model-adapters/index.ts";
 import { makeCandidate } from "../packages/synthesiser/index.ts";
 import { engine, sandboxSkip, tempDir } from "./support.ts";
@@ -187,4 +187,49 @@ test("a portable definition must pass here before it does anything here", { skip
   assert.notEqual(refused.manifest.status, "verified-within-scope");
   await receiver.host.rc.flush();
   await refuser.host.rc.flush();
+});
+
+test("new truth refutes a retained capability even though its format still fits", async () => {
+  const dir = tempDir("life");
+  const e = await engine(dir, []);
+  const row = (id: number, v: number) => `id=${id} v=${v}`;
+  const truth = (pairs: Array<[number, number]>) => pairs.map(([id, v]) => JSON.stringify({ id: String(id), double: String(v * 2) })).join("\n") + "\n";
+  // A retained operation that is right only while v is under 100, which is all it was ever shown.
+  const convert = (text: string) => text.trim().split("\n").map((l) => {
+    const m = /id=(\d+) v=(\d+)/.exec(l)!;
+    return JSON.stringify({ id: m[1], double: String(Number(m[2]) < 100 ? Number(m[2]) * 2 : Number(m[2])) });
+  }).join("\n") + "\n";
+  const sample = `${row(1, 2)}\n${row(2, 3)}\n`;
+  e.universe.tools.set("exapt:retained", {
+    id: "exapt:retained", name: "exapt:retained", kind: "generated",
+    contract: { tool: "exapt:retained", name: "exapt:retained", docs: "", input: { repr: sniff(sample), requiredFields: [], optionalFields: [], influentialFields: [], positive: [sample], rejected: [] }, output: { repr: sniff(convert(sample)), example: convert(sample) }, options: [], behaviour: "", claims: [], probes: 0 },
+    run: async (input) => ({ ok: true, stdout: convert(String(input)), stderr: "", ms: 1, code: 0 }),
+  });
+  const item = (name: string, pairs: Array<[number, number]>) => ({ name, input: { text: `${pairs.map(([id, v]) => row(id, v)).join("\n")}\n` }, truth: { text: truth(pairs) } });
+  const corpus = [item("small", [[1, 2], [2, 3]]), item("also small", [[3, 4], [4, 5]])];
+  assert.equal((await e.analyse({ id: "g", intent: "read", corpus, want: { sample: { text: "a sample must not outrank stated truth" } } }, dir)).status, "achievable-existing");
+  const a = await e.analyse({ id: "g", intent: "read", corpus: [...corpus, item("large", [[5, 500]])], want: {} }, dir);
+  assert.equal(a.status, "gap-found", a.summary);
+  assert.deepEqual(a.refuted?.map((r) => r.name), ["large"]);
+  assert.match(a.summary, /refuted by new evidence/);
+  await e.host.rc.flush();
+});
+
+test("a repair becomes the next version of what it repairs, under the same id", { skip: sandboxSkip }, async () => {
+  const dir = tempDir("life");
+  const env = writeEnvironment(16, dir);
+  const e = await engine(dir, [env.programs]);
+  const first = await e.startInvention(env.goal, env.base, { seed: 16 });
+  const id = first.capability!.id;
+  const exported = (await e.universe.tool(env.params.programs.exporter)!.run(rawDump(env.params, 3, 8))).stdout;
+  const right = referenceAdapter(env.params, exported);
+  const lines = right.trim().split("\n");
+  const wrong = [lines[0].replace(/:(-?[0-9.]+),/, ':999,'), ...lines.slice(1)].join("\n") + "\n";
+  const corpus = [{ name: "right", input: { text: exported }, truth: { text: right } }, { name: "contradicts the capability", input: { text: exported }, truth: { text: wrong } }];
+  const run = await e.startInvention({ id: "repair", intent: "read these", corpus, want: {} }, dir, { seed: 3, rounds: 1, publish: false });
+  assert.equal(run.analysis?.refuted?.[0].name, "contradicts the capability");
+  assert.equal(run.replaces?.id, id);
+  assert.equal(run.goal.corpus?.[1].pinned, true);
+  assert.ok(e.vault.state(id)!.history.some((h) => h.event === "refuted"));
+  await e.host.rc.flush();
 });

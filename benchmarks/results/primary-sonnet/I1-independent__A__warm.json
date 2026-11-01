@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "warm",
+  "task": "I1-independent",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.05197140000000001,
+  "inputTokens": 43988,
+  "outputTokens": 2016,
+  "turns": 5,
+  "ms": 28378,
+  "codeBytes": 0,
+  "notes": [
+    "** 1 / period, rounded to three decimals.\n- **Weight:** 100 − 25 × quality. This mapping is my own assumption, since the help text only says quality 0 is best and weight 100 is best.\n\nIf that weight mapping is wrong, the mean-weight column would change, but the picks, spans and amplitudes would not."
+  ],
+  "unauthorised": []
+}

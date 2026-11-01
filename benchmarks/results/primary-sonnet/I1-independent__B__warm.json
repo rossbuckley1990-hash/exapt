@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "stage": "warm",
+  "task": "I1-independent",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0429297,
+  "inputTokens": 51501,
+  "outputTokens": 1236,
+  "turns": 6,
+  "ms": 25062,
+  "codeBytes": 0,
+  "notes": [
+    "\nThe report covers 12 picks:\n\n| Station | Picks | Largest amplitude | Mean weight |\n|---|---|---|---|\n| ANMO | 1 | 18857.5 nm | 100.0% |\n| COR | 4 | 19027.7 nm | 62.5% |\n| YKA | 7 | 21329.3 nm | 28.6% |\n\nI spot-checked COR's largest amplitude by hand: 31193 counts × 0.61 = 19027.7 nm, which matches."
+  ],
+  "unauthorised": []
+}

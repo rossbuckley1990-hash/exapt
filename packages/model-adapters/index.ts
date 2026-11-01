@@ -138,15 +138,18 @@ export class ClaudeCli implements ModelAdapter {
   readonly model: string;
   readonly real = true;
   private readonly timeoutMs: number;
-  constructor(o: { model: string; timeoutMs?: number }) {
+  private readonly maxBudgetUsd?: number;
+  constructor(o: { model: string; timeoutMs?: number; maxBudgetUsd?: number }) {
     this.model = o.model;
     this.timeoutMs = o.timeoutMs ?? 300_000;
+    if (o.maxBudgetUsd !== undefined && (!Number.isFinite(o.maxBudgetUsd) || o.maxBudgetUsd <= 0)) throw new Error("maxBudgetUsd must be positive");
+    this.maxBudgetUsd = o.maxBudgetUsd;
   }
   async complete(req: CompletionRequest): Promise<Completion> {
     const t0 = performance.now();
     const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "exapt-model-"));
     try {
-      const r = await runCli("claude", ["-p", "--output-format", "json", "--model", this.model, "--max-turns", "1", "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence", "--system-prompt", req.system], req.prompt, cwd, this.timeoutMs);
+      const r = await runCli("claude", ["-p", "--output-format", "json", "--model", this.model, "--max-turns", "1", "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence", ...(this.maxBudgetUsd !== undefined ? ["--max-budget-usd", String(this.maxBudgetUsd)] : []), "--system-prompt", req.system], req.prompt, cwd, this.timeoutMs);
       if (r.code !== 0) throw new Error(`claude exited ${r.code}: ${(r.stderr || r.stdout).slice(0, 300)}`);
       const body = JSON.parse(r.stdout) as { result?: string; is_error?: boolean; total_cost_usd?: number; usage?: { input_tokens?: number; output_tokens?: number; cache_creation_input_tokens?: number; cache_read_input_tokens?: number } };
       if (body.is_error) throw new Error(`claude reported an error: ${String(body.result).slice(0, 300)}`);

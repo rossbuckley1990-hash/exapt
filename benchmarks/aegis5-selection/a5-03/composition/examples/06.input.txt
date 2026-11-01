@@ -1,0 +1,1 @@
+{"events":[{"epoch":1325235600,"value":8},{"epoch":1325232000,"value":-7},{"epoch":1325145600,"value":6}],"version":1,"zone":"Pacific/Apia"}

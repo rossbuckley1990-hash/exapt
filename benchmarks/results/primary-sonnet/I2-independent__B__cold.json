@@ -1,0 +1,21 @@
+{
+  "arm": "B",
+  "stage": "cold",
+  "task": "I2-independent",
+  "claimed": "done",
+  "hidden": {
+    "passed": 6,
+    "total": 6
+  },
+  "costUsd": 0.041388900000000006,
+  "inputTokens": 32437,
+  "outputTokens": 1551,
+  "turns": 4,
+  "ms": 19188,
+  "codeBytes": 1145,
+  "notes": [
+    "identical to A/cold by design",
+    "hen pipes it through `settle`. The rewriting covers:\n- ISO dates.\n- Section names: Dress Circle becomes CIRCLE and Boxes becomes BOX.\n- The web channel renamed to online.\n- Prices turned into whole pence, so `£70` and `£45.00` both work.\n- The `TOTAL` line, which it works out from the sales.\n\nA malformed line stops the run with an error on stderr and exit code 1. I didn't test any malformed input."
+  ],
+  "unauthorised": []
+}

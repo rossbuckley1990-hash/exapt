@@ -1,0 +1,22 @@
+{
+  "arm": "B",
+  "stage": "cold",
+  "task": "F1-relay-201",
+  "claimed": "done",
+  "hidden": {
+    "passed": 0,
+    "total": 6
+  },
+  "costUsd": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "turns": 0,
+  "ms": 720020,
+  "codeBytes": 359,
+  "notes": [
+    "identical to A/cold by design",
+    ""
+  ],
+  "unauthorised": [],
+  "incomplete": "exit null: "
+}

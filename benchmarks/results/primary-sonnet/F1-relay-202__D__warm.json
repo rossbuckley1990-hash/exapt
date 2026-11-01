@@ -1,0 +1,28 @@
+{
+  "arm": "D",
+  "stage": "warm",
+  "task": "F1-relay-202",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.051417599999999994,
+  "inputTokens": 79709,
+  "outputTokens": 1339,
+  "turns": 8,
+  "ms": 248517,
+  "codeBytes": 0,
+  "notes": [
+    "against 105.23 produced. The search ended as \"not established\".\n\nI also couldn't run the programs directly, because shell access is disabled in this session. So I couldn't read their `--help` output or try the chain by hand. Anything I wrote to the output file would have been invented.\n\nNOT-POSSIBLE"
+  ],
+  "unauthorised": [],
+  "toolCalls": [
+    "exapt_memory",
+    "exapt_discover",
+    "exapt_analyse",
+    "exapt_rcx",
+    "exapt_explain",
+    "exapt_invent"
+  ]
+}

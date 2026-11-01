@@ -1,0 +1,384 @@
+{
+  "format": "exapt/capability@1",
+  "id": "exapt:fixed-width-to-kernel-telemetry-collector-4d0a23",
+  "version": 1,
+  "status": "verified-within-scope",
+  "title": "fixed-width{Mach Virtual Memory Statistics: (page,size of 16384 bytes)} -> ndjson{metric,value}",
+  "purpose": "Convert raw Darwin Mach VM kernel telemetry from vm_stat into normalized OpenTelemetry-style NDJSON metrics with exact byte conversions satisfying the kernel conservation law",
+  "inputs": [
+    {
+      "name": "input",
+      "representation": "fixed-width{Mach Virtual Memory Statistics: (page,size of 16384 bytes)}",
+      "semantic": "text"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "output",
+      "representation": "ndjson{metric,value}",
+      "semantic": "text"
+    }
+  ],
+  "artefact": {
+    "sha256": "4de6e1a7b9df71bac9a080fcf5e3b61ce4a1599ffd767249c0b9b2a58bf77a8a",
+    "language": "javascript-esm",
+    "entry": "transform",
+    "bytes": 1247
+  },
+  "contract": {
+    "id": "contract-6b872429a6cb",
+    "title": "Convert raw Darwin Mach VM kernel telemetry from vm_stat into normalized OpenTelemetry-style NDJSON metrics with exact byte conversions satisfying the kernel conservation law",
+    "gap": "gap-4d0a23b708",
+    "goal": "darwin-kernel-telemetry-induction",
+    "inputKind": "text",
+    "source": {
+      "label": "fixed-width{Mach Virtual Memory Statistics: (page,size of 16384 bytes)}",
+      "repr": {
+        "syntax": {
+          "format": "fixed-width",
+          "header": true,
+          "columns": [
+            {
+              "name": "Mach Virtual Memory Statistics: (page",
+              "start": 0,
+              "end": 38
+            },
+            {
+              "name": "size of 16384 bytes)",
+              "start": 38,
+              "end": 314
+            }
+          ]
+        },
+        "fields": [
+          {
+            "name": "Mach Virtual Memory Statistics: (page",
+            "kind": "string",
+            "cardinality": 33,
+            "samples": [
+              "Pages free:",
+              "Pages active:",
+              "Pages inactive:",
+              "Pages speculative:",
+              "Pages throttled:"
+            ]
+          },
+          {
+            "name": "size of 16384 bytes)",
+            "kind": "int",
+            "cardinality": 33,
+            "samples": [
+              "10235.",
+              "239013.",
+              "489960.",
+              "4199.",
+              "0."
+            ],
+            "min": 0,
+            "max": 8380051668
+          }
+        ],
+        "records": 33
+      },
+      "sample": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                    10235.\nPages active:                                 239013.\nPages inactive:                               489960.\nPages speculative:                              4199.\nPages throttled:                                   0.\nPages wired down:                             182679.\nPages purgeable:                                  44.\n\"Translation faults\":                     8380051668.\nPages copy-on-write:                       221985566.\nPages zero filled:                        3702805100.\nPages reactivated:                        1749581164.\nPages purged:                              121981006.\nFile-backed pages:                            142028.\nAnonymous pages:                              591144.\nPages stored in compressor:                   717352.\nPages occupied by compressor:                 339680.\nDecompressions:                           1980545640.\nCompressions:                             2126447835.\nPageins:                                   361022051.\nPageouts:                                     770732.\nSwapins:                                   132023962.\nSwapouts:                                  138384982.\nPages tagged:                                 114480.\nPages tagged resident:                         84798.\nPages tagged compressed:                       29682.\nPages tag-storage:                             32768.\nPages tag-storage holding tags:                 4513.\nPages tag-storage free:                            4.\nPages tag-storage non-tag pageable:            28114.\nPages tag-storage non-tag wired:                  85.\nBytes of compressed tags:                    4744960.\nTagged compressions:                        61955295.\nTagged decompressions:                      60349180.\n"
+    },
+    "target": {
+      "label": "ndjson{metric,value}",
+      "repr": {
+        "syntax": {
+          "format": "ndjson"
+        },
+        "fields": [
+          {
+            "name": "metric",
+            "kind": "string",
+            "cardinality": 6,
+            "samples": [
+              "memory.free_bytes",
+              "memory.active_bytes",
+              "memory.inactive_bytes",
+              "memory.speculative_bytes",
+              "memory.wired_bytes"
+            ]
+          },
+          {
+            "name": "value",
+            "kind": "int",
+            "cardinality": 5,
+            "samples": [
+              "134217728",
+              "2684354560",
+              "5368709120",
+              "33554432",
+              "4294967296"
+            ],
+            "min": 33554432,
+            "max": 5368709120
+          }
+        ],
+        "records": 6
+      },
+      "sample": "{\"metric\":\"memory.free_bytes\",\"value\":134217728}\n{\"metric\":\"memory.active_bytes\",\"value\":2684354560}\n{\"metric\":\"memory.inactive_bytes\",\"value\":5368709120}\n{\"metric\":\"memory.speculative_bytes\",\"value\":33554432}\n{\"metric\":\"memory.wired_bytes\",\"value\":4294967296}\n{\"metric\":\"memory.compressor_bytes\",\"value\":4294967296}\n",
+      "requiredFields": [
+        "metric",
+        "value"
+      ]
+    },
+    "consumer": "cli:kernel-telemetry-collector:mined",
+    "upstream": [],
+    "downstream": [
+      "cli:kernel-telemetry-collector:mined"
+    ],
+    "oracles": [
+      {
+        "kind": "consumer-acceptance",
+        "tool": "cli:kernel-telemetry-collector:mined",
+        "independent": true,
+        "valueLevel": false
+      },
+      {
+        "kind": "ground-truth",
+        "items": 3,
+        "independent": true,
+        "valueLevel": true
+      },
+      {
+        "kind": "metamorphic",
+        "relation": "record-count",
+        "independent": false,
+        "valueLevel": false
+      },
+      {
+        "kind": "metamorphic",
+        "relation": "permutation",
+        "independent": false,
+        "valueLevel": false
+      },
+      {
+        "kind": "metamorphic",
+        "relation": "determinism",
+        "independent": false,
+        "valueLevel": false
+      }
+    ],
+    "tolerance": {},
+    "notCarried": [],
+    "properties": [
+      "Pure and deterministic: the same input always gives the same output.",
+      "One output record per input record, in input order.",
+      "Every output is accepted by kernel-telemetry-collector."
+    ]
+  },
+  "dependencies": [
+    {
+      "kind": "program",
+      "role": "consumer",
+      "capability": "cli:kernel-telemetry-collector:mined",
+      "name": "kernel-telemetry-collector",
+      "sha256": "21649e52f2c1e6d2fe2c46556b80d586a17d2befe7d21733cb766ae98d988906",
+      "behaviour": "8c291a8be9225fe1b31167f8eb0207d37b408e09011e61060374ded62c973837"
+    }
+  ],
+  "environment": {
+    "runtime": "node 22",
+    "image": "node@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da",
+    "backend": "docker"
+  },
+  "permissions": {
+    "network": false,
+    "filesystem": "none",
+    "risk": "read"
+  },
+  "evidence": {
+    "format": "exapt/evidence@1",
+    "candidate": {
+      "sha256": "4de6e1a7b9df71bac9a080fcf5e3b61ce4a1599ffd767249c0b9b2a58bf77a8a",
+      "producer": "claude-cli/sonnet",
+      "kind": "model"
+    },
+    "level": "verified-in-domain",
+    "checkedAt": "2026-11-01T01:14:44.374Z",
+    "seed": 106755,
+    "tiers": {
+      "visible": {
+        "passed": 1,
+        "total": 1
+      },
+      "independent": {
+        "passed": 1,
+        "total": 1
+      },
+      "boundary": {
+        "passed": 0,
+        "total": 0
+      },
+      "malformed": {
+        "passed": 2,
+        "total": 2
+      },
+      "holdout": {
+        "passed": 1,
+        "total": 1
+      }
+    },
+    "oracles": [
+      {
+        "name": "target-representation",
+        "independent": false,
+        "valueLevel": false,
+        "runs": 3,
+        "failures": 0
+      },
+      {
+        "name": "ground-truth",
+        "independent": true,
+        "valueLevel": true,
+        "runs": 3,
+        "failures": 0
+      },
+      {
+        "name": "consumer-acceptance",
+        "independent": true,
+        "valueLevel": false,
+        "runs": 3,
+        "failures": 0
+      },
+      {
+        "name": "malformed-refusal",
+        "independent": false,
+        "valueLevel": false,
+        "runs": 2,
+        "failures": 0
+      }
+    ],
+    "metamorphic": {
+      "passed": 3,
+      "total": 3,
+      "failures": []
+    },
+    "mutation": {
+      "killed": 2,
+      "total": 11,
+      "value": {
+        "killed": 2,
+        "total": 3
+      },
+      "survivors": [
+        "literal changed at 206",
+        "trim removed at 166",
+        "validation removed at 567",
+        "validation removed at 399",
+        "validation removed at 307",
+        "validation removed at 73",
+        "validation removed at 209",
+        "trim removed at 629",
+        "validation removed at 1067"
+      ]
+    },
+    "fieldRecovery": {
+      "metric": {
+        "matched": 18,
+        "total": 18
+      },
+      "value": {
+        "matched": 18,
+        "total": 18
+      }
+    },
+    "domain": [
+      "source: fixed-width{Mach Virtual Memory Statistics: (page,size of 16384 bytes)}",
+      "tested from 22 to 22 records per input"
+    ],
+    "limitations": [
+      "Evidence comes from finite testing. This does not establish correctness outside the stated domain, or universally.",
+      "Correct relative to kernel-telemetry-collector as it behaved when pinned."
+    ],
+    "assessment": "Independently verified within the stated domain: 1 held-out cases passed with value-level oracles, and 2/3 injected value faults were caught.",
+    "execution": {
+      "backend": "docker",
+      "enforces": [
+        "no network (--network none)",
+        "no host mounts: source and input arrive over stdin, so the home directory and the Docker socket are unreachable",
+        "read-only root filesystem; writes only to a size-limited noexec tmpfs that disappears with the container",
+        "all Linux capabilities dropped, no-new-privileges, unprivileged uid 65534",
+        "no host environment variables are passed into the container",
+        "hard cgroup limits on memory, swap, process count and CPU",
+        "wall-clock timeout enforced by this process and inside the container; output capped by this process",
+        "image pinned by content digest"
+      ],
+      "notEstablished": [
+        "protection against a container-runtime or kernel escape",
+        "a covert channel through timing or resource use",
+        "attestation of the timing and memory figures, which are reported from inside the container"
+      ]
+    },
+    "failures": []
+  },
+  "limitations": [
+    "Evidence comes from finite testing. This does not establish correctness outside the stated domain, or universally.",
+    "Correct relative to kernel-telemetry-collector as it behaved when pinned."
+  ],
+  "counterexamples": [
+    {
+      "problem": "ground-truth: 6 difference(s), first: row 1, value: expected 196608000, got 49152000",
+      "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     12000.\nPages active:                                 140000.\nPages inactive:                               380000.\nPages speculative:                              3000.\nPages throttled:                                   0.\nPages wired down:                             220000.\nPages purgeable:"
+    },
+    {
+      "problem": "ground-truth: 6 difference(s), first: row 1, value: expected 196608000, got \"12000.\"",
+      "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     12000.\nPages active:                                 140000.\nPages inactive:                               380000.\nPages speculative:                              3000.\nPages throttled:                                   0.\nPages wired down:                             220000.\nPages purgeable:"
+    },
+    {
+      "problem": "ground-truth: 1 difference(s), first: (record count): expected 6, got 5",
+      "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     12000.\nPages active:                                 140000.\nPages inactive:                               380000.\nPages speculative:                              3000.\nPages throttled:                                   0.\nPages wired down:                             220000.\nPages purgeable:"
+    }
+  ],
+  "rejected": [
+    {
+      "producer": "negative control: x86-4kb-hallucination",
+      "rejectedAt": "visible",
+      "reason": "ground-truth: 6 difference(s), first: row 1, value: expected 196608000, got 49152000"
+    },
+    {
+      "producer": "negative control: unstripped-trailing-dot",
+      "rejectedAt": "visible",
+      "reason": "ground-truth: 6 difference(s), first: row 1, value: expected 196608000, got \"12000.\""
+    },
+    {
+      "producer": "negative control: broken-conservation-law",
+      "rejectedAt": "visible",
+      "reason": "ground-truth: 1 difference(s), first: (record count): expected 6, got 5"
+    }
+  ],
+  "provenance": {
+    "goal": "darwin-kernel-telemetry-induction",
+    "run": "run_mvx50aqj_83f3ed7d",
+    "producer": "claude-cli/sonnet",
+    "kind": "model",
+    "real": true,
+    "createdAt": "2026-11-01T01:14:44.851Z"
+  },
+  "revalidation": {
+    "suite": "aa610f0dbf27e53f32791632ebf2acce2f4e330b19b5aad623a804f2f12a9822",
+    "witnesses": [
+      {
+        "caseId": "visible-1",
+        "outputDigest": "273a9360938316c28aa60aef18463d3ec5f49685641e4b26fac7dadf7814a7b1"
+      },
+      {
+        "caseId": "independent-2",
+        "outputDigest": "1d161b0545d7adc05f06d1210131a75b41c3ed65810d376a4e4b19ec7e493bf5"
+      }
+    ],
+    "instructions": "Re-run the stored suite through the pinned oracles; compare the consumer's outputs with the stored witnesses."
+  },
+  "receipts": [
+    "997887b10242e942002b3bc05233076df94450df1e32e12cb5d1f23d995bb117",
+    "5eb04a27daee50e7e4a7f588342d1eee1f0d640aae2dada8cd71be432e236b92",
+    "e858d447cdf76a23e09ef17147ba69ef9bfb17e14f1dabdb093add770e38c788",
+    "18832dbe7bce892705b23675b556899a00f1385228ea5d4cd8249294386e856e",
+    "9a84175505154822ca8c69353aa396948975ab0f8904c18928d7162f54a1749e",
+    "09021c3ad00206f80e41229bf74e418d228c45185432f9c552fff9ccb16e3e10",
+    "02a16f00b90e09afbce75976a41db3a8ad66538bf48c167654239fd33c8ff80d",
+    "101af98ab63be7cf43ee99a9ee8102a0aa85a03f304990c2012420e905c0bf01"
+  ]
+}

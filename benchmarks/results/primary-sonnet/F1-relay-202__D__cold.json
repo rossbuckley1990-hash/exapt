@@ -1,0 +1,77 @@
+{
+  "arm": "D",
+  "stage": "cold",
+  "task": "F1-relay-202",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.46485,
+  "inputTokens": 50210,
+  "outputTokens": 35228,
+  "turns": 8,
+  "ms": 390475,
+  "codeBytes": 0,
+  "notes": [
+    "Not established: no candidate survived; last: enumerative search: no expression in the language explains target field \"norm_value\" (1226 expressions explored)",
+    "analysis gap-found",
+    "synthesis none ",
+    "level none",
+    "attempts 8",
+    "enumerative search: no expression in the language explains target field \"norm_value\" (1226 expressions explored)"
+  ],
+  "detail": {
+    "gap": "gap-0c9ceedd77",
+    "attempts": [
+      {
+        "producer": "enumerative lens search",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 5 difference(s), first: row 2, norm_value: expected 103.49, got 102.59"
+      },
+      {
+        "producer": "enumerative lens search",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 5 difference(s), first: row 2, norm_value: expected 103.49, got 102.59"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 6 difference(s), first: row 1, norm_value: expected 104.58, got 105"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 6 difference(s), first: row 1, norm_value: expected 104.58, got 105"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 6 difference(s), first: row 1, norm_value: expected 104.58, got 105"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 6 difference(s), first: row 1, norm_value: expected 104.58, got 105"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 6 difference(s), first: row 1, norm_value: expected 104.58, got 105"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 6 difference(s), first: row 1, norm_value: expected 104.58, got 105"
+      }
+    ]
+  }
+}

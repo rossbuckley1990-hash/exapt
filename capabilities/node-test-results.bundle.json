@@ -1,0 +1,375 @@
+{
+  "format": "exapt/bundle@1",
+  "exportedAt": "2026-11-01T01:26:35.821Z",
+  "manifest": {
+    "format": "exapt/capability@1",
+    "id": "exapt:text-to-ndjson-e52395",
+    "version": 3,
+    "status": "verified-within-scope",
+    "title": "text -> ndjson{suite,name,status}",
+    "purpose": "Parse TAP output written by node --test into NDJSON: one JSON object per test with keys suite, name, status. Test names must keep leading and trailing spaces exactly.",
+    "inputs": [
+      {
+        "name": "input",
+        "representation": "text",
+        "semantic": "text"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "output",
+        "representation": "ndjson{suite,name,status}",
+        "semantic": "text"
+      }
+    ],
+    "artefact": {
+      "sha256": "8631f757950f836170f51e420eabc568a92d32e3b011e4a7961c19adf5bdf9e7",
+      "language": "javascript-esm",
+      "entry": "transform",
+      "bytes": 2214
+    },
+    "contract": {
+      "id": "contract-951663ea6385",
+      "title": "Parse TAP output written by node --test into NDJSON: one JSON object per test with keys suite, name, status. Test names must keep leading and trailing spaces exactly.",
+      "gap": "gap-e523959a04",
+      "goal": "node-tap-to-tests",
+      "inputKind": "text",
+      "source": {
+        "label": "text",
+        "repr": {
+          "syntax": {
+            "format": "text"
+          },
+          "fields": [],
+          "records": 0
+        },
+        "sample": "TAP version 13\n# Subtest: every vendored RightClick X file is byte-identical to the recorded upstream commit\nok 1 - every vendored RightClick X file is byte-identical to the recorded upstream commit\n  ---\n  duration_ms: 3.797167\n  type: 'test'\n  ...\n# Subtest: the one private seam EXAPT relies on still exists\nok 2 - the one private seam EXAPT relies on still exists\n  ---\n  duration_ms: 8.189083\n  type: 'test'\n  ...\n# Subtest: the Apache licence travels with the vendored code\nok 3 - the Apache licence travels with the vendored code\n  ---\n  duration_ms: 0.361083\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 155.6765\n"
+      },
+      "target": {
+        "label": "ndjson{suite,name,status}",
+        "repr": {
+          "syntax": {
+            "format": "ndjson"
+          },
+          "fields": [
+            {
+              "name": "suite",
+              "kind": "empty",
+              "cardinality": 1,
+              "samples": [
+                ""
+              ]
+            },
+            {
+              "name": "name",
+              "kind": "string",
+              "cardinality": 9,
+              "samples": [
+                "retained composition links real runs and survives restart without copying raw execution data",
+                "withdrawal and changed dependency defeat historical success without granting authority",
+                "a refused saved goal cannot erase the last completed dependency evidence, including after restart",
+                "missing or truncated completed history cannot make a failed retained goal look current",
+                "refusals, unavailable plans and failed checks are real events without provider-error leakage"
+              ]
+            },
+            {
+              "name": "status",
+              "kind": "string",
+              "cardinality": 1,
+              "samples": [
+                "pass"
+              ]
+            }
+          ],
+          "records": 9
+        },
+        "sample": "{\"suite\": \"\", \"name\": \"retained composition links real runs and survives restart without copying raw execution data\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"withdrawal and changed dependency defeat historical success without granting authority\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"a refused saved goal cannot erase the last completed dependency evidence, including after restart\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"missing or truncated completed history cannot make a failed retained goal look current\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"refusals, unavailable plans and failed checks are real events without provider-error leakage\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"withdrawal records identifiers even for operations never executed\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"bounded history reports overflow, restart, invalid cursor and truncated evidence\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"old persisted state remains readable and forged publication trust supplies no outcome evidence\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"dashboard lifecycle endpoints remain authenticated, bounded, searchable and side-effect free\", \"status\": \"pass\"}\n",
+        "requiredFields": []
+      },
+      "consumer": null,
+      "upstream": [],
+      "downstream": [],
+      "oracles": [
+        {
+          "kind": "ground-truth",
+          "items": 18,
+          "independent": true,
+          "valueLevel": true
+        },
+        {
+          "kind": "metamorphic",
+          "relation": "determinism",
+          "independent": false,
+          "valueLevel": false
+        }
+      ],
+      "tolerance": {},
+      "notCarried": [],
+      "properties": [
+        "Pure and deterministic: the same input always gives the same output."
+      ]
+    },
+    "dependencies": [],
+    "environment": {
+      "runtime": "node 22",
+      "image": "node@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da",
+      "backend": "docker"
+    },
+    "permissions": {
+      "network": false,
+      "filesystem": "none",
+      "risk": "read"
+    },
+    "evidence": {
+      "format": "exapt/evidence@1",
+      "candidate": {
+        "sha256": "8631f757950f836170f51e420eabc568a92d32e3b011e4a7961c19adf5bdf9e7",
+        "producer": "claude-cli/sonnet",
+        "kind": "model"
+      },
+      "level": "verified-in-domain",
+      "checkedAt": "2026-11-01T01:25:18.094Z",
+      "seed": 522803725,
+      "tiers": {
+        "visible": {
+          "passed": 5,
+          "total": 5
+        },
+        "independent": {
+          "passed": 6,
+          "total": 6
+        },
+        "boundary": {
+          "passed": 0,
+          "total": 0
+        },
+        "malformed": {
+          "passed": 2,
+          "total": 2
+        },
+        "holdout": {
+          "passed": 7,
+          "total": 7
+        }
+      },
+      "oracles": [
+        {
+          "name": "target-representation",
+          "independent": false,
+          "valueLevel": false,
+          "runs": 18,
+          "failures": 0
+        },
+        {
+          "name": "ground-truth",
+          "independent": true,
+          "valueLevel": true,
+          "runs": 18,
+          "failures": 0
+        },
+        {
+          "name": "malformed-refusal",
+          "independent": false,
+          "valueLevel": false,
+          "runs": 2,
+          "failures": 0
+        }
+      ],
+      "metamorphic": {
+        "passed": 3,
+        "total": 3,
+        "failures": []
+      },
+      "mutation": {
+        "killed": 13,
+        "total": 23,
+        "value": {
+          "killed": 11,
+          "total": 18
+        },
+        "survivors": [
+          "boundary moved at 462",
+          "inequality inverted at 1379",
+          "literal changed at 1260",
+          "pop removed at 1712",
+          "boundary moved at 1345",
+          "pop removed at 666",
+          "equality inverted at 1306",
+          "trim removed at 1299",
+          "validation removed at 73",
+          "validation removed at 1576"
+        ]
+      },
+      "fieldRecovery": {
+        "suite": {
+          "matched": 108,
+          "total": 108
+        },
+        "name": {
+          "matched": 108,
+          "total": 108
+        },
+        "status": {
+          "matched": 108,
+          "total": 108
+        }
+      },
+      "domain": [
+        "source: text",
+        "tested from 0 to 0 records per input"
+      ],
+      "limitations": [
+        "Evidence comes from finite testing. This does not establish correctness outside the stated domain, or universally."
+      ],
+      "assessment": "Independently verified within the stated domain: 7 held-out cases passed with value-level oracles, and 11/18 injected value faults were caught.",
+      "execution": {
+        "backend": "docker",
+        "enforces": [
+          "no network (--network none)",
+          "no host mounts: source and input arrive over stdin, so the home directory and the Docker socket are unreachable",
+          "read-only root filesystem; writes only to a size-limited noexec tmpfs that disappears with the container",
+          "all Linux capabilities dropped, no-new-privileges, unprivileged uid 65534",
+          "no host environment variables are passed into the container",
+          "hard cgroup limits on memory, swap, process count and CPU",
+          "wall-clock timeout enforced by this process and inside the container; output capped by this process",
+          "image pinned by content digest"
+        ],
+        "notEstablished": [
+          "protection against a container-runtime or kernel escape",
+          "a covert channel through timing or resource use",
+          "attestation of the timing and memory figures, which are reported from inside the container"
+        ]
+      },
+      "failures": []
+    },
+    "limitations": [
+      "Evidence comes from finite testing. This does not establish correctness outside the stated domain, or universally.",
+      "Node's TAP writes a real newline or tab in a test name and a literal backslash sequence as the same bytes, so such names cannot be recovered from TAP by any program.",
+      "One record per leaf test. A parent test with subtests, and a suite, appear in the suite field of their children, not as records, so counts match Node's JUnit reporter and not the TAP summary line."
+    ],
+    "counterexamples": [],
+    "rejected": [],
+    "provenance": {
+      "goal": "node-tap-to-tests",
+      "run": "run_mvx53egl_a4ec993e",
+      "producer": "claude-cli/sonnet",
+      "kind": "model",
+      "real": true,
+      "createdAt": "2026-11-01T01:25:18.404Z"
+    },
+    "revalidation": {
+      "suite": "b541476f20511efb1658d961aabadd910167ded6f4fe4b4fe278dd4023b4c749",
+      "witnesses": [],
+      "instructions": "Re-run the stored suite through the pinned oracles; compare the consumer's outputs with the stored witnesses."
+    },
+    "receipts": []
+  },
+  "source": "export function transform(input, lib) {\n  if (typeof input !== \"string\") throw new Error(\"input must be a string\");\n  const lines = input.split(/\\r?\\n/);\n  if (!lines.some((l) => /^TAP version \\d+/.test(l))) {\n    throw new Error(\"not TAP output\");\n  }\n  const unesc = (s) => s.replace(/\\\\([#\\\\])/g, \"$1\");\n  const stack = [];\n  const out = [];\n  const subRe = /^(\\s*)# Subtest: (.*)$/;\n  const resRe = /^(\\s*)(not ok|ok) (\\d+)(?: - (.*))?$/;\n  for (let i = 0; i < lines.length; i++) {\n    const line = lines[i];\n    let m = subRe.exec(line);\n    if (m) {\n      const indent = m[1].length;\n      while (stack.length && stack[stack.length - 1].indent >= indent) stack.pop();\n      if (stack.length) stack[stack.length - 1].hadChild = true;\n      stack.push({ indent, name: unesc(m[2]), hadChild: false });\n      continue;\n    }\n    m = resRe.exec(line);\n    if (!m) continue;\n    const indent = m[1].length;\n    let raw = m[4] === undefined ? \"\" : m[4];\n    let status = m[2] === \"ok\" ? \"pass\" : \"fail\";\n    const d = /(?<!\\\\)\\s#\\s*(SKIP|TODO)\\b/i.exec(raw);\n    if (d) {\n      status = d[1].toLowerCase() === \"skip\" ? \"skip\" : \"todo\";\n      raw = raw.slice(0, d.index);\n    }\n    const name = unesc(raw);\n    // yaml block\n    let type = null;\n    let j = i + 1;\n    if (j < lines.length && lines[j].trim() === \"---\") {\n      j++;\n      while (j < lines.length && lines[j].trim() !== \"...\") {\n        const t = /^\\s*type:\\s*'?([a-z]+)'?\\s*$/.exec(lines[j]);\n        if (t && lines[j].search(/\\S/) === indent + 2) type = t[1];\n        j++;\n      }\n      if (j >= lines.length) throw new Error(\"unterminated YAML block\");\n      i = j;\n    }\n    while (stack.length && stack[stack.length - 1].indent > indent) stack.pop();\n    let node = null;\n    if (stack.length && stack[stack.length - 1].indent === indent) node = stack.pop();\n    const hadChild = node ? node.hadChild : false;\n    if (type === \"suite\" || hadChild) continue;\n    out.push({\n      suite: stack.map((s) => s.name).join(\" > \"),\n      name,\n      status,\n    });\n  }\n  return out\n    .map(\n      (e) =>\n        `{\"suite\": ${JSON.stringify(e.suite)}, \"name\": ${JSON.stringify(e.name)}, \"status\": ${JSON.stringify(e.status)}}\\n`\n    )\n    .join(\"\");\n}\n",
+  "suite": {
+    "cases": [
+      {
+        "id": "visible-1",
+        "tier": "visible",
+        "input": "TAP version 13\n# Subtest: absent output information skips incomplete candidates without dropping the requirement\nok 1 - absent output information skips incomplete candidates without dropping the requirement\n  ---\n  duration_ms: 12.670917\n  type: 'test'\n  ...\n# Subtest: a capability ID in require gets guidance, never an automatic operation anchor\nok 2 - a capability ID in require gets guidance, never an automatic operation anchor\n  ---\n  duration_ms: 11.90625\n  type: 'test'\n  ...\n# Subtest: explicit acquisition can add missing evidence before the same request executes\nok 3 - explicit acquisition can add missing evidence before the same request executes\n  ---\n  duration_ms: 2.653125\n  type: 'test'\n  ...\n# Subtest: known information still diagnoses policy denial, while unknown information does not\nok 4 - known information still diagnoses policy denial, while unknown information does not\n  ---\n  duration_ms: 0.73325\n  type: 'test'\n  ...\n# Subtest: output metadata does not establish an unrelated input's semantic compatibility\nok 5 - output metadata does not establish an unrelated input's semantic compatibility\n  ---\n  duration_ms: 0.712208\n  type: 'test'\n  ...\n# Subtest: a scalar output's literal bracketed name retains the existing leaf satisfaction rule\nok 6 - a scalar output's literal bracketed name retains the existing leaf satisfaction rule\n  ---\n  duration_ms: 0.924333\n  type: 'test'\n  ...\n1..6\n# tests 6\n# suites 0\n# pass 6\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 197.168041\n",
+        "expected": "{\"suite\": \"\", \"name\": \"absent output information skips incomplete candidates without dropping the requirement\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"a capability ID in require gets guidance, never an automatic operation anchor\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"explicit acquisition can add missing evidence before the same request executes\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"known information still diagnoses policy denial, while unknown information does not\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"output metadata does not establish an unrelated input's semantic compatibility\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"a scalar output's literal bracketed name retains the existing leaf satisfaction rule\", \"status\": \"pass\"}\n",
+        "origin": "corpus",
+        "note": "rcx-output-requirements"
+      },
+      {
+        "id": "visible-2",
+        "tier": "visible",
+        "input": "TAP version 13\n# Subtest: suite whose hook fails\n    # Subtest: never really runs\n    not ok 1 - never really runs\n      ---\n      duration_ms: 0\n      type: 'test'\n      location: '/private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/break/b2.test.mjs:4:3'\n      failureType: 'cancelledByParent'\n      error: 'test did not finish before its parent and was cancelled'\n      code: 'ERR_TEST_FAILURE'\n      ...\n    1..1\nnot ok 1 - suite whose hook fails\n  ---\n  duration_ms: 1.073083\n  type: 'suite'\n  location: '/private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/break/b2.test.mjs:2:1'\n  failureType: 'hookFailed'\n  error: 'before hook failed'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    SuiteContext.<anonymous> (file:///private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/break/b2.test.mjs:3:24)\n    TestHook.runInAsyncScope (node:async_hooks:226:14)\n    TestHook.run (node:internal/test_runner/test:1402:25)\n    TestHook.run (node:internal/test_runner/test:1757:18)\n    TestHook.run (node:internal/util:581:20)\n    Suite.runHook (node:internal/test_runner/test:1289:20)\n    Suite.run (node:internal/test_runner/test:1899:18)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)\n  ...\n# Subtest: only\n    # Subtest: passes\n    ok 1 - passes\n      ---\n      duration_ms: 0.2995\n      type: 'test'\n      ...\n    # Subtest: fails\n    not ok 2 - fails\n      ---\n      duration_ms: 0.194625\n      type: 'test'\n      location: '/private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/break/b2.test.mjs:6:50'\n      failureType: 'testCodeFailure'\n      error: '7'\n      code: 'ERR_TEST_FAILURE'\n      stack: |-\n        async Promise.all (index 0)\n      ...\n    1..2\nnot ok 2 - only\n  ---\n  duration_ms: 1.451542\n  type: 'suite'\n  location: '/private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/break/b2.test.mjs:6:1'\n  failureType: 'subtestsFailed'\n  error: '1 subtest failed'\n  code: 'ERR_TEST_FAILURE'\n  ...\n1..2\n# tests 3\n# suites 2\n# pass 1\n# fail 1\n# cancelled 1\n# skipped 0\n# todo 0\n# duration_ms 192.885875\n",
+        "expected": "{\"suite\": \"suite whose hook fails\", \"name\": \"never really runs\", \"status\": \"fail\"}\n{\"suite\": \"only\", \"name\": \"passes\", \"status\": \"pass\"}\n{\"suite\": \"only\", \"name\": \"fails\", \"status\": \"fail\"}\n",
+        "origin": "corpus",
+        "note": "b2"
+      },
+      {
+        "id": "visible-3",
+        "tier": "visible",
+        "input": "TAP version 13\n# Subtest: every vendored RightClick X file is byte-identical to the recorded upstream commit\nok 1 - every vendored RightClick X file is byte-identical to the recorded upstream commit\n  ---\n  duration_ms: 3.797167\n  type: 'test'\n  ...\n# Subtest: the one private seam EXAPT relies on still exists\nok 2 - the one private seam EXAPT relies on still exists\n  ---\n  duration_ms: 8.189083\n  type: 'test'\n  ...\n# Subtest: the Apache licence travels with the vendored code\nok 3 - the Apache licence travels with the vendored code\n  ---\n  duration_ms: 0.361083\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 155.6765\n",
+        "expected": "{\"suite\": \"\", \"name\": \"every vendored RightClick X file is byte-identical to the recorded upstream commit\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"the one private seam EXAPT relies on still exists\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"the Apache licence travels with the vendored code\", \"status\": \"pass\"}\n",
+        "origin": "corpus",
+        "note": "exapt-vendor"
+      },
+      {
+        "id": "visible-4",
+        "tier": "visible",
+        "input": "TAP version 13\n# file:///private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/break/b3.test.mjs:1\n# throw new Error(\"this file crashes before defining any test\");\n#       ^\n# Error: this file crashes before defining any test\n#     at file:///private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/break/b3.test.mjs:1:7\n#     at \\#evaluateSync (node:internal/modules/esm/module_job:702:24)\n#     at ModuleJobSync.runSync (node:internal/modules/esm/module_job:717:43)\n#     at node:internal/modules/esm/loader:383:11\n#     at TracingChannel.traceSync (node:diagnostics_channel:557:14)\n#     at ModuleLoader.importForEntryPoint (node:internal/modules/esm/loader:372:21)\n#     at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:184:34)\n#     at node:internal/main/run_main_module:33:47\n# Node.js v26.12.0\n# Subtest: break/b3.test.mjs\nnot ok 1 - break/b3.test.mjs\n  ---\n  duration_ms: 323.82725\n  type: 'test'\n  location: '/private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/break/b3.test.mjs:1:1'\n  failureType: 'testCodeFailure'\n  exitCode: 1\n  signal: ~\n  error: 'test failed'\n  code: 'ERR_TEST_FAILURE'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 333.641916\n",
+        "expected": "{\"suite\": \"\", \"name\": \"break/b3.test.mjs\", \"status\": \"fail\"}\n",
+        "origin": "corpus",
+        "note": "b3"
+      },
+      {
+        "id": "visible-5",
+        "tier": "visible",
+        "input": "TAP version 13\n# Subtest: only code can be mutated: comments, strings, templates and regexes cannot\nok 1 - only code can be mutated: comments, strings, templates and regexes cannot\n  ---\n  duration_ms: 0.900666\n  type: 'test'\n  ...\n# Subtest: division is not read as a regular expression\nok 2 - division is not read as a regular expression\n  ---\n  duration_ms: 0.064458\n  type: 'test'\n  ...\n# Subtest: value faults are sampled first and an altered error message is not a fault\nok 3 - value faults are sampled first and an altered error message is not a fault\n  ---\n  duration_ms: 0.108375\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 177.88975\n",
+        "expected": "{\"suite\": \"\", \"name\": \"only code can be mutated: comments, strings, templates and regexes cannot\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"division is not read as a regular expression\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"value faults are sampled first and an altered error message is not a fault\", \"status\": \"pass\"}\n",
+        "origin": "corpus",
+        "note": "exapt-mutation"
+      },
+      {
+        "id": "independent-6",
+        "tier": "independent",
+        "input": "TAP version 13\n# Subtest: retained composition links real runs and survives restart without copying raw execution data\nok 1 - retained composition links real runs and survives restart without copying raw execution data\n  ---\n  duration_ms: 61.750166\n  type: 'test'\n  ...\n# Subtest: withdrawal and changed dependency defeat historical success without granting authority\nok 2 - withdrawal and changed dependency defeat historical success without granting authority\n  ---\n  duration_ms: 18.675833\n  type: 'test'\n  ...\n# Subtest: a refused saved goal cannot erase the last completed dependency evidence, including after restart\nok 3 - a refused saved goal cannot erase the last completed dependency evidence, including after restart\n  ---\n  duration_ms: 34.628\n  type: 'test'\n  ...\n# Subtest: missing or truncated completed history cannot make a failed retained goal look current\nok 4 - missing or truncated completed history cannot make a failed retained goal look current\n  ---\n  duration_ms: 62.746959\n  type: 'test'\n  ...\n# Subtest: refusals, unavailable plans and failed checks are real events without provider-error leakage\nok 5 - refusals, unavailable plans and failed checks are real events without provider-error leakage\n  ---\n  duration_ms: 1.032875\n  type: 'test'\n  ...\n# Subtest: withdrawal records identifiers even for operations never executed\nok 6 - withdrawal records identifiers even for operations never executed\n  ---\n  duration_ms: 2.291708\n  type: 'test'\n  ...\n# Subtest: bounded history reports overflow, restart, invalid cursor and truncated evidence\nok 7 - bounded history reports overflow, restart, invalid cursor and truncated evidence\n  ---\n  duration_ms: 2.603083\n  type: 'test'\n  ...\n# Subtest: old persisted state remains readable and forged publication trust supplies no outcome evidence\nok 8 - old persisted state remains readable and forged publication trust supplies no outcome evidence\n  ---\n  duration_ms: 13.646125\n  type: 'test'\n  ...\n# Subtest: dashboard lifecycle endpoints remain authenticated, bounded, searchable and side-effect free\nok 9 - dashboard lifecycle endpoints remain authenticated, bounded, searchable and side-effect free\n  ---\n  duration_ms: 3.06525\n  type: 'test'\n  ...\n1..9\n# tests 9\n# suites 0\n# pass 9\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 388.303666\n",
+        "expected": "{\"suite\": \"\", \"name\": \"retained composition links real runs and survives restart without copying raw execution data\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"withdrawal and changed dependency defeat historical success without granting authority\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"a refused saved goal cannot erase the last completed dependency evidence, including after restart\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"missing or truncated completed history cannot make a failed retained goal look current\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"refusals, unavailable plans and failed checks are real events without provider-error leakage\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"withdrawal records identifiers even for operations never executed\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"bounded history reports overflow, restart, invalid cursor and truncated evidence\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"old persisted state remains readable and forged publication trust supplies no outcome evidence\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"dashboard lifecycle endpoints remain authenticated, bounded, searchable and side-effect free\", \"status\": \"pass\"}\n",
+        "origin": "corpus",
+        "note": "rcx-living-lifecycle"
+      },
+      {
+        "id": "independent-7",
+        "tier": "independent",
+        "input": "TAP version 13\n# Subtest: delimited to NDJSON with renames, a unit conversion and epoch seconds\nok 1 - delimited to NDJSON with renames, a unit conversion and epoch seconds\n  ---\n  duration_ms: 4.52325\n  type: 'test'\n  ...\n# Subtest: key/value blocks to a tab table with a fixed-width number\nok 2 - key/value blocks to a tab table with a fixed-width number\n  ---\n  duration_ms: 0.584125\n  type: 'test'\n  ...\n# Subtest: fixed-width to JSON array with upper-casing and a stripped prefix\nok 3 - fixed-width to JSON array with upper-casing and a stripped prefix\n  ---\n  duration_ms: 0.58125\n  type: 'test'\n  ...\n# Subtest: two fields joined, and a date reformatted\nok 4 - two fields joined, and a date reformatted\n  ---\n  duration_ms: 0.764416\n  type: 'test'\n  ...\n# Subtest: the simplest hypothesis comes first and more evidence corrects it\nok 5 - the simplest hypothesis comes first and more evidence corrects it\n  ---\n  duration_ms: 0.47575\n  type: 'test'\n  ...\n# Subtest: a task outside the language fails and says why, with no fallback answer\nok 6 - a task outside the language fails and says why, with no fallback answer\n  ---\n  duration_ms: 0.1045\n  type: 'test'\n  ...\n# Subtest: a field no expression can explain is reported, not guessed\nok 7 - a field no expression can explain is reported, not guessed\n  ---\n  duration_ms: 0.105042\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 121.945333\n",
+        "expected": "{\"suite\": \"\", \"name\": \"delimited to NDJSON with renames, a unit conversion and epoch seconds\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"key/value blocks to a tab table with a fixed-width number\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"fixed-width to JSON array with upper-casing and a stripped prefix\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"two fields joined, and a date reformatted\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"the simplest hypothesis comes first and more evidence corrects it\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"a task outside the language fails and says why, with no fallback answer\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"a field no expression can explain is reported, not guessed\", \"status\": \"pass\"}\n",
+        "origin": "corpus",
+        "note": "exapt-lens"
+      },
+      {
+        "id": "independent-8",
+        "tier": "independent",
+        "input": "TAP version 13\n# Subtest: baseline saves real executable code and documentation across fresh stores\nok 1 - baseline saves real executable code and documentation across fresh stores\n  ---\n  duration_ms: 8.490917\n  type: 'test'\n  ...\n# Subtest: baseline files are bounded logical names, never host paths\nok 2 - baseline files are bounded logical names, never host paths\n  ---\n  duration_ms: 0.487791\n  type: 'test'\n  ...\n# Subtest: worker uses measured fetch without hiding errors or request content\nok 3 - worker uses measured fetch without hiding errors or request content\n  ---\n  duration_ms: 27.792292\n  type: 'test'\n  ...\n# Subtest: unawaited fetch is drained before accounting closes\nok 4 - unawaited fetch is drained before accounting closes\n  ---\n  duration_ms: 94.472334\n  type: 'test'\n  ...\n# Subtest: timeouts, output overflow and script errors never become successful values\nok 5 - timeouts, output overflow and script errors never become successful values\n  ---\n  duration_ms: 117.034334\n  type: 'test'\n  ...\n# Subtest: model has only the four authorised coding-baseline tools\nok 6 - model has only the four authorised coding-baseline tools\n  ---\n  duration_ms: 0.154583\n  type: 'test'\n  ...\n1..6\n# tests 6\n# suites 0\n# pass 6\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 469.508958\n",
+        "expected": "{\"suite\": \"\", \"name\": \"baseline saves real executable code and documentation across fresh stores\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"baseline files are bounded logical names, never host paths\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"worker uses measured fetch without hiding errors or request content\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"unawaited fetch is drained before accounting closes\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"timeouts, output overflow and script errors never become successful values\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"model has only the four authorised coding-baseline tools\", \"status\": \"pass\"}\n",
+        "origin": "corpus",
+        "note": "rcx-coding-baseline"
+      },
+      {
+        "id": "independent-9",
+        "tier": "independent",
+        "input": "TAP version 13\n# Subtest: a suite with a \\# hash and 'quotes' in its name\n    # Subtest: works with spaces and: colons\n    ok 1 - works with spaces and: colons\n      ---\n      duration_ms: 0.242792\n      type: 'test'\n      ...\n    # Subtest: reports a skip\n    ok 2 - reports a skip # SKIP\n      ---\n      duration_ms: 0.041166\n      type: 'test'\n      ...\n    # Subtest: nested suite\n        # Subtest: deep test\n        ok 1 - deep test\n          ---\n          duration_ms: 0.501042\n          type: 'test'\n          ...\n        1..1\n    ok 3 - nested suite\n      ---\n      duration_ms: 0.597667\n      type: 'suite'\n      ...\n    1..3\nok 1 - a suite with a \\# hash and 'quotes' in its name\n  ---\n  duration_ms: 1.333917\n  type: 'suite'\n  ...\n1..1\n# tests 3\n# suites 2\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 1\n# todo 0\n# duration_ms 97.391958\n",
+        "expected": "{\"suite\": \"a suite with a # hash and 'quotes' in its name\", \"name\": \"works with spaces and: colons\", \"status\": \"pass\"}\n{\"suite\": \"a suite with a # hash and 'quotes' in its name\", \"name\": \"reports a skip\", \"status\": \"skip\"}\n{\"suite\": \"a suite with a # hash and 'quotes' in its name > nested suite\", \"name\": \"deep test\", \"status\": \"pass\"}\n",
+        "origin": "corpus",
+        "note": "edge-b"
+      },
+      {
+        "id": "independent-10",
+        "tier": "independent",
+        "input": "TAP version 13\n# Subtest: induction reads a self-describing format it has never seen, across schemas\nok 1 - induction reads a self-describing format it has never seen, across schemas\n  ---\n  duration_ms: 4.066333\n  type: 'test'\n  ...\n# Subtest: the emitted reader refuses a truncated file instead of inventing records\nok 2 - the emitted reader refuses a truncated file instead of inventing records\n  ---\n  duration_ms: 0.770875\n  type: 'test'\n  ...\n# Subtest: bytes with no record structure fail honestly\nok 3 - bytes with no record structure fail honestly\n  ---\n  duration_ms: 0.7055\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 135.970708\n",
+        "expected": "{\"suite\": \"\", \"name\": \"induction reads a self-describing format it has never seen, across schemas\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"the emitted reader refuses a truncated file instead of inventing records\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"bytes with no record structure fail honestly\", \"status\": \"pass\"}\n",
+        "origin": "corpus",
+        "note": "exapt-layout"
+      },
+      {
+        "id": "independent-11",
+        "tier": "independent",
+        "input": "TAP version 13\n# Subtest: adds numbers\nok 1 - adds numbers\n  ---\n  duration_ms: 0.639875\n  type: 'test'\n  ...\n# Subtest: this one fails\nnot ok 2 - this one fails\n  ---\n  duration_ms: 0.618583\n  type: 'test'\n  location: '/private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/edge/edge-a.test.mjs:4:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    2 !== 3\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 3\n  actual: 2\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/edge/edge-a.test.mjs:4:37)\n    Test.runInAsyncScope (node:async_hooks:226:14)\n    Test.run (node:internal/test_runner/test:1402:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:974:18)\n    Test.postRun (node:internal/test_runner/test:1542:19)\n    Test.run (node:internal/test_runner/test:1467:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)\n  ...\n# Subtest: skipped for now\nok 3 - skipped for now # SKIP not on this platform\n  ---\n  duration_ms: 0.040958\n  type: 'test'\n  ...\n# Subtest: still to write\nok 4 - still to write # TODO\n  ---\n  duration_ms: 0.444125\n  type: 'test'\n  ...\n# Subtest: has subtests\n    # Subtest: inner passes\n    ok 1 - inner passes\n      ---\n      duration_ms: 0.058666\n      type: 'test'\n      ...\n    # Subtest: inner fails\n    not ok 2 - inner fails\n      ---\n      duration_ms: 0.044875\n      type: 'test'\n      location: '/private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/edge/edge-a.test.mjs:9:11'\n      failureType: 'testCodeFailure'\n      error: 'boom: inner'\n      code: 'ERR_TEST_FAILURE'\n      stack: |-\n        TestContext.<anonymous> (file:///private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/edge/edge-a.test.mjs:9:45)\n        Test.runInAsyncScope (node:async_hooks:226:14)\n        Test.run (node:internal/test_runner/test:1402:25)\n        Test.start (node:internal/test_runner/test:1262:17)\n        TestContext.test (node:internal/test_runner/test:400:20)\n        TestContext.<anonymous> (file:///private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/edge/edge-a.test.mjs:9:11)\n        async Test.run (node:internal/test_runner/test:1409:7)\n        async Test.processPendingSubtests (node:internal/test_runner/test:974:7)\n      ...\n    1..2\nnot ok 5 - has subtests\n  ---\n  duration_ms: 0.377834\n  type: 'test'\n  location: '/private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/edge/edge-a.test.mjs:7:1'\n  failureType: 'subtestsFailed'\n  error: '1 subtest failed'\n  code: 'ERR_TEST_FAILURE'\n  ...\n1..5\n# tests 7\n# suites 0\n# pass 2\n# fail 3\n# cancelled 0\n# skipped 1\n# todo 1\n# duration_ms 97.500708\n",
+        "expected": "{\"suite\": \"\", \"name\": \"adds numbers\", \"status\": \"pass\"}\n{\"suite\": \"\", \"name\": \"this one fails\", \"status\": \"fail\"}\n{\"suite\": \"\", \"name\": \"skipped for now\", \"status\": \"skip\"}\n{\"suite\": \"\", \"name\": \"still to write\", \"status\": \"todo\"}\n{\"suite\": \"has subtests\", \"name\": \"inner passes\", \"status\": \"pass\"}\n{\"suite\": \"has subtests\", \"name\": \"inner fails\", \"status\": \"fail\"}\n",
+        "origin": "corpus",
+        "note": "edge-a"
+      },
+      {
+        "id": "malformed-12",
+        "tier": "malformed",
+        "input": "<<<<<<<<<<<<\n~~~~~~~~\n~~~~\n~~\n<<<\n<<<<<<<<<",
+        "origin": "malformed",
+        "note": "not this format at all"
+      },
+      {
+        "id": "malformed-13",
+        "tier": "malformed",
+        "input": "",
+        "origin": "malformed",
+        "note": "empty input"
+      }
+    ]
+  },
+  "digest": "9529838394ea8e847c884bcd207d486459e622db25ee89a6ddfeecfe3ffc6cc1"
+}

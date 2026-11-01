@@ -1,0 +1,156 @@
+{
+  "name": "broken-conservation-law",
+  "kind": "negative-control",
+  "sha256": "40d759ba63f47ce72e672e98e31d576ef9037e136acbea06f51b02304b090f91",
+  "passed": 0,
+  "total": 21,
+  "rows": [
+    {
+      "id": "original-snap-active.input.txt",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.4023749999999993,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":98304000}\n{\"metric\":\"memory.active_bytes\",\"value\":2949120000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":5734400000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":24576000}\n{\"metric\":\"memory.wired_bytes\",\"value\":4423680000}\n"
+    },
+    {
+      "id": "original-snap-heavy.input.txt",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.2923329999999993,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":65536000}\n{\"metric\":\"memory.active_bytes\",\"value\":3276800000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":5242880000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":16384000}\n{\"metric\":\"memory.wired_bytes\",\"value\":4915200000}\n"
+    },
+    {
+      "id": "original-snap-idle.input.txt",
+      "pass": false,
+      "status": "ok",
+      "ms": 2.4020420000000016,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":196608000}\n{\"metric\":\"memory.active_bytes\",\"value\":2293760000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":6225920000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":49152000}\n{\"metric\":\"memory.wired_bytes\",\"value\":3604480000}\n"
+    },
+    {
+      "id": "page-4096-counts-0",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.220374999999997,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "page-4096-counts-1",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.1944579999999974,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":16384}\n{\"metric\":\"memory.active_bytes\",\"value\":49152}\n{\"metric\":\"memory.inactive_bytes\",\"value\":114688}\n{\"metric\":\"memory.speculative_bytes\",\"value\":212992}\n{\"metric\":\"memory.wired_bytes\",\"value\":475136}\n"
+    },
+    {
+      "id": "page-4096-counts-2",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.1765419999999978,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":196608000}\n{\"metric\":\"memory.active_bytes\",\"value\":2293760000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":6225920000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":49152000}\n{\"metric\":\"memory.wired_bytes\",\"value\":3604480000}\n"
+    },
+    {
+      "id": "page-16384-counts-0",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.1721250000000012,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "page-16384-counts-1",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.5667919999999995,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":16384}\n{\"metric\":\"memory.active_bytes\",\"value\":49152}\n{\"metric\":\"memory.inactive_bytes\",\"value\":114688}\n{\"metric\":\"memory.speculative_bytes\",\"value\":212992}\n{\"metric\":\"memory.wired_bytes\",\"value\":475136}\n"
+    },
+    {
+      "id": "page-16384-counts-2",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.517792,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":196608000}\n{\"metric\":\"memory.active_bytes\",\"value\":2293760000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":6225920000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":49152000}\n{\"metric\":\"memory.wired_bytes\",\"value\":3604480000}\n"
+    },
+    {
+      "id": "page-65536-counts-0",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.1274579999999972,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "page-65536-counts-1",
+      "pass": false,
+      "status": "ok",
+      "ms": 3.343291999999998,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":16384}\n{\"metric\":\"memory.active_bytes\",\"value\":49152}\n{\"metric\":\"memory.inactive_bytes\",\"value\":114688}\n{\"metric\":\"memory.speculative_bytes\",\"value\":212992}\n{\"metric\":\"memory.wired_bytes\",\"value\":475136}\n"
+    },
+    {
+      "id": "page-65536-counts-2",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.4253339999999994,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":196608000}\n{\"metric\":\"memory.active_bytes\",\"value\":2293760000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":6225920000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":49152000}\n{\"metric\":\"memory.wired_bytes\",\"value\":3604480000}\n"
+    },
+    {
+      "id": "empty",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.6750419999999977,
+      "output": "\n"
+    },
+    {
+      "id": "header-only",
+      "pass": false,
+      "status": "ok",
+      "ms": 2.097709000000002,
+      "output": "\n"
+    },
+    {
+      "id": "one-invalid-line",
+      "pass": false,
+      "status": "ok",
+      "ms": 3.136459000000002,
+      "output": "\n"
+    },
+    {
+      "id": "missing-metric",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.3122079999999983,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":16384}\n{\"metric\":\"memory.active_bytes\",\"value\":49152}\n{\"metric\":\"memory.inactive_bytes\",\"value\":114688}\n{\"metric\":\"memory.speculative_bytes\",\"value\":212992}\n{\"metric\":\"memory.wired_bytes\",\"value\":475136}\n"
+    },
+    {
+      "id": "zero-page-size",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.1576670000000036,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":16384}\n{\"metric\":\"memory.active_bytes\",\"value\":49152}\n{\"metric\":\"memory.inactive_bytes\",\"value\":114688}\n{\"metric\":\"memory.speculative_bytes\",\"value\":212992}\n{\"metric\":\"memory.wired_bytes\",\"value\":475136}\n"
+    },
+    {
+      "id": "duplicate-metric",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.2219580000000008,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":16384}\n{\"metric\":\"memory.active_bytes\",\"value\":49152}\n{\"metric\":\"memory.inactive_bytes\",\"value\":114688}\n{\"metric\":\"memory.speculative_bytes\",\"value\":212992}\n{\"metric\":\"memory.wired_bytes\",\"value\":475136}\n{\"metric\":\"memory.free_bytes\",\"value\":16367616}\n"
+    },
+    {
+      "id": "invalid-header-prefix",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.6076669999999993,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":16384}\n{\"metric\":\"memory.active_bytes\",\"value\":49152}\n{\"metric\":\"memory.inactive_bytes\",\"value\":114688}\n{\"metric\":\"memory.speculative_bytes\",\"value\":212992}\n{\"metric\":\"memory.wired_bytes\",\"value\":475136}\n"
+    },
+    {
+      "id": "blank-line",
+      "pass": false,
+      "status": "ok",
+      "ms": 2.1982500000000016,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":16384}\n{\"metric\":\"memory.active_bytes\",\"value\":49152}\n{\"metric\":\"memory.inactive_bytes\",\"value\":114688}\n{\"metric\":\"memory.speculative_bytes\",\"value\":212992}\n{\"metric\":\"memory.wired_bytes\",\"value\":475136}\n"
+    },
+    {
+      "id": "live-host",
+      "pass": false,
+      "status": "ok",
+      "ms": 5.100165999999987,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":125468672}\n{\"metric\":\"memory.active_bytes\",\"value\":3470901248}\n{\"metric\":\"memory.inactive_bytes\",\"value\":7636058112}\n{\"metric\":\"memory.speculative_bytes\",\"value\":28622848}\n{\"metric\":\"memory.wired_bytes\",\"value\":3866738688}\n"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "drift",
+  "task": "F1-relay-201",
+  "claimed": "done",
+  "hidden": {
+    "passed": 0,
+    "total": 1
+  },
+  "costUsd": 0.047808699999999996,
+  "inputTokens": 41274,
+  "outputTokens": 1731,
+  "turns": 5,
+  "ms": 29273,
+  "codeBytes": 0,
+  "notes": [
+    "ion/unit lines come out OVER LIMIT.\n\nIf `amount` were meant as whole degrees Celsius, every line would be WITHIN LIMIT. The help text's own example (`-7.15`) looks more like whole degrees, which is why I'm flagging it. There was no expected output to check against, and I noted this in `RESULT.json`."
+  ],
+  "unauthorised": []
+}

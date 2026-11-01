@@ -1,0 +1,21 @@
+{
+  "arm": "B",
+  "stage": "cold",
+  "task": "F2-ledger-212",
+  "claimed": "done",
+  "hidden": {
+    "passed": 6,
+    "total": 6
+  },
+  "costUsd": 0.025814499999999997,
+  "inputTokens": 37775,
+  "outputTokens": 1180,
+  "turns": 5,
+  "ms": 17452,
+  "codeBytes": 457,
+  "notes": [
+    "identical to A/cold by design",
+    " cents. It then pipes the result to `post-batch`.\n\nI ran it on `sample/statement.txt` and got ten account balances. I added up the two accounts with more than one posting by hand and they match: AC-106 is 6124.97 and AC-135 is 11851.11. I haven't tried any input other than the sample.\n\nIf a row doesn't match the sample's layout, `run.sh` will crash rather than skip it. The sample has no such rows."
+  ],
+  "unauthorised": []
+}

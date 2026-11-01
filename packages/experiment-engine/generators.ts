@@ -168,6 +168,11 @@ function garbage(rng: Rng): string {
   return Array.from({ length: 6 }, () => rng.pick(["<<<", "%%%", "##", "~~", "}}{{"]).repeat(rng.int(1, 4))).join("\n");
 }
 
+/** Damage to a real input whose structure is not assumed. */
+export function malformedText(sample: string, rng: Rng): NamedInput[] {
+  return [{ name: "not this format at all", input: garbage(rng) }, { name: "empty input", input: "" }];
+}
+
 /** Binary corpus files with structural damage. */
 export function malformedBinary(file: Buffer, rng: Rng): Array<{ name: string; input: Buffer }> {
   const cut = file.subarray(0, Math.floor(file.length * 0.6));

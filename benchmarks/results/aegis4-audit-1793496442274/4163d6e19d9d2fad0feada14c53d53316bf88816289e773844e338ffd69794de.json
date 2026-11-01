@@ -1,0 +1,156 @@
+{
+  "name": "condition negated at 299",
+  "kind": "mutant-value",
+  "sha256": "4163d6e19d9d2fad0feada14c53d53316bf88816289e773844e338ffd69794de",
+  "passed": 7,
+  "total": 21,
+  "rows": [
+    {
+      "id": "original-snap-active.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.5691249999999997
+    },
+    {
+      "id": "original-snap-heavy.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.6180840000000032
+    },
+    {
+      "id": "original-snap-idle.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.311125000000004
+    },
+    {
+      "id": "page-4096-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 3.079334000000003
+    },
+    {
+      "id": "page-4096-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 2.9590840000000043
+    },
+    {
+      "id": "page-4096-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.4789579999999987
+    },
+    {
+      "id": "page-16384-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.2466249999999945
+    },
+    {
+      "id": "page-16384-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.4642920000000004
+    },
+    {
+      "id": "page-16384-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.5194580000000002
+    },
+    {
+      "id": "page-65536-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.948833999999998
+    },
+    {
+      "id": "page-65536-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 2.9631669999999986
+    },
+    {
+      "id": "page-65536-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.276207999999997
+    },
+    {
+      "id": "empty",
+      "pass": true,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.4981250000000017
+    },
+    {
+      "id": "header-only",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.8445000000000036
+    },
+    {
+      "id": "one-invalid-line",
+      "pass": true,
+      "status": "threw",
+      "error": "Cannot read properties of null (reading '1')",
+      "ms": 2.1105830000000054
+    },
+    {
+      "id": "missing-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.3773750000000007
+    },
+    {
+      "id": "zero-page-size",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.971500000000006
+    },
+    {
+      "id": "duplicate-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.971082999999993
+    },
+    {
+      "id": "invalid-header-prefix",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.744374999999991
+    },
+    {
+      "id": "blank-line",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 2.079374999999999
+    },
+    {
+      "id": "live-host",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.6516250000000028
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "arm": "D",
+  "stage": "cold",
+  "task": "I2-independent",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "turns": 0,
+  "ms": 6769,
+  "codeBytes": 0,
+  "notes": [
+    "settle is known but no accepted input for it has been observed; give a sample it accepts.",
+    "analysis underspecified",
+    "synthesis none ",
+    "level none",
+    "attempts 0"
+  ],
+  "detail": {
+    "attempts": []
+  }
+}

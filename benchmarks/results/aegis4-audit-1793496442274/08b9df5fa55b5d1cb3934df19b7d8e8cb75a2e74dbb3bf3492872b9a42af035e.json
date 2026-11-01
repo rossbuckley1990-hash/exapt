@@ -1,0 +1,156 @@
+{
+  "name": "condition negated at 1044",
+  "kind": "mutant-value",
+  "sha256": "08b9df5fa55b5d1cb3934df19b7d8e8cb75a2e74dbb3bf3492872b9a42af035e",
+  "passed": 7,
+  "total": 21,
+  "rows": [
+    {
+      "id": "original-snap-active.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.048375
+    },
+    {
+      "id": "original-snap-heavy.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.799750000000003
+    },
+    {
+      "id": "original-snap-idle.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.5250419999999991
+    },
+    {
+      "id": "page-4096-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.2847499999999954
+    },
+    {
+      "id": "page-4096-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.1904169999999965
+    },
+    {
+      "id": "page-4096-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.6871669999999952
+    },
+    {
+      "id": "page-16384-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.6736249999999941
+    },
+    {
+      "id": "page-16384-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.9135830000000027
+    },
+    {
+      "id": "page-16384-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.8615410000000026
+    },
+    {
+      "id": "page-65536-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.3088750000000005
+    },
+    {
+      "id": "page-65536-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.1281669999999977
+    },
+    {
+      "id": "page-65536-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.7133330000000058
+    },
+    {
+      "id": "empty",
+      "pass": true,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.7722920000000002
+    },
+    {
+      "id": "header-only",
+      "pass": true,
+      "status": "threw",
+      "error": "Cannot mix BigInt and other types, use explicit conversions",
+      "ms": 3.532041999999997
+    },
+    {
+      "id": "one-invalid-line",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.1640000000000015
+    },
+    {
+      "id": "missing-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.5435000000000016
+    },
+    {
+      "id": "zero-page-size",
+      "pass": true,
+      "status": "threw",
+      "error": "invalid page size",
+      "ms": 1.4833339999999993
+    },
+    {
+      "id": "duplicate-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.8724999999999952
+    },
+    {
+      "id": "invalid-header-prefix",
+      "pass": true,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.1735410000000002
+    },
+    {
+      "id": "blank-line",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.1380839999999992
+    },
+    {
+      "id": "live-host",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.2544579999999996
+    }
+  ]
+}

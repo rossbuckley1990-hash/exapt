@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "stage": "warm",
+  "task": "F1-relay-202",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.035271899999999995,
+  "inputTokens": 46655,
+  "outputTokens": 904,
+  "turns": 6,
+  "ms": 16065,
+  "codeBytes": 0,
+  "notes": [
+    "cessed.\n\nThe report has 11 lines, one per location and unit. For example, `East-Wing/rig-2b` is over limit with 2 readings, and `Dock-Seven/rig-3c` is within limit.\n\nI only checked the output for plausibility, not against an independent calculation. The last run was also verified on the sample only."
+  ],
+  "unauthorised": []
+}

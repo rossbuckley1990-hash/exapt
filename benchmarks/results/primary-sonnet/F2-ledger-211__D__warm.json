@@ -1,0 +1,29 @@
+{
+  "arm": "D",
+  "stage": "warm",
+  "task": "F2-ledger-211",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.0555349,
+  "inputTokens": 91278,
+  "outputTokens": 1481,
+  "turns": 9,
+  "ms": 262276,
+  "codeBytes": 0,
+  "notes": [
+    "mpts failed on date parsing, on a non-ASCII account name, and on a malformed-line check. Hand-writing the output would mean inventing data.\n\nI also had no shell or file-reading tool in this session. I never read the sample statement, `new-statement.txt` or the program help text myself.\n\nNOT-POSSIBLE"
+  ],
+  "unauthorised": [],
+  "toolCalls": [
+    "exapt_memory",
+    "exapt_memory",
+    "exapt_explain",
+    "exapt_discover",
+    "exapt_analyse",
+    "exapt_analyse",
+    "exapt_invent"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "stage": "warm",
+  "task": "F2-ledger-212",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0291827,
+  "inputTokens": 37675,
+  "outputTokens": 684,
+  "turns": 5,
+  "ms": 15471,
+  "codeBytes": 0,
+  "notes": [
+    "k against the input by eye. For example, AC-129 shows 8092.86, AC-102 shows 2081.28 and AC-139 shows 541.64.\n\nI didn't check the amounts against `post-batch`'s own documentation beyond the cents conversion the script already does. I also didn't open `sample/statement.txt` beyond its first few lines."
+  ],
+  "unauthorised": []
+}

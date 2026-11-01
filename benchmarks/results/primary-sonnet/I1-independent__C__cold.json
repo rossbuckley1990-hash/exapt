@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "stage": "cold",
+  "task": "I1-independent",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "turns": 0,
+  "ms": 4396,
+  "codeBytes": 0,
+  "notes": [
+    "RightClick X holds no capability for bulletin-check"
+  ]
+}

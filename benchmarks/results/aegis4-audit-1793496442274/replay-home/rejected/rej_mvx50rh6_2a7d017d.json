@@ -1,0 +1,12 @@
+{
+  "run": "run_mvx50aqj_83f3ed7d",
+  "gap": "gap-4d0a23b708",
+  "producer": "negative control: broken-conservation-law",
+  "kind": "injected-control",
+  "level": "executed",
+  "rejectedAt": "visible",
+  "reason": "ground-truth: 1 difference(s), first: (record count): expected 6, got 5",
+  "sha256": "40d759ba63f47ce72e672e98e31d576ef9037e136acbea06f51b02304b090f91",
+  "id": "rej_mvx50rh6_2a7d017d",
+  "at": "2026-11-01T01:14:40.026Z"
+}

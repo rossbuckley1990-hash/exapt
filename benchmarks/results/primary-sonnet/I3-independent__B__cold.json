@@ -1,0 +1,21 @@
+{
+  "arm": "B",
+  "stage": "cold",
+  "task": "I3-independent",
+  "claimed": "done",
+  "hidden": {
+    "passed": 6,
+    "total": 6
+  },
+  "costUsd": 0.0410487,
+  "inputTokens": 33235,
+  "outputTokens": 1431,
+  "turns": 4,
+  "ms": 20098,
+  "codeBytes": 620,
+  "notes": [
+    "identical to A/cold by design",
+    "output format anyway.\n\nOn the sample, `hive-report` found 13 inspections across 5 hives. It raised three alerts:\n- **B7:** mites at 4.00 per 100 on 2026-06-10.\n- **C12:** queen absent on 2026-06-10.\n- **C12:** mites at 3.60 per 100 on 2026-06-10.\n\nIf a line doesn't match the expected layout, `run.sh` prints the offending line to standard error and exits with status 1. It doesn't guess at the line."
+  ],
+  "unauthorised": []
+}

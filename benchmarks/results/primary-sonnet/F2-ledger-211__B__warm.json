@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "stage": "warm",
+  "task": "F2-ledger-211",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0303031,
+  "inputTokens": 37872,
+  "outputTokens": 750,
+  "turns": 5,
+  "ms": 13830,
+  "codeBytes": 0,
+  "notes": [
+    ". The statement has 10 postings across 9 accounts. I checked the one account with two postings by hand: AC-109 is 8622.76 + 4555.98 = 13178.74, which matches.\n\n```\nAC-104 816.93\nAC-109 13178.74\nAC-116 8113.90\nAC-119 6984.45\nAC-121 774.14\nAC-125 445.96\nAC-130 6560.72\nAC-132 2544.41\nAC-139 6020.44\n```"
+  ],
+  "unauthorised": []
+}

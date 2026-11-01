@@ -164,8 +164,16 @@ export class Vault {
     return JSON.parse(this.get(m.revalidation.suite).toString("utf8")) as Suite;
   }
 
-  private note(state: CapabilityState, event: string, detail: string, version?: number): void {
+  private record_(state: CapabilityState, event: string, detail: string, version?: number): void {
     state.history.push({ at: new Date().toISOString(), event, detail, ...(version !== undefined ? { version } : {}) });
+  }
+
+  /** Add to a capability's history. */
+  note(id: string, event: string, detail: string, version?: number): void {
+    const state = this.state(id);
+    if (!state) return;
+    this.record_(state, event, detail, version);
+    this.save(state);
   }
 
   private save(state: CapabilityState): void {
@@ -183,7 +191,7 @@ export class Vault {
       for (const v of state.versions) if (v.version !== m.version && v.status === "verified-within-scope" && state.pinned === undefined) v.status = "refused", v.reason = `superseded by version ${m.version}`;
       if (state.pinned === undefined) state.current = m.version;
     }
-    this.note(state, "retained", `version ${m.version} (${m.status}, ${m.evidence.level})`, m.version);
+    this.record_(state, "retained", `version ${m.version} (${m.status}, ${m.evidence.level})`, m.version);
     this.save(state);
     return state;
   }
@@ -196,7 +204,7 @@ export class Vault {
     v.status = status;
     v.reason = reason;
     v.at = new Date().toISOString();
-    this.note(state, `status:${status}`, reason, version);
+    this.record_(state, `status:${status}`, reason, version);
     this.save(state);
     const m = this.manifest(id, version)!;
     writeJson(path.join(this.dir(id), `v${version}.json`), { ...m, status });
@@ -206,7 +214,7 @@ export class Vault {
   repin(m: CapabilityManifest, dependencies: Dependency[], detail: string): void {
     writeJson(path.join(this.dir(m.id), `v${m.version}.json`), { ...m, dependencies });
     const state = this.state(m.id)!;
-    this.note(state, "revalidated", detail, m.version);
+    this.record_(state, "revalidated", detail, m.version);
     this.save(state);
   }
 
@@ -215,6 +223,14 @@ export class Vault {
     if (!current) return;
     current.receipts = [...current.receipts, receipt].slice(-200);
     writeJson(path.join(this.dir(m.id), `v${m.version}.json`), current);
+  }
+
+  /** Record a limit learned after publication. It can only reduce what a capability claims. */
+  addLimitation(id: string, text: string): void {
+    const m = this.manifest(id);
+    if (!m) throw new Error(`unknown capability ${id}`);
+    writeJson(path.join(this.dir(id), `v${m.version}.json`), { ...m, limitations: [...m.limitations, text] });
+    this.note(id, "limitation", text, m.version);
   }
 
   /** Operator-only controls. Nothing on the agent-facing surface reaches these. */
@@ -226,7 +242,7 @@ export class Vault {
       if (!state.versions.some((v) => v.version === version)) throw new Error(`unknown version ${version} of ${id}`);
       state.pinned = version;
     }
-    this.note(state, "pin", version === null ? "version pin removed" : `pinned to version ${version}`);
+    this.record_(state, "pin", version === null ? "version pin removed" : `pinned to version ${version}`);
     this.save(state);
   }
 
@@ -239,7 +255,7 @@ export class Vault {
       const m = this.manifest(id, v.version);
       if (m) writeJson(path.join(this.dir(id), `v${v.version}.json`), { ...m, status: "refused" });
     }
-    this.note(state, "revoked", reason);
+    this.record_(state, "revoked", reason);
     this.save(state);
   }
 

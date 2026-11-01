@@ -1,0 +1,54 @@
+{
+  "id": "a5-02-composition",
+  "intent": "Second-stage composition: Derive deterministic context-separated key material with HKDF",
+  "inputKind": "text",
+  "software": [
+    {
+      "name": "OpenSSL CLI EVP_KDF / HKDF",
+      "version": "4.0.3",
+      "source": "https://docs.openssl.org/4.0/man7/EVP_KDF-HKDF/"
+    },
+    {
+      "name": "Node.js built-in crypto.hkdfSync",
+      "version": "22.23.4 / OpenSSL 3.5.9",
+      "source": "https://nodejs.org/docs/latest-v22.x/api/crypto.html"
+    },
+    {
+      "name": "RFC5869",
+      "version": "May 2010",
+      "source": "https://www.rfc-editor.org/rfc/rfc5869"
+    }
+  ],
+  "examples": [
+    {
+      "input": "examples/01.input.txt",
+      "truth": "examples/01.truth.json"
+    },
+    {
+      "input": "examples/02.input.txt",
+      "truth": "examples/02.truth.json"
+    },
+    {
+      "input": "examples/03.input.txt",
+      "truth": "examples/03.truth.json"
+    },
+    {
+      "input": "examples/04.input.txt",
+      "truth": "examples/04.truth.json"
+    },
+    {
+      "input": "examples/05.input.txt",
+      "truth": "examples/05.truth.json"
+    },
+    {
+      "input": "examples/06.input.txt",
+      "truth": "examples/06.truth.json"
+    }
+  ],
+  "targetSample": "examples/01.input.txt",
+  "comparison": "json",
+  "limitations": [
+    "Inputs satisfy the composition schema. No unsupported composition inputs are scored."
+  ],
+  "instructions": "Implement transform(input:string,lib)->string. Parse {version:1,hash,ikm,salt,labels:[string,...],message:hex}; valid first-stage hash/key/salt values, 1..5 labels (duplicates and empty labels permitted), valid even-length message hex. For each label in order form UTF8(\"AEGIS5:\"+label) as info, derive 32 bytes with retained lib[\"a5-02\"] called on the JSON first-stage request, and compute HMAC-SHA256(messageBytes) under that derived key. Return ordered [{label,tag:lowercaseHex},...]. Use the exact Unicode text without normalization. Full composition-reuse credit requires at least one actual retained call per label. HMAC via node:crypto is available."
+}

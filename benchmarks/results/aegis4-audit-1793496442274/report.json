@@ -1,0 +1,479 @@
+{
+  "sourceSha256": "4de6e1a7b9df71bac9a080fcf5e3b61ce4a1599ffd767249c0b9b2a58bf77a8a",
+  "originalRun": "run_mvx50aqj_83f3ed7d",
+  "originalMutation": {
+    "killed": 2,
+    "total": 11,
+    "value": {
+      "killed": 2,
+      "total": 3
+    },
+    "survivors": [
+      "literal changed at 206",
+      "trim removed at 166",
+      "validation removed at 567",
+      "validation removed at 399",
+      "validation removed at 307",
+      "validation removed at 73",
+      "validation removed at 209",
+      "trim removed at 629",
+      "validation removed at 1067"
+    ]
+  },
+  "historicalTranscript": "Unavailable: logs record only character counts and usage. No full prompt/response was retained.",
+  "historicalSourceRevision": "Unavailable: original dirty checkout was not pinned.",
+  "isolation": {
+    "ok": true,
+    "checks": [
+      {
+        "name": "harness runs a program",
+        "passed": true,
+        "detail": "ok: alive"
+      },
+      {
+        "name": "network is denied",
+        "passed": true,
+        "detail": "ok: denied"
+      },
+      {
+        "name": "root filesystem is read-only",
+        "passed": true,
+        "detail": "ok: denied"
+      },
+      {
+        "name": "no host paths are mounted",
+        "passed": true,
+        "detail": "ok: []"
+      },
+      {
+        "name": "no ambient credentials",
+        "passed": true,
+        "detail": "ok: []"
+      },
+      {
+        "name": "unprivileged uid",
+        "passed": true,
+        "detail": "ok: 65534"
+      },
+      {
+        "name": "memory limit kills an allocation bomb",
+        "passed": true,
+        "detail": "memory (killed by the container's limits)"
+      },
+      {
+        "name": "process limit stops a fork bomb",
+        "passed": true,
+        "detail": "ok: 3"
+      },
+      {
+        "name": "timeout stops an infinite loop",
+        "passed": true,
+        "detail": "timeout (exceeded 1500ms)"
+      },
+      {
+        "name": "output cap stops a flood",
+        "passed": true,
+        "detail": "output-limit (exceeded 1048576 output bytes)"
+      }
+    ],
+    "failures": []
+  },
+  "results": [
+    {
+      "name": "accepted-original",
+      "kind": "original",
+      "sha256": "4de6e1a7b9df71bac9a080fcf5e3b61ce4a1599ffd767249c0b9b2a58bf77a8a",
+      "passed": 19,
+      "total": 21,
+      "failures": [
+        "duplicate-metric",
+        "invalid-header-prefix"
+      ]
+    },
+    {
+      "name": "x86-4kb-hallucination",
+      "kind": "negative-control",
+      "sha256": "762daac37382986909c0cc5a30f86f724b8eaba2f47a4f14cd3b090492843929",
+      "passed": 5,
+      "total": 21,
+      "failures": [
+        "original-snap-active.input.txt",
+        "original-snap-heavy.input.txt",
+        "original-snap-idle.input.txt",
+        "page-16384-counts-1",
+        "page-16384-counts-2",
+        "page-65536-counts-1",
+        "page-65536-counts-2",
+        "empty",
+        "header-only",
+        "one-invalid-line",
+        "missing-metric",
+        "zero-page-size",
+        "duplicate-metric",
+        "invalid-header-prefix",
+        "blank-line",
+        "live-host"
+      ]
+    },
+    {
+      "name": "unstripped-trailing-dot",
+      "kind": "negative-control",
+      "sha256": "7e1e7ee03c0348b511b1156c4fd4d30f5bd1d08064c97856a4fb2dddc5a36d31",
+      "passed": 0,
+      "total": 21,
+      "failures": [
+        "original-snap-active.input.txt",
+        "original-snap-heavy.input.txt",
+        "original-snap-idle.input.txt",
+        "page-4096-counts-0",
+        "page-4096-counts-1",
+        "page-4096-counts-2",
+        "page-16384-counts-0",
+        "page-16384-counts-1",
+        "page-16384-counts-2",
+        "page-65536-counts-0",
+        "page-65536-counts-1",
+        "page-65536-counts-2",
+        "empty",
+        "header-only",
+        "one-invalid-line",
+        "missing-metric",
+        "zero-page-size",
+        "duplicate-metric",
+        "invalid-header-prefix",
+        "blank-line",
+        "live-host"
+      ]
+    },
+    {
+      "name": "broken-conservation-law",
+      "kind": "negative-control",
+      "sha256": "40d759ba63f47ce72e672e98e31d576ef9037e136acbea06f51b02304b090f91",
+      "passed": 0,
+      "total": 21,
+      "failures": [
+        "original-snap-active.input.txt",
+        "original-snap-heavy.input.txt",
+        "original-snap-idle.input.txt",
+        "page-4096-counts-0",
+        "page-4096-counts-1",
+        "page-4096-counts-2",
+        "page-16384-counts-0",
+        "page-16384-counts-1",
+        "page-16384-counts-2",
+        "page-65536-counts-0",
+        "page-65536-counts-1",
+        "page-65536-counts-2",
+        "empty",
+        "header-only",
+        "one-invalid-line",
+        "missing-metric",
+        "zero-page-size",
+        "duplicate-metric",
+        "invalid-header-prefix",
+        "blank-line",
+        "live-host"
+      ]
+    },
+    {
+      "name": "literal changed at 206",
+      "kind": "mutant-value",
+      "sha256": "b94a863958ec1fefe8822f9da871c11bf3aba7ba4d9962f8c6e84e8722390d8a",
+      "passed": 19,
+      "total": 21,
+      "failures": [
+        "duplicate-metric",
+        "invalid-header-prefix"
+      ]
+    },
+    {
+      "name": "literal changed at 497",
+      "kind": "mutant-value",
+      "sha256": "45d0b56652baaff746b1711490ab3759aa8d466dad075330f1a4e8b36def42db",
+      "passed": 6,
+      "total": 21,
+      "failures": [
+        "original-snap-active.input.txt",
+        "original-snap-heavy.input.txt",
+        "original-snap-idle.input.txt",
+        "page-4096-counts-0",
+        "page-4096-counts-1",
+        "page-4096-counts-2",
+        "page-16384-counts-0",
+        "page-16384-counts-1",
+        "page-16384-counts-2",
+        "page-65536-counts-0",
+        "page-65536-counts-1",
+        "page-65536-counts-2",
+        "duplicate-metric",
+        "blank-line",
+        "live-host"
+      ]
+    },
+    {
+      "name": "condition negated at 1044",
+      "kind": "mutant-value",
+      "sha256": "08b9df5fa55b5d1cb3934df19b7d8e8cb75a2e74dbb3bf3492872b9a42af035e",
+      "passed": 7,
+      "total": 21,
+      "failures": [
+        "original-snap-active.input.txt",
+        "original-snap-heavy.input.txt",
+        "original-snap-idle.input.txt",
+        "page-4096-counts-0",
+        "page-4096-counts-1",
+        "page-4096-counts-2",
+        "page-16384-counts-0",
+        "page-16384-counts-1",
+        "page-16384-counts-2",
+        "page-65536-counts-0",
+        "page-65536-counts-1",
+        "page-65536-counts-2",
+        "blank-line",
+        "live-host"
+      ]
+    },
+    {
+      "name": "inequality inverted at 58",
+      "kind": "mutant-value",
+      "sha256": "1c3625b5601f13cd3cb75f56891f9f69516ae7c9ead1e012296ec8b74202fd48",
+      "passed": 7,
+      "total": 21,
+      "failures": [
+        "original-snap-active.input.txt",
+        "original-snap-heavy.input.txt",
+        "original-snap-idle.input.txt",
+        "page-4096-counts-0",
+        "page-4096-counts-1",
+        "page-4096-counts-2",
+        "page-16384-counts-0",
+        "page-16384-counts-1",
+        "page-16384-counts-2",
+        "page-65536-counts-0",
+        "page-65536-counts-1",
+        "page-65536-counts-2",
+        "blank-line",
+        "live-host"
+      ]
+    },
+    {
+      "name": "inequality inverted at 173",
+      "kind": "mutant-value",
+      "sha256": "b390857ae264db5c44398caabf94a7819a87c90da4b586a1f2ad3092d97d232f",
+      "passed": 7,
+      "total": 21,
+      "failures": [
+        "original-snap-active.input.txt",
+        "original-snap-heavy.input.txt",
+        "original-snap-idle.input.txt",
+        "page-4096-counts-0",
+        "page-4096-counts-1",
+        "page-4096-counts-2",
+        "page-16384-counts-0",
+        "page-16384-counts-1",
+        "page-16384-counts-2",
+        "page-65536-counts-0",
+        "page-65536-counts-1",
+        "page-65536-counts-2",
+        "blank-line",
+        "live-host"
+      ]
+    },
+    {
+      "name": "equality inverted at 201",
+      "kind": "mutant-value",
+      "sha256": "b09ba569d1b8e1540b730b892a63c4acba8bfd884b9b2b15482a1f104e043bd4",
+      "passed": 7,
+      "total": 21,
+      "failures": [
+        "original-snap-active.input.txt",
+        "original-snap-heavy.input.txt",
+        "original-snap-idle.input.txt",
+        "page-4096-counts-0",
+        "page-4096-counts-1",
+        "page-4096-counts-2",
+        "page-16384-counts-0",
+        "page-16384-counts-1",
+        "page-16384-counts-2",
+        "page-65536-counts-0",
+        "page-65536-counts-1",
+        "page-65536-counts-2",
+        "blank-line",
+        "live-host"
+      ]
+    },
+    {
+      "name": "condition negated at 299",
+      "kind": "mutant-value",
+      "sha256": "4163d6e19d9d2fad0feada14c53d53316bf88816289e773844e338ffd69794de",
+      "passed": 7,
+      "total": 21,
+      "failures": [
+        "original-snap-active.input.txt",
+        "original-snap-heavy.input.txt",
+        "original-snap-idle.input.txt",
+        "page-4096-counts-0",
+        "page-4096-counts-1",
+        "page-4096-counts-2",
+        "page-16384-counts-0",
+        "page-16384-counts-1",
+        "page-16384-counts-2",
+        "page-65536-counts-0",
+        "page-65536-counts-1",
+        "page-65536-counts-2",
+        "blank-line",
+        "live-host"
+      ]
+    },
+    {
+      "name": "condition negated at 559",
+      "kind": "mutant-value",
+      "sha256": "2f929d451cd5f62ad40feeb7367f85a9760051ad6716e6ef158782c418d67d96",
+      "passed": 7,
+      "total": 21,
+      "failures": [
+        "original-snap-active.input.txt",
+        "original-snap-heavy.input.txt",
+        "original-snap-idle.input.txt",
+        "page-4096-counts-0",
+        "page-4096-counts-1",
+        "page-4096-counts-2",
+        "page-16384-counts-0",
+        "page-16384-counts-1",
+        "page-16384-counts-2",
+        "page-65536-counts-0",
+        "page-65536-counts-1",
+        "page-65536-counts-2",
+        "blank-line",
+        "live-host"
+      ]
+    },
+    {
+      "name": "multiplication became division at 1141",
+      "kind": "mutant-value",
+      "sha256": "cd669eefd52742e3d7ef5f8b57163104f1ffdfcddff50d2aa1e6303ce586e0e4",
+      "passed": 8,
+      "total": 21,
+      "failures": [
+        "original-snap-active.input.txt",
+        "original-snap-heavy.input.txt",
+        "original-snap-idle.input.txt",
+        "page-4096-counts-1",
+        "page-4096-counts-2",
+        "page-16384-counts-1",
+        "page-16384-counts-2",
+        "page-65536-counts-1",
+        "page-65536-counts-2",
+        "duplicate-metric",
+        "invalid-header-prefix",
+        "blank-line",
+        "live-host"
+      ]
+    },
+    {
+      "name": "trim removed at 166",
+      "kind": "mutant-robustness",
+      "sha256": "9bb246534688af00d8314fd21752d0813e8b03c39283ff16507355cf8f499734",
+      "passed": 19,
+      "total": 21,
+      "failures": [
+        "duplicate-metric",
+        "invalid-header-prefix"
+      ]
+    },
+    {
+      "name": "validation removed at 307",
+      "kind": "mutant-robustness",
+      "sha256": "9eaf121f18ace986422ff5fac0d88fd377bbfced7b7ce95935c3a46881748822",
+      "passed": 19,
+      "total": 21,
+      "failures": [
+        "duplicate-metric",
+        "invalid-header-prefix"
+      ]
+    },
+    {
+      "name": "validation removed at 567",
+      "kind": "mutant-robustness",
+      "sha256": "935e93a3c320363a78b20a1274fe55827da4676f44710d12f95a042b5d14d925",
+      "passed": 19,
+      "total": 21,
+      "failures": [
+        "duplicate-metric",
+        "invalid-header-prefix"
+      ]
+    },
+    {
+      "name": "trim removed at 629",
+      "kind": "mutant-robustness",
+      "sha256": "988be23b5d5cdefdd4e145eaf4f1a0beb6a5a49e1f74c6f5d6c13f40193562f9",
+      "passed": 19,
+      "total": 21,
+      "failures": [
+        "duplicate-metric",
+        "invalid-header-prefix"
+      ]
+    },
+    {
+      "name": "validation removed at 1067",
+      "kind": "mutant-robustness",
+      "sha256": "854cc7a4ead4b40837afb6208d0f8aafa862520362f952e915e474801028e168",
+      "passed": 19,
+      "total": 21,
+      "failures": [
+        "duplicate-metric",
+        "invalid-header-prefix"
+      ]
+    },
+    {
+      "name": "validation removed at 399",
+      "kind": "mutant-robustness",
+      "sha256": "33963ecd80a414e0dea146cc34fe817423bbc794b5948ecb115b464024742434",
+      "passed": 18,
+      "total": 21,
+      "failures": [
+        "zero-page-size",
+        "duplicate-metric",
+        "invalid-header-prefix"
+      ]
+    },
+    {
+      "name": "validation removed at 209",
+      "kind": "mutant-robustness",
+      "sha256": "a43782c6cbe95044c5fa7fa7fbf85aac9e67ec91708f2680ec618b530b9bd39e",
+      "passed": 19,
+      "total": 21,
+      "failures": [
+        "duplicate-metric",
+        "invalid-header-prefix"
+      ]
+    },
+    {
+      "name": "validation removed at 73",
+      "kind": "mutant-robustness",
+      "sha256": "96dc2e02daa921d79798cc87638f031cc083bff3d9500cdfd67842eebb37225c",
+      "passed": 19,
+      "total": 21,
+      "failures": [
+        "duplicate-metric",
+        "invalid-header-prefix"
+      ]
+    }
+  ],
+  "survivingLiteral": {
+    "name": "literal changed at 206",
+    "sameValuesAndRefusals": true,
+    "classification": "Equivalent for successful outputs and rejection, assuming error messages are not part of the contract. Exact exception messages differ.",
+    "reason": "Only line counts 0 and 1 change the branch. Both subsequently reject (missing header or missing required metrics). Counts >=2 follow identical code. Raw scores remain unchanged."
+  },
+  "liveInvocation": {
+    "capability": "exapt:fixed-width-to-kernel-telemetry-collector-4d0a23",
+    "version": 1,
+    "level": "verified-in-domain",
+    "output": "{\"metric\":\"memory.free_bytes\",\"value\":125468672}\n{\"metric\":\"memory.active_bytes\",\"value\":3470901248}\n{\"metric\":\"memory.inactive_bytes\",\"value\":7636058112}\n{\"metric\":\"memory.speculative_bytes\",\"value\":28622848}\n{\"metric\":\"memory.wired_bytes\",\"value\":3866738688}\n{\"metric\":\"memory.compressor_bytes\",\"value\":5610520576}\n",
+    "runId": "run_mvx5iyiq_1_77f6a6f9-aac6-4d70-b911-2e7702d0542c",
+    "receipt": "101af98ab63be7cf43ee99a9ee8102a0aa85a03f304990c2012420e905c0bf01",
+    "ms": 410,
+    "exactMatch": true
+  }
+}

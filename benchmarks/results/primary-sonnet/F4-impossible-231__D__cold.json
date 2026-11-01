@@ -1,0 +1,26 @@
+{
+  "arm": "D",
+  "stage": "cold",
+  "task": "F4-impossible-231",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "turns": 0,
+  "ms": 17519,
+  "codeBytes": 0,
+  "notes": [
+    "Not constructible from what is available: nothing in delimited(,){amount} appears to determine: customer, vat_rate.",
+    "analysis not-constructible",
+    "synthesis none ",
+    "level none",
+    "attempts 0"
+  ],
+  "detail": {
+    "attempts": []
+  }
+}

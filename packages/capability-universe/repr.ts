@@ -113,7 +113,7 @@ function splitDelimited(line: string, d: string): string[] {
 const lines = (text: string): string[] => text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n").filter((l) => l.trim() !== "");
 
 function looksLikeHeader(first: string[], rest: string[][]): boolean {
-  if (!first.every((c) => /^[A-Za-z_][\w .%/()-]*$/.test(c.trim()))) return false;
+  if (!first.every((c) => /^[A-Za-z_][\w .%/:()-]*$/.test(c.trim()))) return false;
   if (new Set(first).size !== first.length) return false;
   if (!rest.length) return true;
   // A header's cells differ in kind from the values beneath at least one column, or they are
@@ -293,7 +293,7 @@ export function renderRecords(records: Rec[], syntax: Syntax, names?: string[]):
 export function kindOf(raw: string): FieldKind {
   const s = raw.trim();
   if (s === "") return "empty";
-  if (/^-?(0|[1-9]\d*)$/.test(s)) return "int";
+  if (/^-?(0|[1-9]\d*)\.?$/.test(s)) return "int";
   if (/^-?\d*\.\d+$/.test(s)) return "decimal";
   if (/^(true|false)$/i.test(s)) return "bool";
   if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return "date";
@@ -413,7 +413,8 @@ export function compareRecords(expected: Rec[], actual: Rec[], opts: { fields?: 
   if (expected.length !== actual.length) diffs.push({ row: -1, field: "(record count)", expected: expected.length, actual: actual.length });
   const rows = Math.min(expected.length, actual.length);
   for (let i = 0; i < rows && diffs.length < limit; i++) {
-    for (const f of opts.fields ?? Object.keys(expected[i])) {
+    if (!expected[i] || !actual[i]) continue;
+    for (const f of opts.fields ?? Object.keys(expected[i] ?? {})) {
       const slack = opts.tolerance?.[f];
       const near = slack !== undefined && Math.abs(Number(expected[i][f]) - Number(actual[i][f])) <= slack;
       if (!near && !scalarEqual(expected[i][f], actual[i][f], opts.ulps)) {

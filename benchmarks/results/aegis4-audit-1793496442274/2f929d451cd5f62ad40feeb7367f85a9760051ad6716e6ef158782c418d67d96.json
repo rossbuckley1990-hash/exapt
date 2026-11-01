@@ -1,0 +1,156 @@
+{
+  "name": "condition negated at 559",
+  "kind": "mutant-value",
+  "sha256": "2f929d451cd5f62ad40feeb7367f85a9760051ad6716e6ef158782c418d67d96",
+  "passed": 7,
+  "total": 21,
+  "rows": [
+    {
+      "id": "original-snap-active.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free:                                     6000.",
+      "ms": 1.5636249999999947
+    },
+    {
+      "id": "original-snap-heavy.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free:                                     4000.",
+      "ms": 2.138333000000003
+    },
+    {
+      "id": "original-snap-idle.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free:                                     12000.",
+      "ms": 1.3320829999999972
+    },
+    {
+      "id": "page-4096-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free: 0.",
+      "ms": 2.137500000000003
+    },
+    {
+      "id": "page-4096-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free: 1.",
+      "ms": 1.5101659999999981
+    },
+    {
+      "id": "page-4096-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free: 12000.",
+      "ms": 1.3803749999999937
+    },
+    {
+      "id": "page-16384-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free: 0.",
+      "ms": 2.207084000000002
+    },
+    {
+      "id": "page-16384-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free: 1.",
+      "ms": 1.2090000000000032
+    },
+    {
+      "id": "page-16384-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free: 12000.",
+      "ms": 1.1351670000000027
+    },
+    {
+      "id": "page-65536-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free: 0.",
+      "ms": 1.2884169999999955
+    },
+    {
+      "id": "page-65536-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free: 1.",
+      "ms": 1.2759159999999952
+    },
+    {
+      "id": "page-65536-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free: 12000.",
+      "ms": 3.685707999999998
+    },
+    {
+      "id": "empty",
+      "pass": true,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 2.708416999999997
+    },
+    {
+      "id": "header-only",
+      "pass": true,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.0440830000000005
+    },
+    {
+      "id": "one-invalid-line",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.8972080000000062
+    },
+    {
+      "id": "missing-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed line: Pages free: 1.",
+      "ms": 1.978709000000002
+    },
+    {
+      "id": "zero-page-size",
+      "pass": true,
+      "status": "threw",
+      "error": "invalid page size",
+      "ms": 2.105333999999999
+    },
+    {
+      "id": "duplicate-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed line: Pages free: 1.",
+      "ms": 2.069749999999999
+    },
+    {
+      "id": "invalid-header-prefix",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed line: Pages free: 1.",
+      "ms": 1.918332999999997
+    },
+    {
+      "id": "blank-line",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free: 1.",
+      "ms": 3.0333749999999995
+    },
+    {
+      "id": "live-host",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed line: Pages free:                                     7658.",
+      "ms": 1.7921669999999992
+    }
+  ]
+}

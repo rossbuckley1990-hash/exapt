@@ -1,0 +1,156 @@
+{
+  "name": "inequality inverted at 173",
+  "kind": "mutant-value",
+  "sha256": "b390857ae264db5c44398caabf94a7819a87c90da4b586a1f2ad3092d97d232f",
+  "passed": 7,
+  "total": 21,
+  "rows": [
+    {
+      "id": "original-snap-active.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 2.179957999999999
+    },
+    {
+      "id": "original-snap-heavy.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.9150419999999997
+    },
+    {
+      "id": "original-snap-idle.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.821208999999996
+    },
+    {
+      "id": "page-4096-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.3415000000000035
+    },
+    {
+      "id": "page-4096-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.8031660000000045
+    },
+    {
+      "id": "page-4096-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.5955829999999978
+    },
+    {
+      "id": "page-16384-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 2.323750000000004
+    },
+    {
+      "id": "page-16384-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.716542000000004
+    },
+    {
+      "id": "page-16384-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.5532910000000015
+    },
+    {
+      "id": "page-65536-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 2.134416999999999
+    },
+    {
+      "id": "page-65536-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.7544169999999966
+    },
+    {
+      "id": "page-65536-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 2.6973330000000004
+    },
+    {
+      "id": "empty",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.237917000000003
+    },
+    {
+      "id": "header-only",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.6621659999999991
+    },
+    {
+      "id": "one-invalid-line",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 2.4037079999999946
+    },
+    {
+      "id": "missing-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.4650409999999994
+    },
+    {
+      "id": "zero-page-size",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.193249999999999
+    },
+    {
+      "id": "duplicate-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.2749580000000051
+    },
+    {
+      "id": "invalid-header-prefix",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.9718750000000043
+    },
+    {
+      "id": "blank-line",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.2547910000000044
+    },
+    {
+      "id": "live-host",
+      "pass": false,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.268459
+    }
+  ]
+}

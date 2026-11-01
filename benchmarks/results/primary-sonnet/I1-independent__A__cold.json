@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "cold",
+  "task": "I1-independent",
+  "claimed": "done",
+  "hidden": {
+    "passed": 6,
+    "total": 6
+  },
+  "costUsd": 0.0505994,
+  "inputTokens": 33999,
+  "outputTokens": 1974,
+  "turns": 4,
+  "ms": 23843,
+  "codeBytes": 911,
+  "notes": [
+    "t:** 100 − 25 × quality, so quality 0 is 100% and quality 4 is 0%.\n\nThe weight mapping is an inference from the \"0 = best\" and \"100 = best\" descriptions. Nothing in the docs states it directly, and it drives the mean weights in the report.\n\nIf either program rejects an input, the script exits with status 1 and prints the error on stderr.\n\nFiles are in `out/`:\n- `run.sh`\n- `conv.js`\n- `RESULT.json`"
+  ],
+  "unauthorised": []
+}

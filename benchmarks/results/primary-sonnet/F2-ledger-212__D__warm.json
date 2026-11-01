@@ -1,0 +1,29 @@
+{
+  "arm": "D",
+  "stage": "warm",
+  "task": "F2-ledger-212",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.05935710000000001,
+  "inputTokens": 106004,
+  "outputTokens": 1590,
+  "turns": 9,
+  "ms": 240489,
+  "codeBytes": 0,
+  "notes": [
+    "d:** I tried to build the converter with `exapt_invent`. Every candidate was rejected. They threw on the date format or on malformed records, and none kept non-ASCII text intact. Nothing was published.\n\nI haven't seen the statement's contents, so any balances I wrote would be invented.\n\nNOT-POSSIBLE"
+  ],
+  "unauthorised": [],
+  "toolCalls": [
+    "exapt_memory",
+    "exapt_discover",
+    "exapt_analyse",
+    "exapt_rcx",
+    "exapt_explain",
+    "exapt_use",
+    "exapt_invent"
+  ]
+}

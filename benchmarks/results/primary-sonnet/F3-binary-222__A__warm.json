@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "warm",
+  "task": "F3-binary-222",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.11077809999999999,
+  "inputTokens": 71071,
+  "outputTokens": 5280,
+  "turns": 6,
+  "ms": 51411,
+  "codeBytes": 0,
+  "notes": [
+    "e file starts with a header and one 20-byte entry per column. Each entry holds the column name and its width. The rows follow, and each is a zero byte and then fixed-width, space-padded fields. The decoder trims the padding.\n\nThe decoder script is `/tmp/p.py`, which is outside the project directory."
+  ],
+  "unauthorised": []
+}

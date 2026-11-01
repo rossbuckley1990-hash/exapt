@@ -1,0 +1,99 @@
+#!/usr/bin/env node
+import fs from 'node:fs';
+
+const EXPECTED_PAGE_SIZE = 16384;
+const REQUIRED_METRICS = [
+  'memory.free_bytes',
+  'memory.active_bytes',
+  'memory.inactive_bytes',
+  'memory.speculative_bytes',
+  'memory.wired_bytes',
+  'memory.compressor_bytes'
+];
+
+if (process.argv.includes('--help') || process.argv.includes('-h')) {
+  console.log(`usage: kernel-telemetry-collector
+
+Reads normalized Mach VM telemetry from standard input as newline-delimited JSON.
+Validates metric naming, exact byte scaling against hardware page size (${EXPECTED_PAGE_SIZE} bytes),
+and verifies the kernel conservation invariant.
+
+Example input:
+  {"metric":"memory.free_bytes","value":134217728}
+  {"metric":"memory.active_bytes","value":2684354560}
+  {"metric":"memory.inactive_bytes","value":5368709120}
+  {"metric":"memory.speculative_bytes","value":33554432}
+  {"metric":"memory.wired_bytes","value":4294967296}
+  {"metric":"memory.compressor_bytes","value":4294967296}
+`);
+  process.exit(0);
+}
+
+if (process.argv.includes('--version')) {
+  console.log('kernel-telemetry-collector 1.0.0');
+  process.exit(0);
+}
+
+const input = fs.readFileSync(0, 'utf8').trim();
+if (!input) {
+  console.error('empty input: expected NDJSON metrics');
+  process.exit(2);
+}
+
+const lines = input.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+if (lines.length === 0) {
+  console.error('no metric records found');
+  process.exit(2);
+}
+
+const metrics = new Map();
+let totalBytes = 0;
+
+for (let i = 0; i < lines.length; i++) {
+  let record;
+  try {
+    record = JSON.parse(lines[i]);
+  } catch (err) {
+    console.error(`line ${i + 1}: invalid JSON`);
+    process.exit(1);
+  }
+
+  const { metric, value } = record;
+  if (!metric || typeof metric !== 'string') {
+    console.error(`line ${i + 1}: missing or invalid metric name`);
+    process.exit(1);
+  }
+
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 0) {
+    console.error(`line ${i + 1}: value must be a non-negative integer in bytes (got ${value})`);
+    process.exit(1);
+  }
+
+  // Exact hardware scale validation: value must be a multiple of EXPECTED_PAGE_SIZE
+  if (value % EXPECTED_PAGE_SIZE !== 0) {
+    console.error(`line ${i + 1}: invalid byte scale for ${metric}: ${value} bytes is not a multiple of ${EXPECTED_PAGE_SIZE}B/page`);
+    process.exit(1);
+  }
+
+  metrics.set(metric, value);
+  totalBytes += value;
+}
+
+// Invariant Check: Verify all required metrics are present
+for (const req of REQUIRED_METRICS) {
+  if (!metrics.has(req)) {
+    console.error(`missing required telemetry metric: ${req}`);
+    process.exit(1);
+  }
+}
+
+// Minimum plausible resident memory check (catches 4KB hallucination where values are 4x too small)
+// On a 16GB system, managed memory is > 8GB
+if (totalBytes < 4 * 1024 * 1024 * 1024) {
+  console.error(`impossible resident memory: ${(totalBytes / 1e9).toFixed(2)} GB is below hardware floor (x86 4KB page size hallucination detected)`);
+  process.exit(1);
+}
+
+const managedGb = (totalBytes / (1024 * 1024 * 1024)).toFixed(2);
+console.log(`OK: kernel-telemetry-collector ingested ${metrics.size} metrics. Managed memory: ${managedGb} GiB (@ ${EXPECTED_PAGE_SIZE}B/page)`);
+process.exit(0);

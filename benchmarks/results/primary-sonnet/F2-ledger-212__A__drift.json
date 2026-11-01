@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "drift",
+  "task": "F2-ledger-212",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.034790100000000004,
+  "inputTokens": 30313,
+  "outputTokens": 1137,
+  "turns": 4,
+  "ms": 27310,
+  "codeBytes": 0,
+  "notes": [
+    "the same dates and amounts.\n\nThe balances are:\n\n```\nAC-102 2081.28\nAC-106 6334.05\nAC-113 865.22\nAC-116 1398.98\nAC-124 5221.28\nAC-129 8092.86\nAC-133 2704.58\nAC-136 2496.51\nAC-137 4776.16\nAC-139 541.64\n```\n\nEach account appears only once in the new statement, so each balance equals its single posting."
+  ],
+  "unauthorised": []
+}

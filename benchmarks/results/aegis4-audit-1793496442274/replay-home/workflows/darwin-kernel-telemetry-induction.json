@@ -1,0 +1,17 @@
+{
+  "goal": "darwin-kernel-telemetry-induction",
+  "intent": "Convert raw Darwin Mach VM kernel telemetry from vm_stat into normalized OpenTelemetry-style NDJSON metrics with exact byte conversions satisfying the kernel conservation law",
+  "steps": [
+    {
+      "tool": "exapt:fixed-width-to-kernel-telemetry-collector-4d0a23"
+    },
+    {
+      "tool": "cli:kernel-telemetry-collector:mined"
+    }
+  ],
+  "capability": {
+    "id": "exapt:fixed-width-to-kernel-telemetry-collector-4d0a23",
+    "version": 1,
+    "status": "verified-within-scope"
+  }
+}

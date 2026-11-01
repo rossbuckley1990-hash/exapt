@@ -1,0 +1,26 @@
+{
+  "arm": "D",
+  "stage": "cold",
+  "task": "F5-needless-241",
+  "claimed": "done",
+  "hidden": {
+    "passed": 5,
+    "total": 5
+  },
+  "costUsd": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "turns": 0,
+  "ms": 18709,
+  "codeBytes": 0,
+  "notes": [
+    "Reachable without new code: stock-count accepts this input with its documented option --from=csv.",
+    "analysis achievable-existing",
+    "synthesis none ",
+    "level none",
+    "attempts 0"
+  ],
+  "detail": {
+    "attempts": []
+  }
+}

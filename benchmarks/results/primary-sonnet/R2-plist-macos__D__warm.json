@@ -1,0 +1,27 @@
+{
+  "arm": "D",
+  "stage": "warm",
+  "task": "R2-plist-macos",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.0429953,
+  "inputTokens": 75057,
+  "outputTokens": 1241,
+  "turns": 7,
+  "ms": 21944,
+  "codeBytes": 0,
+  "notes": [
+    "'t an authorised program here.\n- **Other options:** exapt has nothing else that fits. The one retained plist converter, `exapt:binary-to-ndjson-5658fc`, is unverified and produces NDJSON with fixed fields, not JSON.\n\nI didn't hand-write a result, because that would mean inventing data.\n\nNOT-POSSIBLE"
+  ],
+  "unauthorised": [],
+  "toolCalls": [
+    "exapt_discover",
+    "exapt_rcx",
+    "exapt_memory",
+    "exapt_use",
+    "exapt_analyse"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "warm",
+  "task": "F3-binary-221",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0866226,
+  "inputTokens": 64364,
+  "outputTokens": 3646,
+  "turns": 6,
+  "ms": 40047,
+  "codeBytes": 0,
+  "notes": [
+    "atches the header's row count and row size exactly. The parser doesn't use the 3-byte row prefix, and it prints a warning if one is non-zero. It printed none for the new file.\n\nSome values look cut short, like `Permit38` and `Leasin59`. The same shortening appears in the sample NDJSON, so I kept it."
+  ],
+  "unauthorised": []
+}

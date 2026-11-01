@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "warm",
+  "task": "I3-independent",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0676997,
+  "inputTokens": 70969,
+  "outputTokens": 2447,
+  "turns": 7,
+  "ms": 33776,
+  "codeBytes": 0,
+  "notes": [
+    " in `result.txt`.\n\nThe Fahrenheit values don't appear in the printed report, so my conversion can't affect it.\n\nThere are eight mite alerts: A25, A9, B17, C1, N1, N25, W25 and W9. There are no absent-queen alerts. Hive A33 had an absent queen on 2023-05-20, but its latest visit shows the queen seen."
+  ],
+  "unauthorised": []
+}

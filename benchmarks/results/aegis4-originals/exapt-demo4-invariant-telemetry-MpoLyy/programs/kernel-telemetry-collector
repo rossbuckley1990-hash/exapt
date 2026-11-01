@@ -1,0 +1,108 @@
+#!/usr/bin/env node
+import fs from 'node:fs';
+
+const EXPECTED_PAGE_SIZE = 16384;
+const REQUIRED_METRICS = [
+  'memory.free_bytes',
+  'memory.active_bytes',
+  'memory.inactive_bytes',
+  'memory.speculative_bytes',
+  'memory.wired_bytes',
+  'memory.compressor_bytes'
+];
+
+if (process.argv.includes('--help') || process.argv.includes('-h')) {
+  console.log(`usage: kernel-telemetry-collector
+
+Reads normalized Mach VM telemetry from standard input as newline-delimited JSON.
+Validates metric naming, exact byte scaling against hardware page size (${EXPECTED_PAGE_SIZE} bytes),
+and verifies the kernel conservation invariant.
+
+Example input:
+  {"metric":"memory.free_bytes","pages":8192,"bytes":134217728}
+  {"metric":"memory.active_bytes","pages":163840,"bytes":2684354560}
+  {"metric":"memory.inactive_bytes","pages":327680,"bytes":5368709120}
+  {"metric":"memory.speculative_bytes","pages":2048,"bytes":33554432}
+  {"metric":"memory.wired_bytes","pages":262144,"bytes":4294967296}
+  {"metric":"memory.compressor_bytes","pages":262144,"bytes":4294967296}
+`);
+  process.exit(0);
+}
+
+if (process.argv.includes('--version')) {
+  console.log('kernel-telemetry-collector 1.0.0');
+  process.exit(0);
+}
+
+const input = fs.readFileSync(0, 'utf8').trim();
+if (!input) {
+  console.error('empty input: expected NDJSON metrics');
+  process.exit(2);
+}
+
+const lines = input.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+if (lines.length === 0) {
+  console.error('no metric records found');
+  process.exit(2);
+}
+
+const metrics = new Map();
+let totalPages = 0;
+let totalBytes = 0;
+
+for (let i = 0; i < lines.length; i++) {
+  let record;
+  try {
+    record = JSON.parse(lines[i]);
+  } catch (err) {
+    console.error(`line ${i + 1}: invalid JSON`);
+    process.exit(1);
+  }
+
+  const { metric, pages, bytes } = record;
+  if (!metric || typeof metric !== 'string') {
+    console.error(`line ${i + 1}: missing or invalid metric name`);
+    process.exit(1);
+  }
+
+  if (typeof pages !== 'number' || !Number.isInteger(pages) || pages < 0) {
+    console.error(`line ${i + 1}: pages must be a non-negative integer (got ${pages})`);
+    process.exit(1);
+  }
+
+  if (typeof bytes !== 'number' || !Number.isFinite(bytes) || bytes < 0) {
+    console.error(`line ${i + 1}: bytes must be a non-negative number (got ${bytes})`);
+    process.exit(1);
+  }
+
+  // Exact hardware scale validation: bytes must equal pages * EXPECTED_PAGE_SIZE
+  if (bytes !== pages * EXPECTED_PAGE_SIZE) {
+    console.error(`line ${i + 1}: invalid byte scale for ${metric}: ${bytes} bytes for ${pages} pages (expected ${pages * EXPECTED_PAGE_SIZE} with ${EXPECTED_PAGE_SIZE} bytes/page)`);
+    process.exit(1);
+  }
+
+  metrics.set(metric, { pages, bytes });
+  totalPages += pages;
+  totalBytes += bytes;
+}
+
+// Invariant Check: Verify all required metrics are present
+for (const req of REQUIRED_METRICS) {
+  if (!metrics.has(req)) {
+    console.error(`missing required telemetry metric: ${req}`);
+    process.exit(1);
+  }
+}
+
+// Mathematical conservation check: component bytes must sum exactly
+const sumPages = REQUIRED_METRICS.reduce((acc, m) => acc + metrics.get(m).pages, 0);
+const sumBytes = REQUIRED_METRICS.reduce((acc, m) => acc + metrics.get(m).bytes, 0);
+
+if (sumBytes !== sumPages * EXPECTED_PAGE_SIZE) {
+  console.error('conservation law violated: sum of components does not equal total scaled bytes');
+  process.exit(1);
+}
+
+const managedGb = (sumBytes / (1024 * 1024 * 1024)).toFixed(2);
+console.log(`OK: kernel-telemetry-collector ingested ${metrics.size} metrics. Managed memory: ${managedGb} GiB (${sumPages} pages @ ${EXPECTED_PAGE_SIZE}B/page)`);
+process.exit(0);

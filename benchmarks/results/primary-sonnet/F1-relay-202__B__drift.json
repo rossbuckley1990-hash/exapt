@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "stage": "drift",
+  "task": "F1-relay-202",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.050088999999999995,
+  "inputTokens": 50877,
+  "outputTokens": 1645,
+  "turns": 6,
+  "ms": 36233,
+  "codeBytes": 0,
+  "notes": [
+    "100, which gives cents. That would make every value 10 times too small against the 45050.00 limit in `dock-report`, so I did not reuse it. The note in `previous/RESULT.json` says it was only verified on the sample.\n\nI didn't run `dock-archive`, `shout` or `tally`, since the report doesn't need them."
+  ],
+  "unauthorised": []
+}

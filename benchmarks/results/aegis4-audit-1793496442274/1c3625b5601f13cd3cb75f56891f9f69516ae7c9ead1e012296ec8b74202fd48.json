@@ -1,0 +1,156 @@
+{
+  "name": "inequality inverted at 58",
+  "kind": "mutant-value",
+  "sha256": "1c3625b5601f13cd3cb75f56891f9f69516ae7c9ead1e012296ec8b74202fd48",
+  "passed": 7,
+  "total": 21,
+  "rows": [
+    {
+      "id": "original-snap-active.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.7414169999999984
+    },
+    {
+      "id": "original-snap-heavy.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.5684169999999966
+    },
+    {
+      "id": "original-snap-idle.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.3668750000000003
+    },
+    {
+      "id": "page-4096-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.1076249999999987
+    },
+    {
+      "id": "page-4096-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 35.75595800000001
+    },
+    {
+      "id": "page-4096-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.8981670000000008
+    },
+    {
+      "id": "page-16384-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.3477499999999978
+    },
+    {
+      "id": "page-16384-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.1535419999999945
+    },
+    {
+      "id": "page-16384-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.3823750000000032
+    },
+    {
+      "id": "page-65536-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.2150409999999994
+    },
+    {
+      "id": "page-65536-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.6812910000000016
+    },
+    {
+      "id": "page-65536-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.2520839999999964
+    },
+    {
+      "id": "empty",
+      "pass": true,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.6615830000000003
+    },
+    {
+      "id": "header-only",
+      "pass": true,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.449708000000001
+    },
+    {
+      "id": "one-invalid-line",
+      "pass": true,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.207540999999999
+    },
+    {
+      "id": "missing-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 4.729374999999997
+    },
+    {
+      "id": "zero-page-size",
+      "pass": true,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.3182079999999985
+    },
+    {
+      "id": "duplicate-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.2918749999999974
+    },
+    {
+      "id": "invalid-header-prefix",
+      "pass": true,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 0.9526249999999976
+    },
+    {
+      "id": "blank-line",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.4277079999999955
+    },
+    {
+      "id": "live-host",
+      "pass": false,
+      "status": "threw",
+      "error": "input must be a string",
+      "ms": 1.1430420000000012
+    }
+  ]
+}

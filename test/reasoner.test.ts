@@ -75,3 +75,18 @@ test("an outcome that is not stated is reported as underspecified, with what is 
   assert.equal(a.status, "underspecified");
   assert.ok(a.questions.length >= 2);
 });
+
+test("inputs that disagree on a syntax are treated as text, and the fullest truth names the target", async () => {
+  const dir = tempDir("reason");
+  fs.mkdirSync(path.join(dir, "p"));
+  const e = await engine(dir, [path.join(dir, "p")], { model: new (await import("../packages/model-adapters/index.ts")).Scripted([]) });
+  const a = await e.analyseCompact({
+    id: "g", intent: "read these", want: {},
+    corpus: [
+      { input: { text: "ok 1 - a\n  ---\n  type: test\n  ...\n" }, truth: { text: "" } },
+      { input: { text: "TAP version 13\n# Subtest: b\nok 1 - b\n1..1\n" }, truth: { text: '{"name":"b","status":"pass"}\n{"name":"c","status":"fail"}\n' } },
+    ],
+  }, dir);
+  assert.match(a.gaps[0].title, /^text -> ndjson\{name,status\}/);
+  await e.host.rc.flush();
+});

@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "stage": "cold",
+  "task": "F2-ledger-212",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "turns": 0,
+  "ms": 6255,
+  "codeBytes": 0,
+  "notes": [
+    "RightClick X holds no capability for post-batch"
+  ]
+}

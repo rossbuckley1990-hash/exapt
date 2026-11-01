@@ -30,7 +30,7 @@ const goal = {
       sample: sample,
       examples: { type: "array", items: obj({ input: sample, output: sample }, ["input", "output"]), description: "Half are held out from synthesis." },
     }),
-    corpus: { type: "array", items: obj({ input: sample, truth: sample, name: str("Label.") }, ["input", "truth"]), description: "Inputs with an independent source of truth." },
+    corpus: { type: "array", items: obj({ input: sample, truth: sample, name: str("Label."), pinned: bool("Keep this item visible to synthesis.") }, ["input", "truth"]), description: "Inputs with an independent source of truth." },
     checker: str("Authorised program reading {\"input\",\"output\"} as JSON; exit 0 means right."),
     budget: obj({ rounds: num("Rounds."), modelCalls: num("Can only lower the operator's limit."), maxCostUsd: num("Can only lower the operator's limit.") }),
   }, ["id", "intent", "want"]),
@@ -117,7 +117,8 @@ export async function dispatch(e: Exapt, name: string, a: Record<string, any>): 
       const binary = bytes ? sniff(bytes).syntax.format === "binary" : false;
       const input = bytes ? (binary ? bytes.toString("base64") : bytes.toString("utf8")) : a.input;
       if (input === undefined) throw new Refused("missing-input", "give input or input_path");
-      const out = a.workflow ? await e.runWorkflow(a.workflow, input) : a.id ? await e.use(a.id, input, { encoding: binary ? "base64" : a.encoding }) : (() => {
+      const encoding = binary || a.encoding === "base64" ? "base64" : undefined;
+      const out = a.workflow ? await e.runWorkflow(a.workflow, encoding ? Buffer.from(input, "base64") : input) : a.id ? await e.use(a.id, input, { encoding }) : (() => {
         throw new Refused("missing-id", "give id or workflow");
       })();
       if (!a.output_path) return out;

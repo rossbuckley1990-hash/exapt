@@ -12,7 +12,7 @@
 // inputs; a consumer tests acceptance; a program running the other way yields ground truth. Tools
 // built for something else become the verification instruments for what is being built: exaptation.
 import { digest, Refused } from "../shared/index.ts";
-import { accepted, fieldCoverage, isRecordRepr, nameAffinity, reprFits, reprLabel, sameSyntax, sniff, type Field, type Goal, type Repr, type SampleRef, type Tool, type Universe } from "../capability-universe/index.ts";
+import { accepted, compareRecords, fieldCoverage, isRecordRepr, parseRecords, nameAffinity, reprFits, reprLabel, sameSyntax, sniff, sniffSyntax, type Field, type Goal, type Repr, type SampleRef, type Tool, type Universe } from "../capability-universe/index.ts";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -79,6 +79,12 @@ export interface Gap {
 
 export type AnalysisStatus = "achievable-existing" | "achievable-composition" | "gap-found" | "underspecified" | "not-constructible" | "unverifiable";
 
+export interface Refutation {
+  index: number;
+  name: string;
+  route: string[];
+}
+
 export interface Analysis {
   goal: string;
   status: AnalysisStatus;
@@ -90,6 +96,8 @@ export interface Analysis {
   gaps: Gap[];
   limitations: string[];
   questions: string[];
+  /** Items of stated truth a retained route got wrong. */
+  refuted?: Refutation[];
 }
 
 export function loadSample(s: SampleRef, base: string): Buffer {
@@ -102,7 +110,7 @@ export function loadSample(s: SampleRef, base: string): Buffer {
 const summarizeGap = (g: Gap) => `${g.from.label} -> ${g.to.label}`;
 
 /** Run forward from the caller's values. Every value here was actually produced. */
-async function forward(tools: Tool[], seeds: Buffer[], depth: number): Promise<Witness[]> {
+async function forward(tools: Tool[], seeds: Buffer[], depth: number, structured = true): Promise<Witness[]> {
   const out: Witness[] = [];
   const seen = new Set<string>();
   const push = (w: Witness) => {
@@ -112,7 +120,7 @@ async function forward(tools: Tool[], seeds: Buffer[], depth: number): Promise<W
     return true;
   };
   for (const [i, bytes] of seeds.entries()) {
-    const repr = sniff(bytes);
+    const repr: Repr = structured ? sniff(bytes) : { syntax: { format: "text" }, fields: [], records: 0 };
     push({ id: `have-${i}`, bytes, repr, label: reprLabel(repr), lineage: [] });
   }
   let frontier = [...out];
@@ -136,7 +144,14 @@ async function forward(tools: Tool[], seeds: Buffer[], depth: number): Promise<W
 
 function targetsFor(goal: Goal, tools: Tool[], base: string): Requirement[] {
   const out: Requirement[] = [];
-  if (goal.want.sample) {
+  // Stated truth outranks a sample, which outranks nothing: a sample says what a result looks like,
+  // while a corpus says what it must be.
+  if (goal.corpus?.length) {
+    // The fullest example says most about the target; the first one may be nearly empty.
+    const bytes = goal.corpus.map((c) => loadSample(c.truth, base)).sort((a, b) => b.length - a.length)[0];
+    const repr = sniff(bytes);
+    out.push({ id: "target", repr, label: reprLabel(repr), requiredFields: [], sample: bytes.toString("utf8").slice(0, 4000), consumer: null, downstream: [] });
+  } else if (goal.want.sample) {
     const bytes = loadSample(goal.want.sample, base);
     const repr = sniff(bytes);
     out.push({ id: "target", repr, label: reprLabel(repr), requiredFields: repr.fields.map((f) => f.name), sample: bytes.toString("utf8"), consumer: null, downstream: [] });
@@ -144,10 +159,6 @@ function targetsFor(goal: Goal, tools: Tool[], base: string): Requirement[] {
     const bytes = loadSample(goal.want.examples[0].output, base);
     const repr = sniff(bytes);
     out.push({ id: "target", repr, label: reprLabel(repr), requiredFields: repr.fields.map((f) => f.name), sample: bytes.toString("utf8"), consumer: null, downstream: [] });
-  } else if (goal.corpus?.length) {
-    const bytes = loadSample(goal.corpus[0].truth, base);
-    const repr = sniff(bytes);
-    out.push({ id: "target", repr, label: reprLabel(repr), requiredFields: [], sample: bytes.toString("utf8"), consumer: null, downstream: [] });
   }
   const program = goal.want.program ? tools.find((t) => t.name === goal.want.program || t.id === goal.want.program) : undefined;
   if (program?.contract.input) {
@@ -258,7 +269,11 @@ export async function analyse(universe: Universe, goal: Goal, opts: AnalyseOptio
     ...(goal.want.examples ?? []).slice(0, 1).map((e) => loadSample(e.input, opts.base)),
     ...(goal.corpus ?? []).slice(0, 1).map((c) => loadSample(c.input, opts.base)),
   ];
-  const reached = await forward(tools, seeds, opts.depth ?? 3);
+  // One file can look like anything. Several inputs of one kind must agree on a syntax, or the
+  // source is treated as plain text and nothing is assumed about its structure.
+  const family = [...(goal.corpus ?? []).map((c) => loadSample(c.input, opts.base)), ...(goal.want.examples ?? []).map((e) => loadSample(e.input, opts.base))];
+  const agreed = family.length < 2 || family.every((b) => sameSyntax(sniffSyntax(b), sniffSyntax(family[0])));
+  const reached = await forward(tools, seeds, opts.depth ?? 3, agreed);
   const required = targetsFor(goal, tools, opts.base);
 
   // What plain RightClick X composition would do: its route, not its verdict.
@@ -273,7 +288,18 @@ export async function analyse(universe: Universe, goal: Goal, opts: AnalyseOptio
     const target = required.find((r) => r.id === "target");
     return !!target && target.requiredFields.length > 0 && reprFits(w.repr, target.repr, target.requiredFields);
   };
-  const done = reached.find(finished);
+  let done = reached.find(finished);
+  // A shape that fits is not a value that is right. Where truth is stated, a route has to reproduce
+  // it, so new evidence can refute something retained even though its format still matches.
+  const refuted: Refutation[] = [];
+  if (done?.lineage.length && goal.corpus?.length) {
+    for (const [i, c] of goal.corpus.entries()) {
+      const output = await routeOutput(tools, done, loadSample(c.input, opts.base));
+      const truth = loadSample(c.truth, opts.base).toString("utf8");
+      if (output === null || !agrees(truth, output)) refuted.push({ index: i, name: c.name ?? `item ${i + 1}`, route: done.lineage.map((l) => l.tool) });
+    }
+    if (refuted.length) done = undefined;
+  }
   if (done) {
     const composite = done.lineage.length > 1;
     return { ...base, status: composite ? "achievable-composition" : "achievable-existing", summary: `Reachable with what exists: ${done.lineage.map((l) => l.tool).join(" -> ") || "the input already fits"}. Nothing needs to be invented.`, route: { steps: done.lineage, output: done.bytes.toString("utf8").slice(0, 2000), label: done.label }, gaps: [] };
@@ -298,10 +324,13 @@ export async function analyse(universe: Universe, goal: Goal, opts: AnalyseOptio
     }
   }
 
+  if (refuted.length) base.limitations.push(`A retained route gives wrong results on ${refuted.length} of ${goal.corpus!.length} items with stated truth: ${refuted.slice(0, 4).map((r) => r.name).join(", ")}.`);
   const consumers = (repr: Repr) => tools.filter((t) => t.contract.input && sameSyntax(t.contract.input.repr.syntax, repr.syntax)).length;
   const producers = (repr: Repr) => tools.filter((t) => t.contract.output && sameSyntax(t.contract.output.repr.syntax, repr.syntax)).length;
   const gaps: Gap[] = [];
+  const refutedRoute = refuted[0]?.route;
   for (const from of reached) {
+    if (refutedRoute && refutedRoute.every((id) => from.lineage.some((l) => l.tool === id))) continue; // not a source of anything trustworthy now
     for (const to of required) {
       if (from.repr.syntax.format === "text" && to.repr.syntax.format !== "text" && from.lineage.length) continue; // a report or a dump is not a source
       const oracles: OracleSpec[] = [];
@@ -359,7 +388,28 @@ export async function analyse(universe: Universe, goal: Goal, opts: AnalyseOptio
   if (!best) return { ...base, status: "not-constructible", summary: "No representation that would satisfy this goal could be established from the environment.", gaps: [], limitations: ["no target representation is known"] };
   if (!ranked.some((g) => g.constructible)) return { ...base, status: "not-constructible", summary: `Not constructible from what is available: ${best.reasons[0]}.`, gaps: ranked, limitations: best.reasons };
   if (!ranked.some((g) => g.constructible && g.verifiable)) return { ...base, status: "unverifiable", summary: `A route could be built through ${best.title}, but nothing here could independently establish that it is correct.`, gaps: ranked, limitations: best.reasons };
-  return { ...base, status: "gap-found", summary: `Missing transformation: ${best.title}.`, gaps: ranked };
+  return { ...base, status: "gap-found", summary: refuted.length ? `A retained capability is refuted by new evidence, so ${best.title} must be rebuilt.` : `Missing transformation: ${best.title}.`, gaps: ranked, ...(refuted.length ? { refuted } : {}) };
+}
+
+async function routeOutput(tools: Tool[], route: Witness, input: Buffer): Promise<string | null> {
+  let value: string | Buffer = input;
+  for (const step of route.lineage) {
+    const t = tools.find((x) => x.id === step.tool);
+    const r: { ok: boolean; stdout: string; stderr?: string } | null = t ? await t.run(value, step.args ? { args: step.args } : undefined).catch(() => null) : null;
+    if (!r?.ok) return null;
+    value = r.stdout;
+  }
+  return value.toString("utf8");
+}
+
+function agrees(truth: string, output: string): boolean {
+  try {
+    const syntax = sniffSyntax(truth);
+    if (!isRecordRepr({ syntax, fields: [], records: 0 })) return truth.trim() === output.trim();
+    return compareRecords(parseRecords(truth, syntax), parseRecords(output, syntax)).equal;
+  } catch {
+    return false;
+  }
 }
 
 async function consultRcx(universe: Universe, goal: Goal, sample: Buffer | undefined): Promise<Analysis["rcx"]> {

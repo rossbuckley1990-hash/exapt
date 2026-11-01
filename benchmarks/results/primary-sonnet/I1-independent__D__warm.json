@@ -1,0 +1,28 @@
+{
+  "arm": "D",
+  "stage": "warm",
+  "task": "I1-independent",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.0570131,
+  "inputTokens": 92792,
+  "outputTokens": 1414,
+  "turns": 8,
+  "ms": 36073,
+  "codeBytes": 0,
+  "notes": [
+    "no independent check for the per-station counts and maxima, and it rated building the conversion step as not worth attempting.\n\nI didn't want to fabricate a summary from data I couldn't read. To go further I'd need a shell, or the `programs/` help text and `sample/input.txt` pasted in.\n\nNOT-POSSIBLE"
+  ],
+  "unauthorised": [],
+  "toolCalls": [
+    "exapt_memory",
+    "exapt_discover",
+    "exapt_analyse",
+    "exapt_rcx",
+    "exapt_use",
+    "exapt_rcx"
+  ]
+}

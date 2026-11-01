@@ -1,0 +1,26 @@
+{
+  "seed": 2026,
+  "pageSize": 16384,
+  "controls": [
+    {
+      "name": "x86-4kb-hallucination",
+      "fault": "hardcodes 4096 bytes per page; fails hardware page scale verification",
+      "rejected": false
+    },
+    {
+      "name": "unstripped-trailing-dot",
+      "fault": "leaves trailing dot on page counts; fails strict integer schema",
+      "rejected": false
+    },
+    {
+      "name": "broken-conservation-law",
+      "fault": "omits compressor metric; fails physical conservation invariant",
+      "rejected": false
+    }
+  ],
+  "heldOut": {
+    "matched": 0,
+    "total": 6
+  },
+  "liveReport": ""
+}

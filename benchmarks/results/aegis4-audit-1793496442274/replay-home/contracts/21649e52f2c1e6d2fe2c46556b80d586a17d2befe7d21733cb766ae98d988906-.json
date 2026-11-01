@@ -1,0 +1,99 @@
+{
+  "tool": "cli:kernel-telemetry-collector:mined",
+  "name": "kernel-telemetry-collector",
+  "docs": "usage: kernel-telemetry-collector\n\nReads normalized Mach VM telemetry from standard input as newline-delimited JSON.\nValidates metric naming, exact byte scaling against hardware page size (16384 bytes),\nand verifies the kernel conservation invariant.\n\nExample input:\n  {\"metric\":\"memory.free_bytes\",\"value\":134217728}\n  {\"metric\":\"memory.active_bytes\",\"value\":2684354560}\n  {\"metric\":\"memory.inactive_bytes\",\"value\":5368709120}\n  {\"metric\":\"memory.speculative_bytes\",\"value\":33554432}\n  {\"metric\":\"memory.wired_bytes\",\"value\":4294967296}\n  {\"metric\":\"memory.compressor_bytes\",\"value\":4294967296}",
+  "input": {
+    "repr": {
+      "syntax": {
+        "format": "ndjson"
+      },
+      "fields": [
+        {
+          "name": "metric",
+          "kind": "string",
+          "cardinality": 6,
+          "samples": [
+            "memory.free_bytes",
+            "memory.active_bytes",
+            "memory.inactive_bytes",
+            "memory.speculative_bytes",
+            "memory.wired_bytes"
+          ]
+        },
+        {
+          "name": "value",
+          "kind": "int",
+          "cardinality": 5,
+          "samples": [
+            "134217728",
+            "2684354560",
+            "5368709120",
+            "33554432",
+            "4294967296"
+          ],
+          "min": 33554432,
+          "max": 5368709120
+        }
+      ],
+      "records": 6
+    },
+    "requiredFields": [
+      "metric",
+      "value"
+    ],
+    "optionalFields": [],
+    "influentialFields": [],
+    "positive": [
+      "{\"metric\":\"memory.free_bytes\",\"value\":134217728}\n{\"metric\":\"memory.active_bytes\",\"value\":2684354560}\n{\"metric\":\"memory.inactive_bytes\",\"value\":5368709120}\n{\"metric\":\"memory.speculative_bytes\",\"value\":33554432}\n{\"metric\":\"memory.wired_bytes\",\"value\":4294967296}\n{\"metric\":\"memory.compressor_bytes\",\"value\":4294967296}\n"
+    ],
+    "rejected": [
+      {
+        "variant": "without metric",
+        "error": "line 1: missing or invalid metric name"
+      },
+      {
+        "variant": "metric perturbed",
+        "error": "missing required telemetry metric: memory.free_bytes"
+      },
+      {
+        "variant": "without value",
+        "error": "line 1: value must be a non-negative integer in bytes (got undefined)"
+      },
+      {
+        "variant": "value perturbed",
+        "error": "line 1: invalid byte scale for memory.free_bytes: 134217729 bytes is not a multiple of 16384B/page"
+      }
+    ]
+  },
+  "output": {
+    "repr": {
+      "syntax": {
+        "format": "text"
+      },
+      "fields": [],
+      "records": 0
+    },
+    "example": "OK: kernel-telemetry-collector ingested 6 metrics. Managed memory: 15.66 GiB (@ 16384B/page)\n"
+  },
+  "options": [],
+  "behaviour": "8c291a8be9225fe1b31167f8eb0207d37b408e09011e61060374ded62c973837",
+  "claims": [
+    {
+      "claim": "accepts 1 confirmed sample(s)",
+      "status": "observed",
+      "detail": "ran in the program sandbox"
+    },
+    {
+      "claim": "requires fields metric, value",
+      "status": "experimentally-supported",
+      "detail": "removing each one made the program refuse"
+    },
+    {
+      "claim": "refuses scrambled bytes",
+      "status": "observed",
+      "detail": "the acceptance of this program says something about well-formedness"
+    }
+  ],
+  "probes": 7,
+  "channel": "stdin"
+}

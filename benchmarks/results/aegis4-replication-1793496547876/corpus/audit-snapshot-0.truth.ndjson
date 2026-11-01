@@ -1,0 +1,6 @@
+{"metric":"memory.free_bytes","value":0}
+{"metric":"memory.active_bytes","value":2572337152}
+{"metric":"memory.inactive_bytes","value":3768467456}
+{"metric":"memory.speculative_bytes","value":49152}
+{"metric":"memory.wired_bytes","value":3227697152}
+{"metric":"memory.compressor_bytes","value":2965520384}

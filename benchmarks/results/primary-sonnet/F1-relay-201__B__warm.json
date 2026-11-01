@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "stage": "warm",
+  "task": "F1-relay-201",
+  "claimed": "done",
+  "hidden": {
+    "passed": 0,
+    "total": 1
+  },
+  "costUsd": 0.0346493,
+  "inputTokens": 38813,
+  "outputTokens": 926,
+  "turns": 5,
+  "ms": 16085,
+  "codeBytes": 0,
+  "notes": [
+    ": `Dock-Seven/rig-1c`, `Dock-Seven/rig-2b`, `Dock-Seven/rig-8b`, `East-Wing/rig-4a` and `North-Wing/rig-8c`. One more is `Roof-Plant/rig-8b`, making six in total.\n\nThe `cold-report` help text says it prints a line per location, but the output is per site and unit. I left it as the program prints it."
+  ],
+  "unauthorised": []
+}

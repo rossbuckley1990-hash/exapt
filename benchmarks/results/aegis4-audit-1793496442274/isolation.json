@@ -1,0 +1,63 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "harness runs a program",
+      "passed": true,
+      "detail": "ok: alive"
+    },
+    {
+      "name": "network is denied",
+      "passed": true,
+      "detail": "ok: denied"
+    },
+    {
+      "name": "root filesystem is read-only",
+      "passed": true,
+      "detail": "ok: denied"
+    },
+    {
+      "name": "no host paths are mounted",
+      "passed": true,
+      "detail": "ok: []"
+    },
+    {
+      "name": "no ambient credentials",
+      "passed": true,
+      "detail": "ok: []"
+    },
+    {
+      "name": "unprivileged uid",
+      "passed": true,
+      "detail": "ok: 65534"
+    },
+    {
+      "name": "memory limit kills an allocation bomb",
+      "passed": true,
+      "detail": "memory (killed by the container's limits)"
+    },
+    {
+      "name": "process limit stops a fork bomb",
+      "passed": true,
+      "detail": "ok: 3"
+    },
+    {
+      "name": "timeout stops an infinite loop",
+      "passed": true,
+      "detail": "timeout (exceeded 1500ms)"
+    },
+    {
+      "name": "output cap stops a flood",
+      "passed": true,
+      "detail": "output-limit (exceeded 1048576 output bytes)"
+    }
+  ],
+  "failures": [],
+  "docker": {
+    "available": true,
+    "imagePresent": true,
+    "serverVersion": "29.9.2",
+    "detail": "ready"
+  },
+  "image": "node@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da"
+}

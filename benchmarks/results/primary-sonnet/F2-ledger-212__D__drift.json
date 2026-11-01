@@ -1,0 +1,28 @@
+{
+  "arm": "D",
+  "stage": "drift",
+  "task": "F2-ledger-212",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.05951770000000001,
+  "inputTokens": 95091,
+  "outputTokens": 1613,
+  "turns": 8,
+  "ms": 31300,
+  "codeBytes": 0,
+  "notes": [
+    "t-batch` points at a `D-engine/programs` directory, not this task's `D-drift/programs`. The program may have changed since it was registered.\n- My two attempts to run `post-batch` through the exapt interface both failed.\n\nWriting numbers without seeing the data would be inventing them.\n\nNOT-POSSIBLE"
+  ],
+  "unauthorised": [],
+  "toolCalls": [
+    "exapt_memory",
+    "exapt_discover",
+    "exapt_analyse",
+    "exapt_rcx",
+    "exapt_rcx",
+    "exapt_rcx"
+  ]
+}

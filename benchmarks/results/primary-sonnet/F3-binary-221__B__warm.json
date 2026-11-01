@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "stage": "warm",
+  "task": "F3-binary-221",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.029418500000000004,
+  "inputTokens": 30168,
+  "outputTokens": 675,
+  "turns": 4,
+  "ms": 14281,
+  "codeBytes": 0,
+  "notes": [
+    "nsistent with that format: 16 rows, a record size of 34 and three 40-byte column descriptors. The 16 rows in the output match the header's row count.\n\nThe parser reads every column as text, and all three columns in this file look like text. A file with numeric columns would not be decoded correctly."
+  ],
+  "unauthorised": []
+}

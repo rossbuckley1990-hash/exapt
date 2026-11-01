@@ -1,0 +1,21 @@
+{
+  "arm": "B",
+  "stage": "cold",
+  "task": "F2-ledger-211",
+  "claimed": "done",
+  "hidden": {
+    "passed": 6,
+    "total": 6
+  },
+  "costUsd": 0.035107,
+  "inputTokens": 30081,
+  "outputTokens": 1187,
+  "turns": 4,
+  "ms": 16890,
+  "codeBytes": 606,
+  "notes": [
+    "identical to A/cold by design",
+    "ut against a known-correct answer.\n\nThe statement dates are read as DD/MM/YYYY and amounts are converted to cents. The sample contains no negative amounts, thousands separators or other unusual formats, so those paths were never exercised. The script has code for negative amounts (a minus sign or parentheses) and for commas, but that code is untested.\n\nI wrote `out/RESULT.json` with status \"done\"."
+  ],
+  "unauthorised": []
+}

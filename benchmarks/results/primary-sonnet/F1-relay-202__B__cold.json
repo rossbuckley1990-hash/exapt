@@ -1,0 +1,21 @@
+{
+  "arm": "B",
+  "stage": "cold",
+  "task": "F1-relay-202",
+  "claimed": "done",
+  "hidden": {
+    "passed": 6,
+    "total": 6
+  },
+  "costUsd": 0.0401955,
+  "inputTokens": 41613,
+  "outputTokens": 1157,
+  "turns": 5,
+  "ms": 20325,
+  "codeBytes": 338,
+  "notes": [
+    "identical to A/cold by design",
+    "ds.\n3. `dock-ingest` summarises per location and unit.\n4. `dock-report` prints the compliance lines.\n\nThe cents conversion is consistent with the report's 45050.00 limit. In cents that is 450.50 dollars, which matches the dollar-valued readings in the dump.\n\nI haven't tested it on other inputs, so the claim that it works on new dumps rests on the pipeline being general rather than on a second run."
+  ],
+  "unauthorised": []
+}

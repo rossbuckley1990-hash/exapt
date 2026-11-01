@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "stage": "warm",
+  "task": "I3-independent",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.03996809999999999,
+  "inputTokens": 43291,
+  "outputTokens": 715,
+  "turns": 5,
+  "ms": 16800,
+  "codeBytes": 0,
+  "notes": [
+    "m to the format `hive-report` expects, so the report is exactly what `hive-report` printed. It accepted all 21 inspections across 14 hives.\n\nI did not recheck the figures by hand.\n\nThe report shows 8 mite alerts: A25, A9, B17, C1, N1, N25, W25 and W9. No hive had an absent queen on its latest visit."
+  ],
+  "unauthorised": []
+}

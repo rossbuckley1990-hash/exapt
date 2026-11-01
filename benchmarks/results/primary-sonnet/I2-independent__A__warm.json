@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "warm",
+  "task": "I2-independent",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0422169,
+  "inputTokens": 41865,
+  "outputTokens": 1295,
+  "turns": 5,
+  "ms": 28878,
+  "codeBytes": 0,
+  "notes": [
+    "sections and channels (web becomes online), and adds the TOTAL line. `settle` accepted the result without errors.\n\nI rechecked the commission by hand: card £600 × 1.5% is £9.00, and online £35,922.50 × 6% is £2,155.35, which sum to £2,164.35.\n\nThe conversion script isn't saved in the project folder."
+  ],
+  "unauthorised": []
+}

@@ -1,0 +1,27 @@
+{
+  "arm": "D",
+  "stage": "drift",
+  "task": "F1-relay-201",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.046660599999999997,
+  "inputTokens": 65161,
+  "outputTokens": 1070,
+  "turns": 7,
+  "ms": 412560,
+  "codeBytes": 0,
+  "notes": [
+    " checks changed.\n\nI then ran the repair. No replacement step survived testing. The closest candidates got `amount` wrong, giving -7 where -6.96 was expected, and the repaired version stayed unverified. Producing the report from an unverified step would risk wrong numbers, so I stopped.\n\nNOT-POSSIBLE"
+  ],
+  "unauthorised": [],
+  "toolCalls": [
+    "exapt_discover",
+    "exapt_memory",
+    "exapt_analyse",
+    "exapt_use",
+    "exapt_evolve"
+  ]
+}

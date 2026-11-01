@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "stage": "cold",
+  "task": "I3-independent",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "turns": 0,
+  "ms": 5832,
+  "codeBytes": 0,
+  "notes": [
+    "RightClick X holds no capability for hive-report"
+  ]
+}

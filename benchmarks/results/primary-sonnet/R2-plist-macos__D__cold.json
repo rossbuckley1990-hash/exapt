@@ -1,0 +1,87 @@
+{
+  "arm": "D",
+  "stage": "cold",
+  "task": "R2-plist-macos",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.051761,
+  "inputTokens": 4642,
+  "outputTokens": 3985,
+  "turns": 2,
+  "ms": 74792,
+  "codeBytes": 0,
+  "notes": [
+    "Retained as unverified (passed-holdout): Passed held-out tests, but the evidence does not reach the bar for independent verification.",
+    "analysis gap-found",
+    "synthesis model claude-cli/sonnet",
+    "level passed-holdout",
+    "attempts 1",
+    "layout induction: no fixed record layout explains where the known values occur"
+  ],
+  "detail": {
+    "unverified": {
+      "passed": 5,
+      "total": 5
+    },
+    "capability": {
+      "id": "exapt:binary-to-ndjson-5658fc",
+      "version": 1,
+      "status": "synthesised-unverified"
+    },
+    "gap": "gap-5658fccaa8",
+    "attempts": [
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "passed-holdout"
+      }
+    ],
+    "mutation": {
+      "killed": 3,
+      "total": 12,
+      "value": {
+        "killed": 3,
+        "total": 9
+      },
+      "survivors": [
+        "multiplication became division at 2901",
+        "literal changed at 1596",
+        "literal changed at 995",
+        "literal changed at 1162",
+        "multiplication became division at 2409",
+        "literal changed at 902",
+        "validation removed at 499",
+        "validation removed at 1244",
+        "validation removed at 1847"
+      ]
+    },
+    "tiers": {
+      "visible": {
+        "passed": 2,
+        "total": 2
+      },
+      "independent": {
+        "passed": 1,
+        "total": 1
+      },
+      "boundary": {
+        "passed": 0,
+        "total": 0
+      },
+      "malformed": {
+        "passed": 3,
+        "total": 3
+      },
+      "holdout": {
+        "passed": 2,
+        "total": 2
+      }
+    },
+    "limitations": [
+      "Evidence comes from finite testing. This does not establish correctness outside the stated domain, or universally.",
+      "The test suite caught only 3 of 9 injected value faults, so it may not be testing what it appears to test."
+    ]
+  }
+}

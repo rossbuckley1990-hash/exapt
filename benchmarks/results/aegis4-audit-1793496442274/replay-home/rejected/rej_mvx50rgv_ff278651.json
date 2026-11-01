@@ -1,0 +1,12 @@
+{
+  "run": "run_mvx50aqj_83f3ed7d",
+  "gap": "gap-4d0a23b708",
+  "producer": "negative control: unstripped-trailing-dot",
+  "kind": "injected-control",
+  "level": "executed",
+  "rejectedAt": "visible",
+  "reason": "ground-truth: 6 difference(s), first: row 1, value: expected 196608000, got \"12000.\"",
+  "sha256": "7e1e7ee03c0348b511b1156c4fd4d30f5bd1d08064c97856a4fb2dddc5a36d31",
+  "id": "rej_mvx50rgv_ff278651",
+  "at": "2026-11-01T01:14:40.015Z"
+}

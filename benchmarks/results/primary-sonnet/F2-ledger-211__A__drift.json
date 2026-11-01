@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "drift",
+  "task": "F2-ledger-211",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0376481,
+  "inputTokens": 39092,
+  "outputTokens": 1289,
+  "turns": 5,
+  "ms": 22705,
+  "codeBytes": 0,
+  "notes": [
+    "and. AC-109 appears twice, 8622.76 and 4555.98, and the sum is 13178.74, which matches the output.\n\nI didn't have an expected output for the sample statement, so I couldn't test the conversion against a known-good result. The \"done\" status rests on the date reading and the ×1000 scaling being right."
+  ],
+  "unauthorised": []
+}

@@ -1,0 +1,110 @@
+{
+  "arm": "D",
+  "stage": "cold",
+  "task": "F2-ledger-211",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.243759,
+  "inputTokens": 46283,
+  "outputTokens": 13685,
+  "turns": 10,
+  "ms": 286919,
+  "codeBytes": 0,
+  "notes": [
+    "Not established: no candidate survived; last: independent: execution: threw: bad date",
+    "analysis gap-found",
+    "synthesis none ",
+    "level none",
+    "attempts 12",
+    "enumerative search: no expression in the language explains target field \"value_date\" (686 expressions explored)"
+  ],
+  "detail": {
+    "unverified": {
+      "passed": 6,
+      "total": 6
+    },
+    "capability": {
+      "id": "exapt:fixed-width-to-post-batch-aad73e",
+      "version": 1,
+      "status": "synthesised-unverified"
+    },
+    "gap": "gap-aad73e36d2",
+    "attempts": [
+      {
+        "producer": "enumerative lens search",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 5 difference(s), first: row 2, value_date: expected \"2026-02-13\", got \"2026-02-06\""
+      },
+      {
+        "producer": "enumerative lens search",
+        "level": "executed",
+        "rejectedAt": "visible",
+        "reason": "inverse-pair: 5 difference(s), first: row 2, value_date: expected \"2026-02-13\", got \"2026-02-06\""
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "passed-visible",
+        "rejectedAt": "independent",
+        "reason": "execution: threw: invalid date: 44/36/2026"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "passed-visible",
+        "rejectedAt": "independent",
+        "reason": "execution: threw: bad date: 44/36/2026"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "passed-visible",
+        "rejectedAt": "boundary",
+        "reason": "text-preservation: \"non-ascii text\": the input's text did not survive intact"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "passed-visible",
+        "rejectedAt": "independent",
+        "reason": "inverse-route: reading the output back does not reproduce the input: row 1, DATE: expected \"32/24/2026\", got \"01/01/2028\""
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "passed-visible",
+        "rejectedAt": "boundary",
+        "reason": "text-preservation: \"non-ascii text\": the input's text did not survive intact"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "passed-visible",
+        "rejectedAt": "boundary",
+        "reason": "text-preservation: \"non-ascii text\": the input's text did not survive intact"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "passed-visible",
+        "rejectedAt": "boundary",
+        "reason": "text-preservation: \"non-ascii text\": the input's text did not survive intact"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "passed-visible",
+        "rejectedAt": "boundary",
+        "reason": "text-preservation: \"non-ascii text\": the input's text did not survive intact"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "passed-visible",
+        "rejectedAt": "independent",
+        "reason": "execution: threw: bad date"
+      },
+      {
+        "producer": "claude-cli/sonnet",
+        "level": "passed-visible",
+        "rejectedAt": "independent",
+        "reason": "execution: threw: bad date"
+      }
+    ]
+  }
+}

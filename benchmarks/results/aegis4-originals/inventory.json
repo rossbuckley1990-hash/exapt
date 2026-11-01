@@ -1,0 +1,812 @@
+{
+  "capturedAt": "2026-11-01T01:26:43.959Z",
+  "attempts": [
+    {
+      "directory": "exapt-demo4-invariant-telemetry-0QAbJX",
+      "id": "run_mvx4n7n0_a1c8968f",
+      "status": "refused",
+      "outcome": "Not constructible from what is available: nothing in fixed-width{col1,col2} appears to determine: value.",
+      "costUsdReported": 0,
+      "modelCallsRecorded": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "transcriptAvailable": null
+    },
+    {
+      "directory": "exapt-demo4-invariant-telemetry-79RT1c",
+      "id": "run_mvx4smhq_f09004b3",
+      "status": "completed",
+      "outcome": "Not established: no candidate survived; last: visible: ground-truth: 5 difference(s), first: (record count): expected 6, got 22",
+      "costUsdReported": 0.3012646,
+      "modelCallsRecorded": 10,
+      "inputTokens": 51212,
+      "outputTokens": 18969,
+      "transcriptAvailable": false
+    },
+    {
+      "directory": "exapt-demo4-invariant-telemetry-7UALsP",
+      "id": "run_mvx50aqj_83f3ed7d",
+      "status": "completed",
+      "outcome": "New capability exapt:fixed-width-to-kernel-telemetry-collector-4d0a23@1: Independently verified within the stated domain: 1 held-out cases passed with value-level oracles, and 2/3 injected value faults were caught.",
+      "accepted": {
+        "sha256": "4de6e1a7b9df71bac9a080fcf5e3b61ce4a1599ffd767249c0b9b2a58bf77a8a",
+        "producer": "claude-cli/sonnet",
+        "kind": "model"
+      },
+      "evidence": {
+        "format": "exapt/evidence@1",
+        "candidate": {
+          "sha256": "4de6e1a7b9df71bac9a080fcf5e3b61ce4a1599ffd767249c0b9b2a58bf77a8a",
+          "producer": "claude-cli/sonnet",
+          "kind": "model"
+        },
+        "level": "verified-in-domain",
+        "checkedAt": "2026-11-01T01:14:44.374Z",
+        "seed": 106755,
+        "tiers": {
+          "visible": {
+            "passed": 1,
+            "total": 1
+          },
+          "independent": {
+            "passed": 1,
+            "total": 1
+          },
+          "boundary": {
+            "passed": 0,
+            "total": 0
+          },
+          "malformed": {
+            "passed": 2,
+            "total": 2
+          },
+          "holdout": {
+            "passed": 1,
+            "total": 1
+          }
+        },
+        "oracles": [
+          {
+            "name": "target-representation",
+            "independent": false,
+            "valueLevel": false,
+            "runs": 3,
+            "failures": 0
+          },
+          {
+            "name": "ground-truth",
+            "independent": true,
+            "valueLevel": true,
+            "runs": 3,
+            "failures": 0
+          },
+          {
+            "name": "consumer-acceptance",
+            "independent": true,
+            "valueLevel": false,
+            "runs": 3,
+            "failures": 0
+          },
+          {
+            "name": "malformed-refusal",
+            "independent": false,
+            "valueLevel": false,
+            "runs": 2,
+            "failures": 0
+          }
+        ],
+        "metamorphic": {
+          "passed": 3,
+          "total": 3,
+          "failures": []
+        },
+        "mutation": {
+          "killed": 2,
+          "total": 11,
+          "value": {
+            "killed": 2,
+            "total": 3
+          },
+          "survivors": [
+            "literal changed at 206",
+            "trim removed at 166",
+            "validation removed at 567",
+            "validation removed at 399",
+            "validation removed at 307",
+            "validation removed at 73",
+            "validation removed at 209",
+            "trim removed at 629",
+            "validation removed at 1067"
+          ]
+        },
+        "fieldRecovery": {
+          "metric": {
+            "matched": 18,
+            "total": 18
+          },
+          "value": {
+            "matched": 18,
+            "total": 18
+          }
+        },
+        "domain": [
+          "source: fixed-width{Mach Virtual Memory Statistics: (page,size of 16384 bytes)}",
+          "tested from 22 to 22 records per input"
+        ],
+        "limitations": [
+          "Evidence comes from finite testing. This does not establish correctness outside the stated domain, or universally.",
+          "Correct relative to kernel-telemetry-collector as it behaved when pinned."
+        ],
+        "assessment": "Independently verified within the stated domain: 1 held-out cases passed with value-level oracles, and 2/3 injected value faults were caught.",
+        "execution": {
+          "backend": "docker",
+          "enforces": [
+            "no network (--network none)",
+            "no host mounts: source and input arrive over stdin, so the home directory and the Docker socket are unreachable",
+            "read-only root filesystem; writes only to a size-limited noexec tmpfs that disappears with the container",
+            "all Linux capabilities dropped, no-new-privileges, unprivileged uid 65534",
+            "no host environment variables are passed into the container",
+            "hard cgroup limits on memory, swap, process count and CPU",
+            "wall-clock timeout enforced by this process and inside the container; output capped by this process",
+            "image pinned by content digest"
+          ],
+          "notEstablished": [
+            "protection against a container-runtime or kernel escape",
+            "a covert channel through timing or resource use",
+            "attestation of the timing and memory figures, which are reported from inside the container"
+          ]
+        },
+        "failures": []
+      },
+      "costUsdReported": 0.0372102,
+      "modelCallsRecorded": 2,
+      "inputTokens": 8163,
+      "outputTokens": 1916,
+      "transcriptAvailable": false
+    },
+    {
+      "directory": "exapt-demo4-invariant-telemetry-MpoLyy",
+      "id": "run_mvx4l0d5_dd9c340a",
+      "status": "refused",
+      "outcome": "Not constructible from what is available: nothing in fixed-width{col1,col2} appears to determine: pages, bytes.",
+      "costUsdReported": 0,
+      "modelCallsRecorded": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "transcriptAvailable": null
+    },
+    {
+      "directory": "exapt-demo4-invariant-telemetry-l2JJsp",
+      "id": "run_mvx4pjid_0f97cc54",
+      "status": "failed",
+      "outcome": "Cannot convert undefined or null to object",
+      "costUsdReported": 0.0367702,
+      "modelCallsRecorded": 2,
+      "inputTokens": 8163,
+      "outputTokens": 1872,
+      "transcriptAvailable": false
+    },
+    {
+      "directory": "exapt-demo4-invariant-telemetry-v1ZuZU",
+      "id": "run_mvx4j5ho_ec8f9a11",
+      "status": "refused",
+      "outcome": "kernel-telemetry-collector is known but no accepted input for it has been observed; give a sample it accepts.",
+      "costUsdReported": 0,
+      "modelCallsRecorded": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "transcriptAvailable": null
+    }
+  ],
+  "reportedCostUsd": 0.37524499999999994,
+  "sourceProvenance": {
+    "originalRunSourceRevision": "NOT RECORDED; cannot reconstruct exact dirty checkout",
+    "currentHead": "f1bd988059a272522044ea14f2c1ce3100c3bbd5"
+  },
+  "limitations": [
+    "Metadata and extracted source cannot recover a missing full model transcript.",
+    "Historical containment claims require present-day reproduction; flags in a report are not attestation."
+  ],
+  "inventory": [
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/.exapt/contracts/21649e52f2c1e6d2fe2c46556b80d586a17d2befe7d21733cb766ae98d988906-.json",
+      "bytes": 3477,
+      "sha256": "9348812df6f7c4c2d5a0f01d36d036661e450ecf80b768cb8a7251ef3cfa3393"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/.exapt/rcx-state.json",
+      "bytes": 2939,
+      "sha256": "63ad2ecaad01344bb622cc204ebe8484b8893d97d6c9d0899cdd5e83909c7842"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/.exapt/runs/run_mvx4n7n0_a1c8968f/events.jsonl",
+      "bytes": 2915,
+      "sha256": "f8837c97d828351bba5ebe8d09f7085be5cab9842d4deb9867e19efabb323cb9"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/.exapt/runs/run_mvx4n7n0_a1c8968f/run.json",
+      "bytes": 5679,
+      "sha256": "30cd3d774e3ae707666ee1cabbd402c88079fe93ece95227be08cd4e350549c4"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/corpus/snap-active.input.txt",
+      "bytes": 1247,
+      "sha256": "0e0141b8c80a2fe3c45c46af840e6846b1b58f9b8ac67df1210672d66a703e51"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/corpus/snap-active.truth.ndjson",
+      "bytes": 316,
+      "sha256": "d229f6e5d20b76cc5ca3c5790ea27e7e4510a641e1bc10833d67aec9b1b28817"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/corpus/snap-heavy.input.txt",
+      "bytes": 1247,
+      "sha256": "01bcd04e6e073807b571f3766227b7fddfbcd76975833fe5d93c96a8baa67ac5"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/corpus/snap-heavy.truth.ndjson",
+      "bytes": 316,
+      "sha256": "cf9c58114ee68b5c16bb144692c129671ee6e1ddf2e959a29dc5bf4daae1fbf8"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/corpus/snap-idle.input.txt",
+      "bytes": 1248,
+      "sha256": "6c14549f0ce8593c09733243c962cc0844ec411b11f095cd680daa642680cd82"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/corpus/snap-idle.truth.ndjson",
+      "bytes": 317,
+      "sha256": "5ccde2c25247d1e4c3baae889343bbf38d5c09bd6b3a28130c22a26309c5ae06"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/demo4-telemetry-report.json",
+      "bytes": 616,
+      "sha256": "736b9480201d0deaca2ac95eeb4788deedcb11fe52b4f230e520bc6d11dc1074"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/programs/kernel-telemetry-collector",
+      "bytes": 3181,
+      "sha256": "21649e52f2c1e6d2fe2c46556b80d586a17d2befe7d21733cb766ae98d988906"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/sample-target.ndjson",
+      "bytes": 317,
+      "sha256": "8eefe016e12803f34d7ac462d72adc5db5126479230c3378b1f8469b78d4d643"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-0QAbJX/sample-vmstat.txt",
+      "bytes": 1841,
+      "sha256": "add1ffe0e150ce099837f4a57315b97b20d3ea02ce46f80d938861dbafabe9bd"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/capabilities/fixed-width-to-kernel-telemetry-collector-4d0a23/state.json",
+      "bytes": 407,
+      "sha256": "1a35e9f82a3cf7a7c982fb744c68f6e25ccae3b033cae891ca48850aea9a2884"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/capabilities/fixed-width-to-kernel-telemetry-collector-4d0a23/v1.json",
+      "bytes": 18886,
+      "sha256": "0e4959fd881c6cbe68f5154fca36e4c36fc13ec4bab32cdea7444d4cd0e88ce2"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/contracts/21649e52f2c1e6d2fe2c46556b80d586a17d2befe7d21733cb766ae98d988906-.json",
+      "bytes": 3477,
+      "sha256": "9348812df6f7c4c2d5a0f01d36d036661e450ecf80b768cb8a7251ef3cfa3393"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/3ada8177bf045c822ea49e902959f4f3601e3ef469b7d90bd9e1cf37a3edf4f6",
+      "bytes": 1546,
+      "sha256": "3ada8177bf045c822ea49e902959f4f3601e3ef469b7d90bd9e1cf37a3edf4f6"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/40d759ba63f47ce72e672e98e31d576ef9037e136acbea06f51b02304b090f91",
+      "bytes": 826,
+      "sha256": "40d759ba63f47ce72e672e98e31d576ef9037e136acbea06f51b02304b090f91"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/5849fcb8addf336f7e49a7e68bd5968e04155c0c9f7e96bb03866baf48312cf5",
+      "bytes": 1943,
+      "sha256": "5849fcb8addf336f7e49a7e68bd5968e04155c0c9f7e96bb03866baf48312cf5"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/5979f3771d737c7fb229320cebbd1130106dc5e8ed6bf3f2ce54e10aa752de14",
+      "bytes": 1677,
+      "sha256": "5979f3771d737c7fb229320cebbd1130106dc5e8ed6bf3f2ce54e10aa752de14"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/6b20d0ea9be4a5fee9878ca07056218d7724bdb563a254e62ae94e8bb043cbf2",
+      "bytes": 12,
+      "sha256": "6b20d0ea9be4a5fee9878ca07056218d7724bdb563a254e62ae94e8bb043cbf2"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/762daac37382986909c0cc5a30f86f724b8eaba2f47a4f14cd3b090492843929",
+      "bytes": 916,
+      "sha256": "762daac37382986909c0cc5a30f86f724b8eaba2f47a4f14cd3b090492843929"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/7e1e7ee03c0348b511b1156c4fd4d30f5bd1d08064c97856a4fb2dddc5a36d31",
+      "bytes": 869,
+      "sha256": "7e1e7ee03c0348b511b1156c4fd4d30f5bd1d08064c97856a4fb2dddc5a36d31"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/be835fbd9b75213fcaf8ca1971001e6eb11a7840d42f48b297a11ec17aff208a",
+      "bytes": 1595,
+      "sha256": "be835fbd9b75213fcaf8ca1971001e6eb11a7840d42f48b297a11ec17aff208a"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/d9df1bc2602b19fa1f9e778ca1e9e7bab15f3ece390c68a6e77226f0ce13946e",
+      "bytes": 1773,
+      "sha256": "d9df1bc2602b19fa1f9e778ca1e9e7bab15f3ece390c68a6e77226f0ce13946e"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/da28e8319c7a2371df7b520fb0f0f5771e64b41ce8fbd50482b4ebd2080ac591",
+      "bytes": 2614,
+      "sha256": "da28e8319c7a2371df7b520fb0f0f5771e64b41ce8fbd50482b4ebd2080ac591"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/dc0a891be754682c43dbfa52f5a837978c77b74fbcedc51b4fca02a4b6c6ea7f",
+      "bytes": 1392,
+      "sha256": "dc0a891be754682c43dbfa52f5a837978c77b74fbcedc51b4fca02a4b6c6ea7f"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/e30a1525e0e3b3e061c6a091614c57611d53bc1a64cc81ab15e1a1368aa46c11",
+      "bytes": 1610,
+      "sha256": "e30a1525e0e3b3e061c6a091614c57611d53bc1a64cc81ab15e1a1368aa46c11"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/objects/e55ee9cbfa86aa3b1de6cc7d718d326615f30c16e4f6a19b7f7848ec5d3379ed",
+      "bytes": 1360,
+      "sha256": "e55ee9cbfa86aa3b1de6cc7d718d326615f30c16e4f6a19b7f7848ec5d3379ed"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rcx-state.json",
+      "bytes": 2939,
+      "sha256": "eff59a07a798475f36b235b66b2f2380f5cf5e10433e0b9e13a6a3f17d05808c"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhgb_97327c72.json",
+      "bytes": 450,
+      "sha256": "5b5a407e8cc4a14a63968d3002996e8ce00d54866c4c7ad81873a62ea5f87437"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhgr_cf6da393.json",
+      "bytes": 454,
+      "sha256": "092e0a00c703da5189881e70f113be0ce22b95777d46c4cdbb0e50a708a4c1f1"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhgz_f1d16c4b.json",
+      "bytes": 439,
+      "sha256": "359e04a49c9d8ea4327806787d9a9c0cca868d59b57adac977afa4f71bcc9caa"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhha_222879f3.json",
+      "bytes": 390,
+      "sha256": "131cc74d81708499a0feb8ca56c9664e65301735c169ddf2786ba54586a091dd"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhhg_f3c2b757.json",
+      "bytes": 390,
+      "sha256": "602ceb0ce2ebad4afa7baa23f012d4211c2ad00e0d005be59cdded8937e617f1"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhhp_e4508258.json",
+      "bytes": 390,
+      "sha256": "051ccaa75d01a65ff2ed6eae78b462d16c33c0062671ffafc14c9f02e7f91c12"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhhy_4bf4143c.json",
+      "bytes": 390,
+      "sha256": "e0273de3a756cc29dd59f4820911e63b0c72a52bbdcdb19c5473a2d563375778"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhi5_bcc582cb.json",
+      "bytes": 440,
+      "sha256": "c90fe15914a35575f85c18a9dfa055f2ea16a6cb09ee43d53b595d897ae13ceb"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhid_7ea6e711.json",
+      "bytes": 436,
+      "sha256": "ca52ff3f566036899bc5c7034f6810c68a28ed9e21818c791e457a0fc106f2d9"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhim_9c2b2035.json",
+      "bytes": 390,
+      "sha256": "2867f1612954202d5a0a5ce31cfd9661794a93f50860c018cbd82db1634ef728"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhiu_c32c01af.json",
+      "bytes": 405,
+      "sha256": "f5f59703a8811ef1570dc3bc8c9ce5a1b5a8126a57d05ef0ca25561dde75acab"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/rejected/rej_mvx4xhj1_b79f8bf4.json",
+      "bytes": 405,
+      "sha256": "565fc14f7c5a97834ca927cc76fbc876610ddb8d01f43e40761687f71ad5413c"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/runs/run_mvx4smhq_f09004b3/events.jsonl",
+      "bytes": 17696,
+      "sha256": "a80f7cfc560eb1e2bf3321875aae4ecff5f48da9b05f69f61afbca2d9ef3d77b"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/runs/run_mvx4smhq_f09004b3/model.jsonl",
+      "bytes": 1946,
+      "sha256": "03f8030d6826593ee490991d4290ef34a4e6f011f2268b3f298b9a1b9cb6ec1d"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/runs/run_mvx4smhq_f09004b3/run.json",
+      "bytes": 30071,
+      "sha256": "10df9cff5556b1795af0fa2e3146f93d545c741ed5f93f6e040c5f1a8341325c"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/.exapt/sandbox-attestation.json",
+      "bytes": 155,
+      "sha256": "61663b056392592d18d14a100cb5a933afc207ddeae1d6aaf1517a434482d3d6"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/corpus/snap-active.input.txt",
+      "bytes": 1247,
+      "sha256": "0e0141b8c80a2fe3c45c46af840e6846b1b58f9b8ac67df1210672d66a703e51"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/corpus/snap-active.truth.ndjson",
+      "bytes": 316,
+      "sha256": "d229f6e5d20b76cc5ca3c5790ea27e7e4510a641e1bc10833d67aec9b1b28817"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/corpus/snap-heavy.input.txt",
+      "bytes": 1247,
+      "sha256": "01bcd04e6e073807b571f3766227b7fddfbcd76975833fe5d93c96a8baa67ac5"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/corpus/snap-heavy.truth.ndjson",
+      "bytes": 316,
+      "sha256": "cf9c58114ee68b5c16bb144692c129671ee6e1ddf2e959a29dc5bf4daae1fbf8"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/corpus/snap-idle.input.txt",
+      "bytes": 1248,
+      "sha256": "6c14549f0ce8593c09733243c962cc0844ec411b11f095cd680daa642680cd82"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/corpus/snap-idle.truth.ndjson",
+      "bytes": 317,
+      "sha256": "5ccde2c25247d1e4c3baae889343bbf38d5c09bd6b3a28130c22a26309c5ae06"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/demo4-telemetry-report.json",
+      "bytes": 802,
+      "sha256": "f5bad86b66209296d7fde7553a67360f60dcbadbef621690cfaecfb212b3fd9d"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/programs/kernel-telemetry-collector",
+      "bytes": 3181,
+      "sha256": "21649e52f2c1e6d2fe2c46556b80d586a17d2befe7d21733cb766ae98d988906"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/sample-target.ndjson",
+      "bytes": 317,
+      "sha256": "26745aac103693a0c777bcbee49a27b178042f7b9f71245ddd8374bd725a2616"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-79RT1c/sample-vmstat.txt",
+      "bytes": 1841,
+      "sha256": "78c3bde5e6f6a832652d9d6ea70d0e2b24c88d2ca64d5bd9a6f9f0e30beeb571"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/capabilities/fixed-width-to-kernel-telemetry-collector-4d0a23/state.json",
+      "bytes": 409,
+      "sha256": "c3c55a41d6db7c452dc0bafb6003b59bb26d007214e30978fbca134f27223fac"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/capabilities/fixed-width-to-kernel-telemetry-collector-4d0a23/v1.json",
+      "bytes": 15011,
+      "sha256": "68e07d00376194d931214e54d384721d786c7d8f7776bf9447ad2bbae3e503a2"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/contracts/21649e52f2c1e6d2fe2c46556b80d586a17d2befe7d21733cb766ae98d988906-.json",
+      "bytes": 3477,
+      "sha256": "9348812df6f7c4c2d5a0f01d36d036661e450ecf80b768cb8a7251ef3cfa3393"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/objects/40d759ba63f47ce72e672e98e31d576ef9037e136acbea06f51b02304b090f91",
+      "bytes": 826,
+      "sha256": "40d759ba63f47ce72e672e98e31d576ef9037e136acbea06f51b02304b090f91"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/objects/4de6e1a7b9df71bac9a080fcf5e3b61ce4a1599ffd767249c0b9b2a58bf77a8a",
+      "bytes": 1247,
+      "sha256": "4de6e1a7b9df71bac9a080fcf5e3b61ce4a1599ffd767249c0b9b2a58bf77a8a"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/objects/762daac37382986909c0cc5a30f86f724b8eaba2f47a4f14cd3b090492843929",
+      "bytes": 916,
+      "sha256": "762daac37382986909c0cc5a30f86f724b8eaba2f47a4f14cd3b090492843929"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/objects/7e1e7ee03c0348b511b1156c4fd4d30f5bd1d08064c97856a4fb2dddc5a36d31",
+      "bytes": 869,
+      "sha256": "7e1e7ee03c0348b511b1156c4fd4d30f5bd1d08064c97856a4fb2dddc5a36d31"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/objects/aa610f0dbf27e53f32791632ebf2acce2f4e330b19b5aad623a804f2f12a9822",
+      "bytes": 3734,
+      "sha256": "aa610f0dbf27e53f32791632ebf2acce2f4e330b19b5aad623a804f2f12a9822"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/rcx-state.json",
+      "bytes": 19407,
+      "sha256": "bbe6dde0f7bc681d64029321b946f543d67189faf7cecf43fb716e382f23f06f"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/rejected/rej_mvx50rgn_e337b766.json",
+      "bytes": 450,
+      "sha256": "11beaa26e95e3ae11b0644053015a10469c8df00911399b3a93ee1a6a079804b"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/rejected/rej_mvx50rgv_ff278651.json",
+      "bytes": 454,
+      "sha256": "0f17dacbf92d439e1196f18807fb1187de62940860a5c21bd021246cfa665ff4"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/rejected/rej_mvx50rh6_2a7d017d.json",
+      "bytes": 439,
+      "sha256": "8c7097ad74499f522918d01b89000751fc1ec735d28199174b53316de996345f"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/runs/run_mvx50aqj_83f3ed7d/events.jsonl",
+      "bytes": 10470,
+      "sha256": "93adfebe22e001e4e65f46075c2e6dfb357417b667870d92bf2b1cce1f9ad769"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/runs/run_mvx50aqj_83f3ed7d/model.jsonl",
+      "bytes": 391,
+      "sha256": "adf59974137f49bce95e757ac1d7a7690fa3df71b549768bde430e1d256fdc48"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/runs/run_mvx50aqj_83f3ed7d/run.json",
+      "bytes": 22443,
+      "sha256": "88b909a3b8d335759dda304fc630902f834bfda8dba8b2b2fdbbca4613740810"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/sandbox-attestation.json",
+      "bytes": 155,
+      "sha256": "a270a43c3e67309dede4b6f0e40cd238ea6daa5936af27097069bb45f75a88c4"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/.exapt/workflows/darwin-kernel-telemetry-induction.json",
+      "bytes": 554,
+      "sha256": "5ea955863fa1f62e055414ba4eb164ac5995b53da349cc8e48c053fb8331121e"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/corpus/snap-active.input.txt",
+      "bytes": 1247,
+      "sha256": "0e0141b8c80a2fe3c45c46af840e6846b1b58f9b8ac67df1210672d66a703e51"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/corpus/snap-active.truth.ndjson",
+      "bytes": 316,
+      "sha256": "d229f6e5d20b76cc5ca3c5790ea27e7e4510a641e1bc10833d67aec9b1b28817"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/corpus/snap-heavy.input.txt",
+      "bytes": 1247,
+      "sha256": "01bcd04e6e073807b571f3766227b7fddfbcd76975833fe5d93c96a8baa67ac5"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/corpus/snap-heavy.truth.ndjson",
+      "bytes": 316,
+      "sha256": "cf9c58114ee68b5c16bb144692c129671ee6e1ddf2e959a29dc5bf4daae1fbf8"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/corpus/snap-idle.input.txt",
+      "bytes": 1248,
+      "sha256": "6c14549f0ce8593c09733243c962cc0844ec411b11f095cd680daa642680cd82"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/corpus/snap-idle.truth.ndjson",
+      "bytes": 317,
+      "sha256": "5ccde2c25247d1e4c3baae889343bbf38d5c09bd6b3a28130c22a26309c5ae06"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/demo4-telemetry-report.json",
+      "bytes": 931,
+      "sha256": "150422a0cb1af48a14850e70dbb1d2d453cccc43c84f9ed17bec3a26732000d7"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/programs/kernel-telemetry-collector",
+      "bytes": 3181,
+      "sha256": "21649e52f2c1e6d2fe2c46556b80d586a17d2befe7d21733cb766ae98d988906"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/sample-target.ndjson",
+      "bytes": 317,
+      "sha256": "5f014a27a3c2936ee4c8dd1260ba0d35817ad3a7a7b18f580f9d313b0bc43e12"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-7UALsP/sample-vmstat.txt",
+      "bytes": 1841,
+      "sha256": "e79117043a35e55c9fdd6b7cb17bcc228551057f85ac5ad12fb278814cb54e4a"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/.exapt/contracts/31e6c55089e6a9b403fb6587937d028231ed34ff0c76f4ffe25653e8b963baf8-.json",
+      "bytes": 4345,
+      "sha256": "dc008f1048327b90aa7dfacd85e8859a3697aafcf42d485d07f51adca371618a"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/.exapt/rcx-state.json",
+      "bytes": 2939,
+      "sha256": "5e5477ac82c99821ec5e8497fe407ac2fbf39a929d642108d5da6ef9d7f50ceb"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/.exapt/runs/run_mvx4l0d5_dd9c340a/events.jsonl",
+      "bytes": 2989,
+      "sha256": "ef72b4c8a7d37e3ee128ef5e38d07e51a409643239ee57ce596f8f4bb86c34c9"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/.exapt/runs/run_mvx4l0d5_dd9c340a/run.json",
+      "bytes": 5801,
+      "sha256": "dd2e6dac53c706b999733fc575ebaf593190cd2e21e42b278d074e7f0fc6951d"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/corpus/snap-active.input.txt",
+      "bytes": 1247,
+      "sha256": "0e0141b8c80a2fe3c45c46af840e6846b1b58f9b8ac67df1210672d66a703e51"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/corpus/snap-active.truth.ndjson",
+      "bytes": 402,
+      "sha256": "5a4170253a2799e5c61da443cc2e40f97ccbb403bf5bcd57d9a23fc9c6946f2c"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/corpus/snap-heavy.input.txt",
+      "bytes": 1247,
+      "sha256": "01bcd04e6e073807b571f3766227b7fddfbcd76975833fe5d93c96a8baa67ac5"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/corpus/snap-heavy.truth.ndjson",
+      "bytes": 402,
+      "sha256": "6415fd4dcddbbcad79efeb10c8aaa510f92061773b56a75bcdb4a0acf4de139f"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/corpus/snap-idle.input.txt",
+      "bytes": 1248,
+      "sha256": "6c14549f0ce8593c09733243c962cc0844ec411b11f095cd680daa642680cd82"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/corpus/snap-idle.truth.ndjson",
+      "bytes": 404,
+      "sha256": "a163e5e4bc9ee71684d447cfcaf91d790db46147ed52d60d3b9465d910343acd"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/demo4-telemetry-report.json",
+      "bytes": 616,
+      "sha256": "736b9480201d0deaca2ac95eeb4788deedcb11fe52b4f230e520bc6d11dc1074"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/programs/kernel-telemetry-collector",
+      "bytes": 3623,
+      "sha256": "31e6c55089e6a9b403fb6587937d028231ed34ff0c76f4ffe25653e8b963baf8"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/sample-target.ndjson",
+      "bytes": 403,
+      "sha256": "b7cda020e67b3f96122a9236ec99d5684c463e4cd3170bff55ebd628cbff3e07"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-MpoLyy/sample-vmstat.txt",
+      "bytes": 1841,
+      "sha256": "aed143af2a553b52e5784488ffa2bdd3467d360ba7d538955bacdc618648551b"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/.exapt/contracts/21649e52f2c1e6d2fe2c46556b80d586a17d2befe7d21733cb766ae98d988906-.json",
+      "bytes": 3477,
+      "sha256": "9348812df6f7c4c2d5a0f01d36d036661e450ecf80b768cb8a7251ef3cfa3393"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/.exapt/rcx-state.json",
+      "bytes": 2939,
+      "sha256": "b39c26ff31ccd80d4042c90614d8107c705e5f5a0bc1514046f752cc117516ca"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/.exapt/runs/run_mvx4pjid_0f97cc54/events.jsonl",
+      "bytes": 8129,
+      "sha256": "996ee2f1585a91390005d50e1bb3fc9449a63faf4478193157925bdae305a180"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/.exapt/runs/run_mvx4pjid_0f97cc54/model.jsonl",
+      "bytes": 391,
+      "sha256": "b9a8172614a4ee5a7d02cf82423e89432a3ccd45944fa4aaf02f16edfd350ec7"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/.exapt/runs/run_mvx4pjid_0f97cc54/run.json",
+      "bytes": 5632,
+      "sha256": "df4245ac9ab37fda15555fe760243a76b481c00bf1db5b30d953c92a3bf36188"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/.exapt/sandbox-attestation.json",
+      "bytes": 155,
+      "sha256": "42c0cc78c6160735f6b8db34397927dbcf1092ff514fe78d2ce95ffdf6be3e6f"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/corpus/snap-active.input.txt",
+      "bytes": 1247,
+      "sha256": "0e0141b8c80a2fe3c45c46af840e6846b1b58f9b8ac67df1210672d66a703e51"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/corpus/snap-active.truth.ndjson",
+      "bytes": 316,
+      "sha256": "d229f6e5d20b76cc5ca3c5790ea27e7e4510a641e1bc10833d67aec9b1b28817"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/corpus/snap-heavy.input.txt",
+      "bytes": 1247,
+      "sha256": "01bcd04e6e073807b571f3766227b7fddfbcd76975833fe5d93c96a8baa67ac5"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/corpus/snap-heavy.truth.ndjson",
+      "bytes": 316,
+      "sha256": "cf9c58114ee68b5c16bb144692c129671ee6e1ddf2e959a29dc5bf4daae1fbf8"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/corpus/snap-idle.input.txt",
+      "bytes": 1248,
+      "sha256": "6c14549f0ce8593c09733243c962cc0844ec411b11f095cd680daa642680cd82"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/corpus/snap-idle.truth.ndjson",
+      "bytes": 317,
+      "sha256": "5ccde2c25247d1e4c3baae889343bbf38d5c09bd6b3a28130c22a26309c5ae06"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/demo4-telemetry-report.json",
+      "bytes": 616,
+      "sha256": "736b9480201d0deaca2ac95eeb4788deedcb11fe52b4f230e520bc6d11dc1074"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/programs/kernel-telemetry-collector",
+      "bytes": 3181,
+      "sha256": "21649e52f2c1e6d2fe2c46556b80d586a17d2befe7d21733cb766ae98d988906"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/sample-target.ndjson",
+      "bytes": 317,
+      "sha256": "6d4f495a55f540fc32bf4dfa42da45368a3cde9714749bd1943e4f3b49fc2209"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-l2JJsp/sample-vmstat.txt",
+      "bytes": 1841,
+      "sha256": "5c95715d327d113a1893648fcafeece5defefda8e16561782b2bb368288bffd3"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-v1ZuZU/.exapt/rcx-state.json",
+      "bytes": 869,
+      "sha256": "f13e8af0a25177d7baa46a79662d791bd33a643443a36d1e775f67dc1c1f8454"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-v1ZuZU/.exapt/runs/run_mvx4j5ho_ec8f9a11/events.jsonl",
+      "bytes": 636,
+      "sha256": "4eef022ac0e0e58f740bc6cdaa9972f1cb709791b99564433ef655afa282c86e"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-v1ZuZU/.exapt/runs/run_mvx4j5ho_ec8f9a11/run.json",
+      "bytes": 1695,
+      "sha256": "69752cb473a9b93888d6ea1d6734a8679fdb4b0b331b2838783138d6c5e26bb9"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-v1ZuZU/demo4-telemetry-report.json",
+      "bytes": 616,
+      "sha256": "736b9480201d0deaca2ac95eeb4788deedcb11fe52b4f230e520bc6d11dc1074"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-v1ZuZU/programs/kernel-telemetry-collector",
+      "bytes": 3403,
+      "sha256": "958fac14eb0cc3728ff1af9c14a65fbc304faff062aa1236b3c8a77de147644c"
+    },
+    {
+      "path": "exapt-demo4-invariant-telemetry-v1ZuZU/sample-vmstat.txt",
+      "bytes": 1841,
+      "sha256": "5310819537ead2c74501e42b092ac0d45f99b1ee63d94bca5c5add77f296fe08"
+    }
+  ]
+}

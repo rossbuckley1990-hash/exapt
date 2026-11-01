@@ -1,0 +1,156 @@
+{
+  "name": "multiplication became division at 1141",
+  "kind": "mutant-value",
+  "sha256": "cd669eefd52742e3d7ef5f8b57163104f1ffdfcddff50d2aa1e6303ce586e0e4",
+  "passed": 8,
+  "total": 21,
+  "rows": [
+    {
+      "id": "original-snap-active.input.txt",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.633291000000007,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":10}\n{\"metric\":\"memory.inactive_bytes\",\"value\":21}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":16}\n{\"metric\":\"memory.compressor_bytes\",\"value\":25}\n"
+    },
+    {
+      "id": "original-snap-heavy.input.txt",
+      "pass": false,
+      "status": "ok",
+      "ms": 2.397291999999993,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":12}\n{\"metric\":\"memory.inactive_bytes\",\"value\":19}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":18}\n{\"metric\":\"memory.compressor_bytes\",\"value\":29}\n"
+    },
+    {
+      "id": "original-snap-idle.input.txt",
+      "pass": false,
+      "status": "ok",
+      "ms": 2.1438750000000013,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":8}\n{\"metric\":\"memory.inactive_bytes\",\"value\":23}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":13}\n{\"metric\":\"memory.compressor_bytes\",\"value\":21}\n"
+    },
+    {
+      "id": "page-4096-counts-0",
+      "pass": true,
+      "status": "ok",
+      "ms": 1.544040999999993,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "page-4096-counts-1",
+      "pass": false,
+      "status": "ok",
+      "ms": 2.9345419999999933,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "page-4096-counts-2",
+      "pass": false,
+      "status": "ok",
+      "ms": 2.4323749999999933,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":2}\n{\"metric\":\"memory.active_bytes\",\"value\":34}\n{\"metric\":\"memory.inactive_bytes\",\"value\":92}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":53}\n{\"metric\":\"memory.compressor_bytes\",\"value\":85}\n"
+    },
+    {
+      "id": "page-16384-counts-0",
+      "pass": true,
+      "status": "ok",
+      "ms": 3.064458000000002,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "page-16384-counts-1",
+      "pass": false,
+      "status": "ok",
+      "ms": 3.0757090000000034,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "page-16384-counts-2",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.5550410000000028,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":8}\n{\"metric\":\"memory.inactive_bytes\",\"value\":23}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":13}\n{\"metric\":\"memory.compressor_bytes\",\"value\":21}\n"
+    },
+    {
+      "id": "page-65536-counts-0",
+      "pass": true,
+      "status": "ok",
+      "ms": 2.6248329999999953,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "page-65536-counts-1",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.6083339999999993,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "page-65536-counts-2",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.2062080000000037,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":2}\n{\"metric\":\"memory.inactive_bytes\",\"value\":5}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":3}\n{\"metric\":\"memory.compressor_bytes\",\"value\":5}\n"
+    },
+    {
+      "id": "empty",
+      "pass": true,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 1.0687080000000009
+    },
+    {
+      "id": "header-only",
+      "pass": true,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.134166999999998
+    },
+    {
+      "id": "one-invalid-line",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.568000000000005
+    },
+    {
+      "id": "missing-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "missing field: Pages occupied by compressor",
+      "ms": 1.3911249999999953
+    },
+    {
+      "id": "zero-page-size",
+      "pass": true,
+      "status": "threw",
+      "error": "invalid page size",
+      "ms": 1.5978330000000014
+    },
+    {
+      "id": "duplicate-metric",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.0487499999999983,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "invalid-header-prefix",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.2069169999999971,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "blank-line",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.2930830000000029,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n"
+    },
+    {
+      "id": "live-host",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.8610000000000042,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":12}\n{\"metric\":\"memory.inactive_bytes\",\"value\":28}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":14}\n{\"metric\":\"memory.compressor_bytes\",\"value\":20}\n"
+    }
+  ]
+}

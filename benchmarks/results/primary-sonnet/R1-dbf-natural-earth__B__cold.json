@@ -1,0 +1,21 @@
+{
+  "arm": "B",
+  "stage": "cold",
+  "task": "R1-dbf-natural-earth",
+  "claimed": "done",
+  "hidden": {
+    "passed": 4,
+    "total": 4
+  },
+  "costUsd": 0.041702100000000006,
+  "inputTokens": 39592,
+  "outputTokens": 1510,
+  "turns": 5,
+  "ms": 27088,
+  "codeBytes": 971,
+  "notes": [
+    "identical to A/cold by design",
+    "umbers:** empty or unparseable numbers become null.\n- **Other types:** logical and date fields are handled too, but none of the samples contain them, so those paths are untested.\n- **Deleted rows:** records marked as deleted are skipped.\n\nI marked `out/RESULT.json` as `done`. The main risk is a new file in a different text encoding or with logical or date columns, which the samples don't exercise."
+  ],
+  "unauthorised": []
+}

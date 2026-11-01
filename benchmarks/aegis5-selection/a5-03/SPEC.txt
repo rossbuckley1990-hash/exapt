@@ -1,0 +1,7 @@
+Convert UTC event instants to local civil time in specified IANA zones
+
+Implement transform(input:string,lib?)->string. Parse {version:1,zone:string,instants:[integerUnixSeconds,...]}. Allowed zones are UTC, Europe/London, America/New_York, Asia/Kathmandu, Australia/Lord_Howe, Pacific/Apia. Accept 0..64 instants, each 946684800..1767225599 inclusive (2000-01-01 through 2025-12-31 UTC). Return an array in input order of {epoch:originalSeconds,local:"YYYY-MM-DDTHH:mm:ss",offsetSeconds:signedOffsetEastOfUTC}. Local hours must be 00..23; use Gregorian calendar and Latin digits. Preserve duplicates. Resolve from the unique UTC instant, including DST folds, half-hour changes and skipped local dates. Additional JSON keys and whitespace are ignored. Return {"error":"UNSUPPORTED_INPUT"} for unsupported versions/zones, invalid JSON/types, out-of-range values, or absent instants; throwing is not refusal. Node Intl.DateTimeFormat is an existing permitted implementation. The suite uses only historical transitions crosschecked among installed implementations.
+
+Limitations:
+- Only the enumerated zones and UTC interval are in scope. No inverse local-time resolution, leap-second representation or future-zone-rule prediction.
+- Python/macOS and ICU implementations are distinct but share IANA data lineage; this is not an independent timezone-policy validation.

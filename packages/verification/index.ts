@@ -79,7 +79,7 @@ export async function verify(o: { universe: Universe; contract: BehaviouralContr
   const failures: EvidenceReport["failures"] = [];
   const allCases: TestCase[] = [];
   const allOutputs: Array<string | undefined> = [];
-  let valueCasesInHoldout = 0;
+  const valueHoldoutInputs = new Set<string>();
   const run = async (tier: Tier, cases: TestCase[]) => {
     const rs = await runCases(backend, judge, source, cases, o.libs);
     tiers[tier] = { passed: rs.filter((r) => r.passed).length, total: rs.length };
@@ -91,7 +91,10 @@ export async function verify(o: { universe: Universe; contract: BehaviouralContr
         oracleRuns.set(name, e);
       }
       for (const f of r.failures.slice(0, 2)) if (failures.length < 12) failures.push({ tier, oracle: f.oracle, detail: f.detail });
-      if (tier === "holdout" && r.passed && hasValueOracle(r)) valueCasesInHoldout++;
+      if (tier === "holdout" && r.passed && hasValueOracle(r)) {
+        const c = cases.find(c => c.id === r.id)!;
+        valueHoldoutInputs.add(sha256(`${c.binary ? "binary" : "text"}:${c.input}`));
+      }
     }
     return rs;
   };
@@ -116,7 +119,7 @@ export async function verify(o: { universe: Universe; contract: BehaviouralContr
     allOutputs.push(r.output ?? (r.outputBase64 ? Buffer.from(r.outputBase64, "base64").toString("utf8") : undefined));
   }
   const meta = await metamorphicChecks(backend, source, contract, independentCases.length ? independentCases : visible, o.seed, o.libs);
-  const mutation = await mutationScore(backend, judge, source, [...visible, ...independentCases, ...boundaryCases, ...malformedCases], o.seed, o.libs);
+  const mutation = await mutationScore(backend, judge, source, [...visible, ...independentCases, ...boundaryCases, ...malformedCases, ...heldCases], o.libs);
 
   const passed = (rs: Array<{ passed: boolean }>) => rs.length > 0 && rs.every((r) => r.passed);
   if (seen.some((r) => r.failures.every((f) => f.oracle !== "execution")) || seen.length === 0) level = syntax.ok ? "executed" : level;
@@ -127,14 +130,15 @@ export async function verify(o: { universe: Universe; contract: BehaviouralContr
   if (level === "passed-independent" && passed(held)) level = "passed-holdout";
   const mutationStrength = mutation.value.total ? mutation.value.killed / mutation.value.total : 0;
   const consumerHeld = !contract.consumer || !oracleRuns.get("consumer-acceptance")?.failures;
-  const hasValue = valueCasesInHoldout >= Math.min(MIN_VALUE_CASES, heldCases.length);
+  const valueCasesInHoldout = valueHoldoutInputs.size;
+  const hasValue = valueCasesInHoldout >= MIN_VALUE_CASES;
   const strongEnough = mutation.value.total === 0 || mutationStrength >= MIN_MUTATION_SCORE;
   if (level === "passed-holdout" && hasValue && consumerHeld && strongEnough) level = "verified-in-domain";
 
   const oracles: OracleTally[] = [...oracleRuns].map(([name, v]) => ({ name, independent: INDEPENDENT.has(name), valueLevel: VALUE.has(name), ...v }));
   const limitations = [
     "Evidence comes from finite testing. This does not establish correctness outside the stated domain, or universally.",
-    ...(hasValue ? [] : ["No value-level independent oracle ran on the held-out cases, so values in the output are unconfirmed."]),
+    ...(hasValue ? [] : [`Only ${valueCasesInHoldout} held-out cases exercised a value-level independent oracle; at least ${MIN_VALUE_CASES} are required for the strongest evidence label.`]),
     ...(strongEnough ? [] : [`The test suite caught only ${mutation.value.killed} of ${mutation.value.total} injected value faults, so it may not be testing what it appears to test.`]),
     ...(contract.consumer ? [`Correct relative to ${o.universe.tool(contract.consumer)?.name} as it behaved when pinned.`] : []),
     ...bench.limitations,

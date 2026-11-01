@@ -104,7 +104,7 @@ export interface Goal {
     description?: string;
   };
   /** Files with an independent source of truth. Split into tiers by EXAPT, never shown whole to a model. */
-  corpus?: Array<{ input: SampleRef; truth: SampleRef; name?: string }>;
+  corpus?: Array<{ input: SampleRef; truth: SampleRef; name?: string; pinned?: boolean }>;
   /** Operator-supplied independent checker: a program that reads {"input","output"} as JSON. */
   checker?: string;
   budget?: { rounds?: number; candidatesPerRound?: number; modelCalls?: number; maxTokens?: number; maxCostUsd?: number };

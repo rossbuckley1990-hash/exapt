@@ -18,6 +18,7 @@
     "test:security": "node --test --test-timeout=240000 test/security-*.test.ts",
     "typecheck": "tsc -p tsconfig.json",
     "upstream:verify": "node scripts/verify-upstream.ts",
+    "gate": "node scripts/release-gate.ts",
     "check": "npm run typecheck && npm test"
   },
   "devDependencies": {

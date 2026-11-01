@@ -1,0 +1,26 @@
+{
+  "arm": "D",
+  "stage": "cold",
+  "task": "F2-ledger-212",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "turns": 0,
+  "ms": 7188,
+  "codeBytes": 0,
+  "notes": [
+    "Not constructible from what is available: nothing in fixed-width{ACCOUNT,DATE,AMOUNT,MEMO} appears to determine: booked.",
+    "analysis not-constructible",
+    "synthesis none ",
+    "level none",
+    "attempts 0"
+  ],
+  "detail": {
+    "attempts": []
+  }
+}

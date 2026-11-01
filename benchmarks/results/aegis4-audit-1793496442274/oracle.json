@@ -1,0 +1,8 @@
+{
+  "path": "/Users/ross/EXAPT/benchmarks/aegis4/oracle.py",
+  "sha256": "52fa03f93d28b63b4af51a060cf9e83ff8990b567ddbbf61824577038b78936b",
+  "limitations": [
+    "Independent implementation, not an external human oracle.",
+    "This tests six selected metrics, not a physical conservation law."
+  ]
+}

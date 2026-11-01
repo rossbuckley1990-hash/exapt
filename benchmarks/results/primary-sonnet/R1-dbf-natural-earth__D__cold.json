@@ -1,0 +1,76 @@
+{
+  "arm": "D",
+  "stage": "cold",
+  "task": "R1-dbf-natural-earth",
+  "claimed": "done",
+  "hidden": {
+    "passed": 4,
+    "total": 4
+  },
+  "costUsd": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "turns": 0,
+  "ms": 36834,
+  "codeBytes": 1483,
+  "notes": [
+    "New capability exapt:binary-to-ndjson-e392ee@1: Independently verified within the stated domain: 2 held-out cases passed with value-level oracles, and 7/9 injected value faults were caught.",
+    "analysis gap-found",
+    "synthesis deterministic binary layout induction",
+    "level verified-in-domain",
+    "attempts 1"
+  ],
+  "detail": {
+    "capability": {
+      "id": "exapt:binary-to-ndjson-e392ee",
+      "version": 1,
+      "status": "verified-within-scope"
+    },
+    "gap": "gap-e392ee7342",
+    "attempts": [
+      {
+        "producer": "binary layout induction",
+        "level": "passed-holdout"
+      }
+    ],
+    "mutation": {
+      "killed": 8,
+      "total": 12,
+      "value": {
+        "killed": 7,
+        "total": 9
+      },
+      "survivors": [
+        "literal changed at 297",
+        "literal changed at 716",
+        "validation removed at 1088",
+        "validation removed at 301"
+      ]
+    },
+    "tiers": {
+      "visible": {
+        "passed": 2,
+        "total": 2
+      },
+      "independent": {
+        "passed": 2,
+        "total": 2
+      },
+      "boundary": {
+        "passed": 0,
+        "total": 0
+      },
+      "malformed": {
+        "passed": 3,
+        "total": 3
+      },
+      "holdout": {
+        "passed": 2,
+        "total": 2
+      }
+    },
+    "limitations": [
+      "Evidence comes from finite testing. This does not establish correctness outside the stated domain, or universally."
+    ]
+  }
+}

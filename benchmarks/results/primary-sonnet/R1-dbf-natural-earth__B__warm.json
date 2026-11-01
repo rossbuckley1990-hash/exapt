@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "stage": "warm",
+  "task": "R1-dbf-natural-earth",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0319548,
+  "inputTokens": 38184,
+  "outputTokens": 719,
+  "turns": 5,
+  "ms": 15885,
+  "codeBytes": 0,
+  "notes": [
+    "d in `previous/run.js` without changing it. I first ran it on all six files in `sample/`, and each output matched its `.truth.ndjson` exactly. I only looked at the first few lines of the new output, which use the file's own field names (`scalerank`, `featurecla`, `labelrank`, `sr_sov_a3` and so on)."
+  ],
+  "unauthorised": []
+}

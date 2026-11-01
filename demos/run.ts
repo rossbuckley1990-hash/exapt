@@ -1,7 +1,8 @@
-// `exapt demo`: the three demonstrations, one generic engine.
+// `exapt demo`: demonstrations of the generic capability engine.
 import { demo1 } from "./missing-transformation/run.ts";
 import { demo2 } from "./digital-resurrection/run.ts";
 import { demo3 } from "./inherited-superpower/run.ts";
+import { demo4 } from "./invariant-telemetry/run.ts";
 import { dockerStatus } from "../packages/execution/index.ts";
 import { modelFromEnv } from "../packages/model-adapters/index.ts";
 
@@ -17,5 +18,6 @@ export async function runDemos(which: string, opts: { seed?: number }): Promise<
   if (which === "1" || which === "all") results.push((await demo1(opts)).ok);
   if (which === "2" || which === "all") results.push((await demo2(opts)).ok);
   if (which === "3" || which === "all") results.push((await demo3(opts)).ok);
+  if (which === "4" || which === "telemetry" || which === "all") results.push((await demo4(opts)).ok);
   return results.every(Boolean) ? 0 : 1;
 }

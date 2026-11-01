@@ -1,0 +1,21 @@
+{
+  "arm": "D",
+  "stage": "drift",
+  "task": "F2-ledger-211",
+  "claimed": "none",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.017636899999999997,
+  "inputTokens": 3453,
+  "outputTokens": 636,
+  "turns": 1,
+  "ms": 38810,
+  "codeBytes": 0,
+  "notes": [
+    "rift; ls -la . programs sample input out 2>&1</parameter>\n</invoke>\n\n\n\n\n\n\n\n\n\n\n<invoke name=\"Bash\">\n<parameter name=\"command\">cd /private/var/folders/tz/y04t4d0900xdbmz96jp608180000gn/T/exapt-benchmark/primary-sonnet/F2-ledger-211/D-drift; ls -la . programs sample input out 2>&1</parameter>\n</invoke>"
+  ],
+  "unauthorised": [],
+  "toolCalls": []
+}

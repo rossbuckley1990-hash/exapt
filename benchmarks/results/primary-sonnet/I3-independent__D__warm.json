@@ -1,0 +1,30 @@
+{
+  "arm": "D",
+  "stage": "warm",
+  "task": "I3-independent",
+  "claimed": "not-possible",
+  "hidden": {
+    "passed": 0,
+    "total": 0
+  },
+  "costUsd": 0.059639399999999995,
+  "inputTokens": 94921,
+  "outputTokens": 1614,
+  "turns": 10,
+  "ms": 29245,
+  "codeBytes": 0,
+  "notes": [
+    "ntation.\n  - `exapt_use` refused to run it by id.\n- **EXAPT couldn't verify a route.** Its analysis said it can't establish that any route is correct without a value-level independent check.\n\nWriting a report without seeing your notes' format would mean making up the data, so I didn't.\n\nNOT-POSSIBLE"
+  ],
+  "unauthorised": [],
+  "toolCalls": [
+    "exapt_memory",
+    "exapt_memory",
+    "exapt_discover",
+    "exapt_analyse",
+    "exapt_rcx",
+    "exapt_explain",
+    "exapt_rcx",
+    "exapt_use"
+  ]
+}

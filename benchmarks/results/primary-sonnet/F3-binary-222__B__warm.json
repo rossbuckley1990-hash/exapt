@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "stage": "warm",
+  "task": "F3-binary-222",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.034072399999999996,
+  "inputTokens": 38889,
+  "outputTokens": 967,
+  "turns": 5,
+  "ms": 17995,
+  "codeBytes": 0,
+  "notes": [
+    "run.sh`. It reproduces all five sample files byte-for-byte. The new file has three string columns (`batch`, `region`, `depot`). The file size matches the header exactly (86 header bytes plus 23 rows of 41 bytes). No row had a non-zero flag byte, which is the one field whose meaning is still unknown."
+  ],
+  "unauthorised": []
+}

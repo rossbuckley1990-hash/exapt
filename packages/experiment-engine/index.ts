@@ -65,6 +65,8 @@ export interface InventionOptions {
   libs?: Record<string, string>;
   /** Controls: candidates tested before synthesis, exactly as if a synthesiser had proposed them. */
   injected?: Candidate[];
+  /** A retained version this run replaces: the model starts from it rather than from nothing. */
+  starting?: string;
   onEvent?: EventSink;
   onModelCall?: (entry: Record<string, unknown>) => void;
 }
@@ -117,9 +119,19 @@ export async function metamorphicChecks(backend: ExecutionBackend, source: strin
         continue;
       }
       const [base, moved] = [parseRecords(a.output, to.repr.syntax), parseRecords(b.output, to.repr.syntax)];
-      const cmp = compareRecords(p.order.map((i) => base[i]), moved);
-      out.push({ relation: "permutation", passed: cmp.equal, detail: cmp.equal ? "output followed the input's order" : describeDiff(cmp.diffs[0]) });
-      out.push({ relation: "record-count", passed: base.length === parseRecords(c.input, from.repr.syntax).length, detail: `${base.length} records out` });
+      const inputCount = parseRecords(c.input, from.repr.syntax).length;
+      if (base.length === inputCount) {
+        const cmp = compareRecords(p.order.map((i) => base[i]), moved);
+        out.push({ relation: "permutation", passed: cmp.equal, detail: cmp.equal ? "output followed the input's order" : describeDiff(cmp.diffs[0]) });
+        out.push({ relation: "record-count", passed: true, detail: `${base.length} records out` });
+      } else {
+        const sortKey = (r: Rec) => JSON.stringify(r);
+        const sortedBase = [...base].sort((x, y) => sortKey(x).localeCompare(sortKey(y)));
+        const sortedMoved = [...moved].sort((x, y) => sortKey(x).localeCompare(sortKey(y)));
+        const cmp = compareRecords(sortedBase, sortedMoved);
+        out.push({ relation: "permutation", passed: cmp.equal, detail: cmp.equal ? "output records invariant under input permutation" : describeDiff(cmp.diffs[0]) });
+        out.push({ relation: "record-count", passed: base.length === moved.length, detail: `${base.length} records out` });
+      }
     }
   }
   return { results: out };
@@ -297,7 +309,7 @@ export async function invent(o: InventionOptions): Promise<InventionResult> {
       injected = [];
     } else {
       const proposal = await propose({
-        spec, pairs: training, allPairs: [...new Map([...known, ...training].map((p) => [p.input, p])).values()], counterexamples, rejected, helpers: o.helpers ?? [],
+        spec, pairs: training, allPairs: [...new Map([...known, ...training].map((p) => [p.input, p])).values()], counterexamples, rejected, helpers: o.helpers ?? [], starting: o.starting,
         round, wanted: perRound, tried, strategy: o.strategy, model: o.model, budget: o.budget, onModelCall: o.onModelCall,
       });
       for (const n of proposal.notes) {
@@ -346,7 +358,7 @@ const levelIndex = (l: EvidenceLevel): number => LEVEL_ORDER.indexOf(l);
 
 /** Small faults injected into an accepted program. A suite that cannot tell them apart from the
  *  original was not testing what it appeared to test. */
-export function mutantsOf(source: string, seed: number, limit = 12): Mutant[] {
+export function mutantsOf(source: string, limit = 24): Mutant[] {
   const out: Mutant[] = [];
   const code = codePositions(source);
   const inErrorMessage = (i: number): boolean => {
@@ -368,6 +380,21 @@ export function mutantsOf(source: string, seed: number, limit = 12): Mutant[] {
   at(/ \/ /g, () => " * ", "division became multiplication");
   at(/ \+ (?=\d|-)/g, () => " - ", "offset sign flipped");
   at(/\.toFixed\((\d+)\)/g, (m) => `.toFixed(${Math.max(0, Number(m[1]) - 1)})`, "precision reduced");
+  // The standard logic operators. Programs that keep their work in conditions, rather than in
+  // arithmetic, would otherwise offer almost nothing to mutate, and a score over a handful of faults
+  // is mostly noise.
+  at(/ === /g, () => " !== ", "equality inverted");
+  at(/ !== /g, () => " === ", "inequality inverted");
+  at(/ && /g, () => " || ", "conjunction became disjunction");
+  at(/ \|\| /g, () => " && ", "disjunction became conjunction");
+  at(/ < /g, () => " <= ", "boundary moved");
+  at(/ > /g, () => " >= ", "boundary moved");
+  at(/\bcontinue;/g, () => ";", "continue removed");
+  at(/\bbreak;/g, () => ";", "break removed");
+  at(/\.pop\(\)/g, () => ".length", "pop removed");
+  at(/\bif \(!/g, () => "if (", "condition negated");
+  at(/\btrue\b/g, () => "false", "boolean flipped");
+  at(/\bfalse\b/g, () => "true", "boolean flipped");
   at(/\.toUpperCase\(\)/g, () => "", "case change removed");
   at(/\.trim\(\)/g, () => "", "trim removed", "robustness");
   at(/throw new Error\(/g, () => "void String(", "validation removed", "robustness");
@@ -375,7 +402,9 @@ export function mutantsOf(source: string, seed: number, limit = 12): Mutant[] {
   for (let i = 1; i < names.length; i++) {
     if (names[i] !== names[0]) out.push({ name: `fields swapped: ${names[0]} and ${names[i]}`, kind: "value", source: source.replace(`field(r, ${names[0]})`, "field(r, \0)").replace(`field(r, ${names[i]})`, `field(r, ${names[0]})`).replace("field(r, \0)", `field(r, ${names[i]})`) });
   }
-  const rng = new Rng(seed);
+  // The sample comes from the program itself, so assessing it again gives the same faults. A verdict
+  // cannot be improved by asking twice.
+  const rng = new Rng(parseInt(sha256(source).slice(0, 8), 16));
   const unique = [...new Map(out.filter((m) => m.source !== source).map((m) => [sha256(m.source), m])).values()];
   const valueFaults = rng.shuffle(unique.filter((m) => m.kind === "value")).slice(0, Math.ceil(limit * 0.75));
   const robustness = rng.shuffle(unique.filter((m) => m.kind === "robustness"));
@@ -440,24 +469,28 @@ export interface MutationScore {
   total: number;
   value: { killed: number; total: number };
   survivors: string[];
+  /** Reproducible identities and killing cases; absent only in older evidence records. */
+  details?: Array<{ name: string; kind: Mutant["kind"]; sha256: string; killed: boolean; tested: string[]; killedBy: string[] }>;
 }
 
-export async function mutationScore(backend: ExecutionBackend, judge: Judge, source: string, cases: TestCase[], seed: number, libs?: Record<string, string>): Promise<MutationScore> {
-  const mutants = mutantsOf(source, seed);
+export async function mutationScore(backend: ExecutionBackend, judge: Judge, source: string, cases: TestCase[], libs?: Record<string, string>): Promise<MutationScore> {
+  const mutants = mutantsOf(source);
   // Every kind of test must be present: a fault in validation shows only on malformed input.
   const batches: Array<[string, number]> = [["visible", 2], ["independent", 6], ["holdout", 4], ["boundary", 12], ["malformed", 8]];
   const outcomes = await pool(mutants, 2, async (m) => {
+    const tested: string[] = [];
     // Most faults die on the first batch, so stop there. A fault can loop forever; it gets less rope.
     for (const [tier, n] of batches) {
       const suite = cases.filter((c) => c.tier === tier).slice(0, n);
       if (!suite.length) continue;
       const rs = await runCases(backend, judge, m.source, suite, libs, { timeoutMs: 3000 });
-      if (rs.some((r) => !r.passed)) return { name: m.name, kind: m.kind, killed: true };
+      tested.push(...suite.map(c => c.id));
+      if (rs.some((r) => !r.passed)) return { name: m.name, kind: m.kind, sha256: sha256(m.source), killed: true, tested, killedBy: rs.filter(r => !r.passed).map(r => r.id) };
     }
-    return { name: m.name, kind: m.kind, killed: false };
+    return { name: m.name, kind: m.kind, sha256: sha256(m.source), killed: false, tested, killedBy: [] };
   });
   const value = outcomes.filter((o) => o.kind === "value");
-  return { killed: outcomes.filter((o) => o.killed).length, total: outcomes.length, value: { killed: value.filter((o) => o.killed).length, total: value.length }, survivors: outcomes.filter((o) => !o.killed).map((o) => o.name) };
+  return { killed: outcomes.filter((o) => o.killed).length, total: outcomes.length, value: { killed: value.filter((o) => o.killed).length, total: value.length }, survivors: outcomes.filter((o) => !o.killed).map((o) => o.name), details: outcomes };
 }
 
 export type { RunResult };

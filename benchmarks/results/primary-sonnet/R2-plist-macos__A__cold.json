@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "cold",
+  "task": "R2-plist-macos",
+  "claimed": "done",
+  "hidden": {
+    "passed": 5,
+    "total": 5
+  },
+  "costUsd": 0.0281758,
+  "inputTokens": 28183,
+  "outputTokens": 913,
+  "turns": 4,
+  "ms": 21433,
+  "codeBytes": 84,
+  "notes": [
+    "m the sample files: for example, `title` comes first in the sample but `tags` comes first in the output. `plutil` doesn't keep the plist's key order. Anything that reads the JSON by key won't notice, but a byte-for-byte text comparison would fail.\n\nI only had these five samples. If new inputs contain types like dates or binary data, `plutil` may handle them differently, and I haven't checked that."
+  ],
+  "unauthorised": []
+}

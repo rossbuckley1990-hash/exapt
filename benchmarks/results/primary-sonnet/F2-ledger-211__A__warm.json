@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "warm",
+  "task": "F2-ledger-211",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.035258700000000004,
+  "inputTokens": 38799,
+  "outputTokens": 1076,
+  "turns": 5,
+  "ms": 16662,
+  "codeBytes": 0,
+  "notes": [
+    "/MM/YYYY to ISO and the amounts to cents. The sample statement has dates like 13/12/2026, so the day comes first. I only spot-checked one total by hand: AC-109 is 8622.76 + 4555.98 = 13178.74, which matches the output.\n\nThe result has nine accounts. AC-109 is the only one with more than one posting."
+  ],
+  "unauthorised": []
+}

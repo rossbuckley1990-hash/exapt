@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "warm",
+  "task": "F1-relay-202",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.044836299999999996,
+  "inputTokens": 41488,
+  "outputTokens": 1409,
+  "turns": 5,
+  "ms": 18981,
+  "codeBytes": 0,
+  "notes": [
+    "st-Wing/rig-2b`, so the 12 input readings give 11 location/unit keys. Of the 11, 7 are over limit and 4 are within limit.\n\nI also ran the same steps on `sample/raw.dump` to confirm they work, and they ran without errors.\n\nI put \"done\" in `RESULT.json`, with a note that the conversion step is my own."
+  ],
+  "unauthorised": []
+}

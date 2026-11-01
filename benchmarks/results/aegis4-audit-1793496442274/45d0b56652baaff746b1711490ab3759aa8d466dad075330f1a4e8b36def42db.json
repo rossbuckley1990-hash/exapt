@@ -1,0 +1,156 @@
+{
+  "name": "literal changed at 497",
+  "kind": "mutant-value",
+  "sha256": "45d0b56652baaff746b1711490ab3759aa8d466dad075330f1a4e8b36def42db",
+  "passed": 6,
+  "total": 21,
+  "rows": [
+    {
+      "id": "original-snap-active.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.4853749999999977
+    },
+    {
+      "id": "original-snap-heavy.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 3.254249999999999
+    },
+    {
+      "id": "original-snap-idle.input.txt",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.407083
+    },
+    {
+      "id": "page-4096-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.332124999999998
+    },
+    {
+      "id": "page-4096-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.4408329999999978
+    },
+    {
+      "id": "page-4096-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.4227089999999976
+    },
+    {
+      "id": "page-16384-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.5172079999999966
+    },
+    {
+      "id": "page-16384-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 3.0125829999999922
+    },
+    {
+      "id": "page-16384-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.5414999999999992
+    },
+    {
+      "id": "page-65536-counts-0",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.281334000000001
+    },
+    {
+      "id": "page-65536-counts-1",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.077541999999994
+    },
+    {
+      "id": "page-65536-counts-2",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.4182910000000035
+    },
+    {
+      "id": "empty",
+      "pass": true,
+      "status": "threw",
+      "error": "empty input",
+      "ms": 2.1720830000000007
+    },
+    {
+      "id": "header-only",
+      "pass": true,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.3412080000000017
+    },
+    {
+      "id": "one-invalid-line",
+      "pass": true,
+      "status": "threw",
+      "error": "malformed header",
+      "ms": 1.2502909999999972
+    },
+    {
+      "id": "missing-metric",
+      "pass": true,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.5531669999999949
+    },
+    {
+      "id": "zero-page-size",
+      "pass": true,
+      "status": "threw",
+      "error": "invalid page size",
+      "ms": 2.664749999999998
+    },
+    {
+      "id": "duplicate-metric",
+      "pass": false,
+      "status": "ok",
+      "ms": 1.774957999999998,
+      "output": "{\"metric\":\"memory.free_bytes\",\"value\":16367616}\n{\"metric\":\"memory.active_bytes\",\"value\":49152}\n{\"metric\":\"memory.inactive_bytes\",\"value\":114688}\n{\"metric\":\"memory.speculative_bytes\",\"value\":212992}\n{\"metric\":\"memory.wired_bytes\",\"value\":475136}\n{\"metric\":\"memory.compressor_bytes\",\"value\":999424}\n"
+    },
+    {
+      "id": "invalid-header-prefix",
+      "pass": true,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.8750830000000036
+    },
+    {
+      "id": "blank-line",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 2.0223340000000007
+    },
+    {
+      "id": "live-host",
+      "pass": false,
+      "status": "threw",
+      "error": "missing field: Pages free",
+      "ms": 1.552749999999996
+    }
+  ]
+}

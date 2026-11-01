@@ -1,0 +1,6 @@
+{"metric":"memory.free_bytes","pages":6000,"bytes":98304000}
+{"metric":"memory.active_bytes","pages":180000,"bytes":2949120000}
+{"metric":"memory.inactive_bytes","pages":350000,"bytes":5734400000}
+{"metric":"memory.speculative_bytes","pages":1500,"bytes":24576000}
+{"metric":"memory.wired_bytes","pages":270000,"bytes":4423680000}
+{"metric":"memory.compressor_bytes","pages":420000,"bytes":6881280000}

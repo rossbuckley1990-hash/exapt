@@ -1,0 +1,142 @@
+[
+  {
+    "id": "original-snap-active.input.txt",
+    "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     6000.\nPages active:                                 180000.\nPages inactive:                               350000.\nPages speculative:                              1500.\nPages throttled:                                   0.\nPages wired down:                             270000.\nPages purgeable:                                   4.\n\"Translation faults\":                     1234567890.\nPages copy-on-write:                        12345678.\nPages zero filled:                         987654321.\nPages reactivated:                          45678901.\nPages purged:                                1234567.\nFile-backed pages:                             98765.\nAnonymous pages:                              345678.\nPages stored in compressor:                   840000.\nPages occupied by compressor:                 420000.\nDecompressions:                             12345678.\nCompressions:                               15678901.\nPageins:                                     1234567.\nPageouts:                                      12345.\nSwapins:                                       45678.\nSwapouts:                                      56789.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":98304000}\n{\"metric\":\"memory.active_bytes\",\"value\":2949120000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":5734400000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":24576000}\n{\"metric\":\"memory.wired_bytes\",\"value\":4423680000}\n{\"metric\":\"memory.compressor_bytes\",\"value\":6881280000}\n",
+    "refusal": false,
+    "provenance": "original fixture checked by independently implemented Python oracle"
+  },
+  {
+    "id": "original-snap-heavy.input.txt",
+    "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     4000.\nPages active:                                 200000.\nPages inactive:                               320000.\nPages speculative:                              1000.\nPages throttled:                                   0.\nPages wired down:                             300000.\nPages purgeable:                                   4.\n\"Translation faults\":                     1234567890.\nPages copy-on-write:                        12345678.\nPages zero filled:                         987654321.\nPages reactivated:                          45678901.\nPages purged:                                1234567.\nFile-backed pages:                             98765.\nAnonymous pages:                              345678.\nPages stored in compressor:                   960000.\nPages occupied by compressor:                 480000.\nDecompressions:                             12345678.\nCompressions:                               15678901.\nPageins:                                     1234567.\nPageouts:                                      12345.\nSwapins:                                       45678.\nSwapouts:                                      56789.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":65536000}\n{\"metric\":\"memory.active_bytes\",\"value\":3276800000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":5242880000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":16384000}\n{\"metric\":\"memory.wired_bytes\",\"value\":4915200000}\n{\"metric\":\"memory.compressor_bytes\",\"value\":7864320000}\n",
+    "refusal": false,
+    "provenance": "original fixture checked by independently implemented Python oracle"
+  },
+  {
+    "id": "original-snap-idle.input.txt",
+    "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     12000.\nPages active:                                 140000.\nPages inactive:                               380000.\nPages speculative:                              3000.\nPages throttled:                                   0.\nPages wired down:                             220000.\nPages purgeable:                                   4.\n\"Translation faults\":                     1234567890.\nPages copy-on-write:                        12345678.\nPages zero filled:                         987654321.\nPages reactivated:                          45678901.\nPages purged:                                1234567.\nFile-backed pages:                             98765.\nAnonymous pages:                              345678.\nPages stored in compressor:                   700000.\nPages occupied by compressor:                 350000.\nDecompressions:                             12345678.\nCompressions:                               15678901.\nPageins:                                     1234567.\nPageouts:                                      12345.\nSwapins:                                       45678.\nSwapouts:                                      56789.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":196608000}\n{\"metric\":\"memory.active_bytes\",\"value\":2293760000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":6225920000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":49152000}\n{\"metric\":\"memory.wired_bytes\",\"value\":3604480000}\n{\"metric\":\"memory.compressor_bytes\",\"value\":5734400000}\n",
+    "refusal": false,
+    "provenance": "original fixture checked by independently implemented Python oracle"
+  },
+  {
+    "id": "page-4096-counts-0",
+    "input": "Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free: 0.\nPages active: 0.\nPages inactive: 0.\nPages speculative: 0.\nPages wired down: 0.\nPages occupied by compressor: 0.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n",
+    "refusal": false,
+    "provenance": "new audit domain checks; integer products computed in Python"
+  },
+  {
+    "id": "page-4096-counts-1",
+    "input": "Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free: 1.\nPages active: 3.\nPages inactive: 7.\nPages speculative: 13.\nPages wired down: 29.\nPages occupied by compressor: 61.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":4096}\n{\"metric\":\"memory.active_bytes\",\"value\":12288}\n{\"metric\":\"memory.inactive_bytes\",\"value\":28672}\n{\"metric\":\"memory.speculative_bytes\",\"value\":53248}\n{\"metric\":\"memory.wired_bytes\",\"value\":118784}\n{\"metric\":\"memory.compressor_bytes\",\"value\":249856}\n",
+    "refusal": false,
+    "provenance": "new audit domain checks; integer products computed in Python"
+  },
+  {
+    "id": "page-4096-counts-2",
+    "input": "Mach Virtual Memory Statistics: (page size of 4096 bytes)\nPages free: 12000.\nPages active: 140000.\nPages inactive: 380000.\nPages speculative: 3000.\nPages wired down: 220000.\nPages occupied by compressor: 350000.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":49152000}\n{\"metric\":\"memory.active_bytes\",\"value\":573440000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":1556480000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":12288000}\n{\"metric\":\"memory.wired_bytes\",\"value\":901120000}\n{\"metric\":\"memory.compressor_bytes\",\"value\":1433600000}\n",
+    "refusal": false,
+    "provenance": "new audit domain checks; integer products computed in Python"
+  },
+  {
+    "id": "page-16384-counts-0",
+    "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free: 0.\nPages active: 0.\nPages inactive: 0.\nPages speculative: 0.\nPages wired down: 0.\nPages occupied by compressor: 0.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n",
+    "refusal": false,
+    "provenance": "new audit domain checks; integer products computed in Python"
+  },
+  {
+    "id": "page-16384-counts-1",
+    "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free: 1.\nPages active: 3.\nPages inactive: 7.\nPages speculative: 13.\nPages wired down: 29.\nPages occupied by compressor: 61.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":16384}\n{\"metric\":\"memory.active_bytes\",\"value\":49152}\n{\"metric\":\"memory.inactive_bytes\",\"value\":114688}\n{\"metric\":\"memory.speculative_bytes\",\"value\":212992}\n{\"metric\":\"memory.wired_bytes\",\"value\":475136}\n{\"metric\":\"memory.compressor_bytes\",\"value\":999424}\n",
+    "refusal": false,
+    "provenance": "new audit domain checks; integer products computed in Python"
+  },
+  {
+    "id": "page-16384-counts-2",
+    "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free: 12000.\nPages active: 140000.\nPages inactive: 380000.\nPages speculative: 3000.\nPages wired down: 220000.\nPages occupied by compressor: 350000.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":196608000}\n{\"metric\":\"memory.active_bytes\",\"value\":2293760000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":6225920000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":49152000}\n{\"metric\":\"memory.wired_bytes\",\"value\":3604480000}\n{\"metric\":\"memory.compressor_bytes\",\"value\":5734400000}\n",
+    "refusal": false,
+    "provenance": "new audit domain checks; integer products computed in Python"
+  },
+  {
+    "id": "page-65536-counts-0",
+    "input": "Mach Virtual Memory Statistics: (page size of 65536 bytes)\nPages free: 0.\nPages active: 0.\nPages inactive: 0.\nPages speculative: 0.\nPages wired down: 0.\nPages occupied by compressor: 0.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":0}\n{\"metric\":\"memory.active_bytes\",\"value\":0}\n{\"metric\":\"memory.inactive_bytes\",\"value\":0}\n{\"metric\":\"memory.speculative_bytes\",\"value\":0}\n{\"metric\":\"memory.wired_bytes\",\"value\":0}\n{\"metric\":\"memory.compressor_bytes\",\"value\":0}\n",
+    "refusal": false,
+    "provenance": "new audit domain checks; integer products computed in Python"
+  },
+  {
+    "id": "page-65536-counts-1",
+    "input": "Mach Virtual Memory Statistics: (page size of 65536 bytes)\nPages free: 1.\nPages active: 3.\nPages inactive: 7.\nPages speculative: 13.\nPages wired down: 29.\nPages occupied by compressor: 61.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":65536}\n{\"metric\":\"memory.active_bytes\",\"value\":196608}\n{\"metric\":\"memory.inactive_bytes\",\"value\":458752}\n{\"metric\":\"memory.speculative_bytes\",\"value\":851968}\n{\"metric\":\"memory.wired_bytes\",\"value\":1900544}\n{\"metric\":\"memory.compressor_bytes\",\"value\":3997696}\n",
+    "refusal": false,
+    "provenance": "new audit domain checks; integer products computed in Python"
+  },
+  {
+    "id": "page-65536-counts-2",
+    "input": "Mach Virtual Memory Statistics: (page size of 65536 bytes)\nPages free: 12000.\nPages active: 140000.\nPages inactive: 380000.\nPages speculative: 3000.\nPages wired down: 220000.\nPages occupied by compressor: 350000.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":786432000}\n{\"metric\":\"memory.active_bytes\",\"value\":9175040000}\n{\"metric\":\"memory.inactive_bytes\",\"value\":24903680000}\n{\"metric\":\"memory.speculative_bytes\",\"value\":196608000}\n{\"metric\":\"memory.wired_bytes\",\"value\":14417920000}\n{\"metric\":\"memory.compressor_bytes\",\"value\":22937600000}\n",
+    "refusal": false,
+    "provenance": "new audit domain checks; integer products computed in Python"
+  },
+  {
+    "id": "empty",
+    "input": "",
+    "refusal": true,
+    "provenance": "boundary: empty input"
+  },
+  {
+    "id": "header-only",
+    "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\n",
+    "refusal": true,
+    "provenance": "boundary: one-line valid header"
+  },
+  {
+    "id": "one-invalid-line",
+    "input": "not telemetry\n",
+    "refusal": true,
+    "provenance": "boundary: one-line invalid input"
+  },
+  {
+    "id": "missing-metric",
+    "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free: 1.\nPages active: 3.\nPages inactive: 7.\nPages speculative: 13.\nPages wired down: 29.\n",
+    "refusal": true,
+    "provenance": "malformed: required metric absent"
+  },
+  {
+    "id": "zero-page-size",
+    "input": "Mach Virtual Memory Statistics: (page size of 0 bytes)\nPages free: 1.\nPages active: 3.\nPages inactive: 7.\nPages speculative: 13.\nPages wired down: 29.\nPages occupied by compressor: 61.\n",
+    "refusal": true,
+    "provenance": "malformed: zero scale"
+  },
+  {
+    "id": "duplicate-metric",
+    "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free: 1.\nPages active: 3.\nPages inactive: 7.\nPages speculative: 13.\nPages wired down: 29.\nPages occupied by compressor: 61.\nPages free: 999.\n",
+    "refusal": true,
+    "provenance": "NEW stricter ambiguity requirement; not established by original suite"
+  },
+  {
+    "id": "invalid-header-prefix",
+    "input": "garbage Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free: 1.\nPages active: 3.\nPages inactive: 7.\nPages speculative: 13.\nPages wired down: 29.\nPages occupied by compressor: 61.\n",
+    "refusal": true,
+    "provenance": "NEW strict header requirement; not established by original suite"
+  },
+  {
+    "id": "blank-line",
+    "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free: 1.\n\nPages active: 3.\nPages inactive: 7.\nPages speculative: 13.\nPages wired down: 29.\nPages occupied by compressor: 61.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":16384}\n{\"metric\":\"memory.active_bytes\",\"value\":49152}\n{\"metric\":\"memory.inactive_bytes\",\"value\":114688}\n{\"metric\":\"memory.speculative_bytes\",\"value\":212992}\n{\"metric\":\"memory.wired_bytes\",\"value\":475136}\n{\"metric\":\"memory.compressor_bytes\",\"value\":999424}\n",
+    "refusal": false,
+    "provenance": "valid blank line"
+  },
+  {
+    "id": "live-host",
+    "input": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     7658.\nPages active:                                 211847.\nPages inactive:                               466068.\nPages speculative:                              1747.\nPages throttled:                                   0.\nPages wired down:                             236007.\nPages purgeable:                                   2.\n\"Translation faults\":                     8480444272.\nPages copy-on-write:                       224167576.\nPages zero filled:                        3721904044.\nPages reactivated:                        1794445608.\nPages purged:                              122819771.\nFile-backed pages:                            108902.\nAnonymous pages:                              570760.\nPages stored in compressor:                   709119.\nPages occupied by compressor:                 342439.\nDecompressions:                           2027285247.\nCompressions:                             2175216263.\nPageins:                                   361978848.\nPageouts:                                     772036.\nSwapins:                                   132187749.\nSwapouts:                                  138579274.\nPages tagged:                                 116156.\nPages tagged resident:                         82062.\nPages tagged compressed:                       34094.\nPages tag-storage:                             32768.\nPages tag-storage holding tags:                 4461.\nPages tag-storage free:                           51.\nPages tag-storage non-tag pageable:            28050.\nPages tag-storage non-tag wired:                  92.\nBytes of compressed tags:                    5670848.\nTagged compressions:                        62706911.\nTagged decompressions:                      61090087.\n",
+    "expected": "{\"metric\":\"memory.free_bytes\",\"value\":125468672}\n{\"metric\":\"memory.active_bytes\",\"value\":3470901248}\n{\"metric\":\"memory.inactive_bytes\",\"value\":7636058112}\n{\"metric\":\"memory.speculative_bytes\",\"value\":28622848}\n{\"metric\":\"memory.wired_bytes\",\"value\":3866738688}\n{\"metric\":\"memory.compressor_bytes\",\"value\":5610520576}\n",
+    "refusal": false,
+    "provenance": "fresh /usr/bin/vm_stat; no synthetic fallback"
+  }
+]

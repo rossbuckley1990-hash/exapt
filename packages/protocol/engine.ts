@@ -7,7 +7,7 @@ import { EventEmitter } from "node:events";
 import fs from "node:fs";
 import path from "node:path";
 import { RcxHost, ProgramChanged, type Capability } from "../rcx-adapter/index.ts";
-import { Universe, reprLabel, accepted, type CapabilityNode, type EvidenceLevel, type GeneratedNodeInfo, type Goal, type SampleRef, type Tool, levelRank } from "../capability-universe/index.ts";
+import { Universe, reprLabel, accepted, sniffSyntax, type CapabilityNode, type EvidenceLevel, type GeneratedNodeInfo, type Goal, type SampleRef, type Tool, levelRank } from "../capability-universe/index.ts";
 import { analyse, loadSample, type Analysis, type Gap } from "../gap-reasoner/index.ts";
 import { dockerStatus, openBackend, reapOrphans, selfTest, DockerBackend, IMAGE, type ExecutionBackend, type SelfTestReport } from "../execution/index.ts";
 import { invent, Judge, metamorphicChecks, runCases, specFor, TestBench, type BehaviouralContract, type CandidateAssessment, type EventSink, type InventionResult, type TestCase } from "../experiment-engine/index.ts";
@@ -62,6 +62,8 @@ export interface RunRecord {
   seed: number;
   /** Trimmed refutations, kept with the run. */
   counterexamples?: Array<{ problem: string; input: string }>;
+  /** The retained capability this run exists to repair. Its result is that capability's next version. */
+  replaces?: { id: string; version: number };
 }
 
 export interface CompactGap {
@@ -91,7 +93,7 @@ export const compactGap = (g: Gap): CompactGap => ({
 
 export interface WorkflowResult {
   id: string;
-  steps: Array<{ tool: string; args?: string[]; kind: string; ok: boolean; ms: number; receipt?: string }>;
+  steps: Array<{ tool: string; args?: string[]; kind: string; ok: boolean; ms: number; receipt?: string; error?: string }>;
   output: string;
   ok: boolean;
 }
@@ -364,13 +366,25 @@ export class Exapt {
       return this.finish(run, emit);
     }
     run.gap = gap.id;
+    // New truth that refuted a retained capability is shown to the synthesiser, and the version it
+    // refuted is where the repair starts.
+    let starting: string | undefined;
+    for (const r of analysis.refuted ?? []) {
+      run.goal.corpus![r.index].pinned = true;
+      const retained = r.route.map((id) => this.vault.manifest(id)).find(Boolean);
+      if (retained) {
+        starting ??= this.vault.source(retained);
+        run.replaces ??= { id: retained.id, version: retained.version };
+        this.vault.note(retained.id, "refuted", `wrong on ${r.name}`, retained.version);
+      }
+    }
     stage("synthesising and falsifying");
     const budget = this.budgetFor(run.goal);
     const modelLog = path.join(this.runDir(run.id), "model.jsonl");
     const { helpers, libs } = this.helpers();
     const result = await invent({
       universe: this.universe, goal: run.goal, gap, base: run.base, backend: this.backend, model: this.config.model, budget, strategy: opts.strategy ?? this.config.strategy,
-      seed: run.seed, helpers, libs, injected: opts.injected, rounds: opts.rounds, onEvent: emit,
+      seed: run.seed, helpers, libs, injected: opts.injected, rounds: opts.rounds, onEvent: emit, ...(starting ? { starting } : {}),
       onModelCall: (entry) => fs.appendFileSync(modelLog, `${JSON.stringify({ at: new Date().toISOString(), ...entry })}\n`),
     });
     run.contract = result.contract;
@@ -405,10 +419,10 @@ export class Exapt {
     stage("publishing");
     await this.publishCandidate(run, result, gap, accepted, evidence, libs);
     if (run.capability?.status === "verified-within-scope") {
-      this.universe.closeGoal(run.goal.id);
       stage("running the completed workflow");
       const steps = [...gap.from.lineage, { tool: run.capability.id }, ...gap.to.downstream.map((tool) => ({ tool }))];
       run.workflow = await this.executeRoute(steps, run.goal, run.base);
+      if (run.workflow.ok) this.universe.closeGoal(run.goal.id);
       this.saveWorkflow(run);
       emit("workflow", { ok: run.workflow.ok, steps: run.workflow.steps, output: run.workflow.output.slice(0, 2000) });
     }
@@ -417,6 +431,11 @@ export class Exapt {
   }
 
   private finish(run: RunRecord, emit: EventSink): RunRecord {
+    if (run.workflow?.ok === false) {
+      run.status = "failed";
+      const failed = run.workflow.steps.find((s) => !s.ok);
+      run.outcome = `Workflow failed at ${failed?.tool ?? "an unknown step"}${failed?.error ? `: ${failed.error}` : ""}.${run.capability ? " The retained capability's evidence is unchanged; the requested workflow did not complete." : ""}`;
+    }
     run.finishedAt = new Date().toISOString();
     run.stage = "finished";
     this.saveRun(run);
@@ -464,7 +483,7 @@ export class Exapt {
 
   private manifestFor(run: RunRecord, result: InventionResult, accepted: Candidate, evidence: EvidenceReport, status: CapabilityManifest["status"], suite: { cases: TestCase[]; witnesses: ConsumerWitness[] }, libs: Record<string, string>): CapabilityManifest {
     const { contract } = result;
-    const id = this.capabilityId(contract);
+    const id = run.replaces?.id ?? this.capabilityId(contract);
     const artefact = this.vault.put(accepted.source);
     const version = this.vault.nextVersion(id);
     return {
@@ -482,7 +501,7 @@ export class Exapt {
       limitations: evidence.limitations,
       counterexamples: result.counterexamples.slice(-12).map((c) => ({ problem: c.problem.slice(0, 300), input: c.binary ? "(binary)" : c.input.slice(0, 400) })),
       rejected: result.attempts.filter((a) => !a.survived).map((a) => ({ producer: a.candidate.producer, rejectedAt: a.rejectedAt ?? "?", reason: (a.reason ?? "").slice(0, 300) })),
-      provenance: { goal: run.goal.id, run: run.id, producer: accepted.producer, kind: accepted.kind, real: accepted.kind === "model", createdAt: new Date().toISOString() },
+      provenance: { goal: run.goal.id, run: run.id, producer: accepted.producer, kind: accepted.kind, real: accepted.kind === "model", createdAt: new Date().toISOString(), ...(run.replaces ? { parent: run.replaces } : {}) },
       revalidation: { suite: this.vault.put(JSON.stringify({ cases: suite.cases })), witnesses: suite.witnesses, instructions: "Re-run the stored suite through the pinned oracles; compare the consumer's outputs with the stored witnesses." },
       receipts: [],
     };
@@ -584,7 +603,7 @@ export class Exapt {
   // ---------------------------------------------------------- workflows
 
   private saveWorkflow(run: RunRecord): void {
-    if (!run.workflow) return;
+    if (!run.workflow?.ok) return;
     writeJson(path.join(this.config.home, "workflows", `${slugify(run.goal.id)}.json`), { goal: run.goal.id, intent: run.goal.intent, steps: run.workflow.steps.map((s) => ({ tool: s.tool, ...(s.args ? { args: s.args } : {}) })), capability: run.capability });
   }
 
@@ -594,7 +613,7 @@ export class Exapt {
     return fs.readdirSync(dir).map((f) => readJson<{ goal: string; intent: string; steps: Array<{ tool: string; args?: string[] }> }>(path.join(dir, f))!);
   }
 
-  async runWorkflow(goalId: string, input: string): Promise<WorkflowResult> {
+  async runWorkflow(goalId: string, input: string | Buffer): Promise<WorkflowResult> {
     await this.ensureDiscovered();
     const w = readJson<{ steps: Array<{ tool: string; args?: string[] }> }>(path.join(this.config.home, "workflows", `${slugify(goalId)}.json`));
     if (!w) throw new Refused("unknown-workflow", `no retained workflow for ${goalId}`);
@@ -603,10 +622,14 @@ export class Exapt {
 
   private async executeRoute(steps: Array<{ tool: string; args?: string[] }>, goal: Goal, base: string): Promise<WorkflowResult> {
     const sample = goal.have?.samples?.[0] ?? goal.want.examples?.[0]?.input ?? goal.corpus?.[0]?.input;
-    return this.runSteps(steps, sample ? loadSample(sample, base).toString("utf8") : "");
+    if (!sample) return this.runSteps(steps, "");
+    const bytes = loadSample(sample, base);
+    const declaredBinary = this.universe.tool(steps[0]?.tool)?.contract.input?.repr.syntax.format === "binary";
+    const binary = declaredBinary || sample.base64 !== undefined || sniffSyntax(bytes).format === "binary";
+    return this.runSteps(steps, binary ? bytes : bytes.toString("utf8"));
   }
 
-  private async runSteps(steps: Array<{ tool: string; args?: string[] }>, input: string): Promise<WorkflowResult> {
+  private async runSteps(steps: Array<{ tool: string; args?: string[] }>, input: string | Buffer): Promise<WorkflowResult> {
     const out: WorkflowResult["steps"] = [];
     let value = input;
     for (const step of steps) {
@@ -617,16 +640,21 @@ export class Exapt {
       }
       if (t.kind === "generated") await this.assertUsable(t.id);
       const t0 = performance.now();
-      const useRcx = !step.args?.length;
-      const rec = useRcx ? await this.host.rc.run(t.id, { input: value }).catch((e) => ({ status: "failed" as const, output: undefined, error: String(e.message), receipt: undefined })) : null;
+      // Generated operations have a base64 input convention. Native mined operations expose text
+      // through RCX, so binary stdin must use the existing byte-preserving program runner.
+      const binary = Buffer.isBuffer(value);
+      const useRcx = !step.args?.length && (!binary || t.kind === "generated");
+      const args = binary ? { input: value.toString("base64"), encoding: "base64" } : { input: value };
+      const rec = useRcx ? await this.host.rc.run(t.id, args).catch((e) => ({ status: "failed" as const, output: undefined, error: String(e.message), receipt: undefined })) : null;
       const direct = rec ? null : await t.run(value, { args: step.args });
       const ok = rec ? rec.status === "completed" && typeof rec.output === "string" : !!direct && accepted(direct);
       const receipt = (rec as { receipt?: { hash?: string } } | null)?.receipt?.hash;
-      out.push({ tool: t.id, ...(step.args?.length ? { args: step.args } : {}), kind: t.kind, ok, ms: Math.round(performance.now() - t0), ...(receipt ? { receipt } : {}) });
+      const error = !ok ? String(rec?.error ?? direct?.stderr ?? "operation did not produce text output").slice(0, 400) : undefined;
+      out.push({ tool: t.id, ...(step.args?.length ? { args: step.args } : {}), kind: t.kind, ok, ms: Math.round(performance.now() - t0), ...(receipt ? { receipt } : {}), ...(error ? { error } : {}) });
       if (!ok) return { id: newId("wf"), steps: out, output: "", ok: false };
       value = rec ? String(rec.output) : direct!.stdout;
     }
-    return { id: newId("wf"), steps: out, output: value, ok: true };
+    return { id: newId("wf"), steps: out, output: typeof value === "string" ? value : "", ok: out.length > 0 && typeof value === "string" };
   }
 
   // ---------------------------------------------------------- use and revalidation

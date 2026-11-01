@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "stage": "warm",
+  "task": "F1-relay-201",
+  "claimed": "done",
+  "hidden": {
+    "passed": 0,
+    "total": 1
+  },
+  "costUsd": 0.0405732,
+  "inputTokens": 40753,
+  "outputTokens": 1171,
+  "turns": 5,
+  "ms": 20277,
+  "codeBytes": 0,
+  "notes": [
+    ", one per site and unit. Six are over limit, and Roof-Plant/rig-2a is the only unit with two readings.\n\nThe one step I couldn't check is the kelvin-to-Celsius conversion. Its rounding could matter near the 13.35 limit. North-Wing/rig-8c has a max of 13.95, which is over the limit with room to spare."
+  ],
+  "unauthorised": []
+}

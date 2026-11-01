@@ -1,0 +1,28 @@
+{
+  "arm": "D",
+  "stage": "warm",
+  "task": "R1-dbf-natural-earth",
+  "claimed": "done",
+  "hidden": {
+    "passed": 1,
+    "total": 1
+  },
+  "costUsd": 0.0744692,
+  "inputTokens": 114804,
+  "outputTokens": 2023,
+  "turns": 10,
+  "ms": 81690,
+  "codeBytes": 0,
+  "notes": [
+    "hecked is the same capability's output on the same input, which showed these fields and plausible values (e.g. Fiji, Tanzania). I did not check all 42,299 bytes or compare them against the source.\n\nThe capability is verified only within its tested domain, so the full-file output rests on that.\n\nDONE"
+  ],
+  "unauthorised": [],
+  "toolCalls": [
+    "exapt_discover",
+    "exapt_explain",
+    "exapt_use",
+    "exapt_use",
+    "exapt_analyse",
+    "exapt_analyse"
+  ]
+}
