@@ -1,0 +1,21 @@
+import fs from "node:fs";
+import { configFromEnv, Exapt } from "/Users/ross/EXAPT/packages/protocol/engine.ts";
+const SP="/private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood";
+const e = await Exapt.open(configFromEnv({} as any, { home: SP+"/home", programs: [], model: null }));
+const id = "exapt:text-to-ndjson-e52395";
+const key = (r:any)=>JSON.stringify([r.suite,r.name,r.status]);
+const lines=(t:string)=>t.trim().split("\n").filter(Boolean).map(l=>JSON.parse(l));
+let files=0, exact=0, tests=0, right=0;
+const score=async(dir:string,n:string)=>{ const truth=lines(fs.readFileSync(`${SP}/${dir}/${n}.truth.ndjson`,"utf8"));
+ let got:any[]=[]; let err="";
+ try { got=lines((await e.use(id, fs.readFileSync(`${SP}/${dir}/${n}.tap`,"utf8"))).output); } catch(x:any){ err=String(x.message).slice(0,160); }
+ const t=new Set(truth.map(key)), g=new Set(got.map(key));
+ const hit=[...t].filter(k=>g.has(k)).length; files++; tests+=truth.length; right+=hit; const same=truth.length===got.length&&hit===truth.length; if(same) exact++;
+ console.log((same?"exact ":"DIFF  ")+n.padEnd(26), hit+"/"+truth.length, got.length+" returned", err);
+ if(!same){ for(const k of [...t].filter(k=>!g.has(k)).slice(0,6)) console.log("   missing", k.slice(0,120)); for(const k of [...g].filter(k=>!t.has(k)).slice(0,6)) console.log("   extra  ", k.slice(0,120)); } };
+for (const n of JSON.parse(fs.readFileSync(SP+"/split.json","utf8")).unseen) await score("unseen",n);
+console.log("--- unseen real files:",exact+"/"+files,"exact,",right+"/"+tests,"tests");
+files=exact=tests=right=0;
+for (const n of ["b2","b3"]) await score("breakc",n); await score("reprc","r1"); await score("final2c","z");
+console.log("--- adversarial:",exact+"/"+files,"exact,",right+"/"+tests,"tests");
+await e.host.rc.flush();

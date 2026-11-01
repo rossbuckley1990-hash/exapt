@@ -1,0 +1,10 @@
+Created both files:
+
+| File | Tests | Failed |
+|---|---:|---:|
+| [reflectors.ndjson](/private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/codex/reflectors.ndjson) | 10 | 0 |
+| [generalisation.ndjson](/private/tmp/claude-501/-Users-ross-EXAPT/89ac2e4f-b3ab-45ad-bbbb-ce80cac1ae83/scratchpad/dogfood/codex/generalisation.ndjson) | 20 | 0 |
+
+I used exapt’s existing `text-to-ndjson-e52395` capability; no code was written. Each line contains `suite`, `name`, and `status`. Suite is empty because these tests have no enclosing suites.
+
+I read back both outputs, checked every test name and status against the TAP inputs, and confirmed line counts match their TAP summaries.

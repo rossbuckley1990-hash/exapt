@@ -1,0 +1,1 @@
+{"at":"2026-11-01T01:42:10.124Z","name":"shell","args":{"command":"mkdir -p out && cp probe.txt out/result.txt && cat out/result.txt"},"result":{"status":0,"signal":null,"stdout":"aegis-terminal-preflight-20261101","stderr":"","changed":["out/result.txt"]},"ms":17370}

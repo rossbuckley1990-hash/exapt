@@ -1,0 +1,12 @@
+Wrote both requested files using exapt’s existing TAP-to-NDJSON capability, version 3. Each object contains `suite`, `name`, and `status`. I wrote no code.
+
+| Output | Records written | Failed |
+|---|---:|---:|
+| `codex2/r1.ndjson` | 14 | 2 |
+| `codex2/z.ndjson` | 7 | 1 |
+
+**`r1.ndjson` is incomplete.** Checking the output against the original TAP revealed that exapt omitted three failed parent tests: `deep`, `two`, and `three # hash`. The correct totals are **17 tests, 5 failed**.
+
+`z.ndjson` matches its source: **7 tests, 1 failed**.
+
+I could not reliably complete the full conversion with the available exapt parser; its “verified” status did not prevent this omission.

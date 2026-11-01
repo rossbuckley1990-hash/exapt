@@ -1,0 +1,37 @@
+{
+  "createdAt": "2026-11-01T01:42:33.231364+00:00",
+  "disclosureGate": "parent must state FROZEN",
+  "engineAccess": false,
+  "independentHumanValidation": false,
+  "publicManifestSha256": "d967b11cc70263c07aeb543470bc71b7d952cb4775418f3d9227de4ce528560c",
+  "publicRoot": "/Users/ross/EXAPT/benchmarks/aegis5-selection",
+  "schemaVersion": 1,
+  "sealedManifestSha256": "66dc09fe72ba91409c3b78636048f436ee66393a3b750e175465a562ce475080",
+  "sealedRoot": "/private/tmp/exapt-aegis5-sealed",
+  "selectedBeforeControlScoring": "6ab7a0f0f9a397eeecc9daba86e0ba05a3193042ee849f301313330ab1b31c0d",
+  "selectedBeforeEngineResults": true,
+  "selectedBy": "independent selector agent",
+  "tasks": [
+    {
+      "compositionSpecSha256": "3e41f2a447292deac33be6621e6ff3b68ec1acd3902c2bd6badf94d92f5fe72b",
+      "hiddenCorpusSha256": "7593a8982c9ca7725aa33bbca93d4b0aac9a703706a29f637f6e85ad7116119e",
+      "id": "a5-01",
+      "publicSpecSha256": "1092176277b398e8f514a1e6ad947a5865d6a332fc7cee006f093a67856eb709",
+      "publicTaskTreeSha256": "50335973ab1063168033ee57e57943bf8fdc8e97ae382e189a3dfcf2f0ddc78c"
+    },
+    {
+      "compositionSpecSha256": "66fffb1542eebfa1cdf0964b44354cee0040eaec87ebe228fd7b9a7723a634fc",
+      "hiddenCorpusSha256": "c3a01f31eae83d45be934d0115da78575e554fcd722a3543fc8bc464fb175115",
+      "id": "a5-02",
+      "publicSpecSha256": "685ec307ff37eab2bc8129b3bab43499a35bed2614a3259b96ebb2977a426968",
+      "publicTaskTreeSha256": "31c5cc36095797a770a45a149d4fc35585f1909a25320ea6df8816b19c5ffe68"
+    },
+    {
+      "compositionSpecSha256": "2a135f5d026e9e8ff8cfa10f771dce663293b0857ac043f2b473ccf24a167e1d",
+      "hiddenCorpusSha256": "55d609d2dcf4685538bc71afb1a0f4ebcf69c92b9ed110322c6964ba31099ac1",
+      "id": "a5-03",
+      "publicSpecSha256": "dcbe1a7e76930046cf03c261bb9bc2dfd42c593e6541f280e3adb6ba69115a7e",
+      "publicTaskTreeSha256": "8220f9dd3ac61946093af33d6457fb88446f61e9f4309b9372cd95f1d67429cd"
+    }
+  ]
+}

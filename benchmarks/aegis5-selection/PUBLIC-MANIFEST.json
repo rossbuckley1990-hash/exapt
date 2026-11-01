@@ -1,0 +1,1375 @@
+{
+  "files": [
+    {
+      "bytes": 752,
+      "path": "DATA-PROVENANCE.txt",
+      "sha256": "c3c4281fca99ec42d1ab8970419382362c754d8222128f5a892120698836bd02"
+    },
+    {
+      "bytes": 7815,
+      "path": "PROTOCOL.txt",
+      "sha256": "99bdc96134f8377e853d5d66cb3b19927b8c7fd2f6e2a55e7c55a7045f2e6903"
+    },
+    {
+      "bytes": 1464,
+      "path": "a5-01/SPEC.txt",
+      "sha256": "6b018d14ab043b939e30aee89bda4af81c64862a2ccff521ac39e3e74f1e08b2"
+    },
+    {
+      "bytes": 1302,
+      "path": "a5-01/compatible/SPEC.txt",
+      "sha256": "b01de7ced35a4a5473975b7baad224fb820f5fd368dc6d7cfdd3e2d03c0204f4"
+    },
+    {
+      "bytes": 74,
+      "path": "a5-01/compatible/examples/01.input.bin",
+      "sha256": "bf22440dc35fa6d26b7c334356ba6557f01ff960947a1b0581f333ca5dcfa2aa"
+    },
+    {
+      "bytes": 38,
+      "path": "a5-01/compatible/examples/01.truth.json",
+      "sha256": "de8df0b6872160d78746f444c4e66b183a6acb48fc7b70d3148c834f78cd1a27"
+    },
+    {
+      "bytes": 98,
+      "path": "a5-01/compatible/examples/02.input.bin",
+      "sha256": "521df9c73c74d17c713378a924a2a86048748508b3df97f5f9473c2a18f73f33"
+    },
+    {
+      "bytes": 68,
+      "path": "a5-01/compatible/examples/02.truth.json",
+      "sha256": "fa387acb67b60de01b908aa0050aedf3a9f94713e94d6de3a41bbce86ae5dffc"
+    },
+    {
+      "bytes": 102,
+      "path": "a5-01/compatible/examples/03.input.bin",
+      "sha256": "91fd0598aecd979d1493ea5e2dab9bb7397f1e6ef8d0cd421cef0940772f2557"
+    },
+    {
+      "bytes": 68,
+      "path": "a5-01/compatible/examples/03.truth.json",
+      "sha256": "19e00a0b113da4fa78b0c54e93c50c6110d9ee21acffd1040e0724a7454e16ab"
+    },
+    {
+      "bytes": 130,
+      "path": "a5-01/compatible/examples/04.input.bin",
+      "sha256": "539039c00fdc5c941188017deb988357ce5f520fec8959c72f795d9cdd61697c"
+    },
+    {
+      "bytes": 128,
+      "path": "a5-01/compatible/examples/04.truth.json",
+      "sha256": "e81eff2d526a6317f40e7f6918385a3b203dd5b4bc9936fa5f7516af0a642313"
+    },
+    {
+      "bytes": 134,
+      "path": "a5-01/compatible/examples/05.input.bin",
+      "sha256": "ec7616c887e89d90d4100c10a8b125bf26ca74bb3d89de530a571c20f8879bab"
+    },
+    {
+      "bytes": 122,
+      "path": "a5-01/compatible/examples/05.truth.json",
+      "sha256": "656019b19ba4a185a443c24ec49b68284b025868fcbf758bfb46e65ebf43b321"
+    },
+    {
+      "bytes": 130,
+      "path": "a5-01/compatible/examples/06.input.bin",
+      "sha256": "cfef2bf37af3a9d5978c9056bb51afbd0c218c6d26ead82f3321a5fe713810be"
+    },
+    {
+      "bytes": 104,
+      "path": "a5-01/compatible/examples/06.truth.json",
+      "sha256": "6a9ab6b85b4110cc5ed2f03c6d99ce31ddec6fc631d8f1d4a82001f459bf8691"
+    },
+    {
+      "bytes": 190,
+      "path": "a5-01/compatible/examples/07.input.bin",
+      "sha256": "3887f5d81f206fe95a1746a740654fc3159ef05f47f950ec3b9b9a40d154a306"
+    },
+    {
+      "bytes": 200,
+      "path": "a5-01/compatible/examples/07.truth.json",
+      "sha256": "a658bc086e2ac174b5312f055ef29d0ba999412bd6f99145852ed843321d8f1f"
+    },
+    {
+      "bytes": 122,
+      "path": "a5-01/compatible/examples/08.input.bin",
+      "sha256": "a48c2996f4b9ba10e59bcd92cf6745a8c53ce7bb9ed3eafecd0c5e5ee48fd49f"
+    },
+    {
+      "bytes": 80,
+      "path": "a5-01/compatible/examples/08.truth.json",
+      "sha256": "f48757b7b5276cf65a7be491afc1590c40c778c38280962ca617b848c9239382"
+    },
+    {
+      "bytes": 106,
+      "path": "a5-01/compatible/examples/09.input.bin",
+      "sha256": "465642f43d93b46239790a8166a452c50677b7eba0c34c51ab2a46d3e5a598b9"
+    },
+    {
+      "bytes": 38,
+      "path": "a5-01/compatible/examples/09.truth.json",
+      "sha256": "de8df0b6872160d78746f444c4e66b183a6acb48fc7b70d3148c834f78cd1a27"
+    },
+    {
+      "bytes": 130,
+      "path": "a5-01/compatible/examples/10.input.bin",
+      "sha256": "d7eee25c9ae20bdb5274f69ac62ab91979bfc03beda5e96a3dd07b3ae3573ffe"
+    },
+    {
+      "bytes": 68,
+      "path": "a5-01/compatible/examples/10.truth.json",
+      "sha256": "fa387acb67b60de01b908aa0050aedf3a9f94713e94d6de3a41bbce86ae5dffc"
+    },
+    {
+      "bytes": 3262,
+      "path": "a5-01/compatible/task.json",
+      "sha256": "e4d026db7b9096c3f8fe7812c30bb44985f49d142618db7ec188980c0777e688"
+    },
+    {
+      "bytes": 822,
+      "path": "a5-01/composition/SPEC.txt",
+      "sha256": "4e6f12ba41311bf3da00b938c08467e99031d35b6d46b9696a7a4e9a93086c7d"
+    },
+    {
+      "bytes": 129,
+      "path": "a5-01/composition/examples/01.input.txt",
+      "sha256": "41d38db6aed5e723b27b256f205d1e3d95c6609876c6c35e58100a68e5792302"
+    },
+    {
+      "bytes": 38,
+      "path": "a5-01/composition/examples/01.truth.json",
+      "sha256": "39e3fdd107f312fcdaa2e48c3a824611ff238133af33c38db03d89829fd39e68"
+    },
+    {
+      "bytes": 328,
+      "path": "a5-01/composition/examples/02.input.txt",
+      "sha256": "e2976923f022cc5a937251d8079adc0dda45b47d18e055b248ec8662c901893b"
+    },
+    {
+      "bytes": 242,
+      "path": "a5-01/composition/examples/02.truth.json",
+      "sha256": "7a80e3f3331d4976a0d7ffca9143b780d8b93c447cf2ce150ceeca893e1cad6f"
+    },
+    {
+      "bytes": 775,
+      "path": "a5-01/composition/examples/03.input.txt",
+      "sha256": "80d10d8b7b9b6847e3162ee4f60fa9d12f3a782a998ed9f82809a85ce95179c2"
+    },
+    {
+      "bytes": 1005,
+      "path": "a5-01/composition/examples/03.truth.json",
+      "sha256": "138dc4f5a32ab35f7b1c47a40b7294802ee03a85c26b9d10657e340219450fa3"
+    },
+    {
+      "bytes": 578,
+      "path": "a5-01/composition/examples/04.input.txt",
+      "sha256": "6ca64bac894f012be1e467fac89927cb8573f722e7bd8e7652e8ad46dfdfa2d6"
+    },
+    {
+      "bytes": 579,
+      "path": "a5-01/composition/examples/04.truth.json",
+      "sha256": "a2fea1920e0530a9f0afbc8803e5e5ae810fa46a61bf6dc733b39fdbafae1e15"
+    },
+    {
+      "bytes": 165,
+      "path": "a5-01/composition/examples/05.input.txt",
+      "sha256": "0e3757d223c94c7341afa3068fafa1b0d3a5741a12c32a873ba9356d8a206664"
+    },
+    {
+      "bytes": 92,
+      "path": "a5-01/composition/examples/05.truth.json",
+      "sha256": "71c564eb11dccc63042384135d1ca966bcac7f2c27fe4dad92b945bfe7784f1c"
+    },
+    {
+      "bytes": 500,
+      "path": "a5-01/composition/examples/06.input.txt",
+      "sha256": "53059636e43de7d94d8dde60feb3cb92f560816e67f15fb422f72bd435f5b2e5"
+    },
+    {
+      "bytes": 518,
+      "path": "a5-01/composition/examples/06.truth.json",
+      "sha256": "b700d459557374851cc0199c1003529b265bb45a7ebb908099780e3f008808f5"
+    },
+    {
+      "bytes": 328,
+      "path": "a5-01/composition/examples/07.input.txt",
+      "sha256": "9ddd91449c4aa6ae86b3649f045dfbc1914bbf69f429b4bb76efdb8dabcf39e5"
+    },
+    {
+      "bytes": 242,
+      "path": "a5-01/composition/examples/07.truth.json",
+      "sha256": "99ac87be5d084a67c105a92daa220938d5d9d2ab9fcf95a7fb0d65af64d67620"
+    },
+    {
+      "bytes": 775,
+      "path": "a5-01/composition/examples/08.input.txt",
+      "sha256": "f4fb11f208f1bb8858c8131d7f547a23a41b27126242e5aa8af8591fb2711ab6"
+    },
+    {
+      "bytes": 1005,
+      "path": "a5-01/composition/examples/08.truth.json",
+      "sha256": "dd48859d75d664331d69a3850eaa6a668b6eef614f4539eaead5443149eebd54"
+    },
+    {
+      "bytes": 578,
+      "path": "a5-01/composition/examples/09.input.txt",
+      "sha256": "fe4107a7c17231cf1381dda497b2119253f0e435d1229a224519c34087d83905"
+    },
+    {
+      "bytes": 579,
+      "path": "a5-01/composition/examples/09.truth.json",
+      "sha256": "3605a2b2e2c29299e1c1f11f57bd04d6394714e1007c47ee2cedc07a11c29975"
+    },
+    {
+      "bytes": 165,
+      "path": "a5-01/composition/examples/10.input.txt",
+      "sha256": "bc951b5df7aa5e6dbcbddb7c676610b20b10663755920dc56e46c5a1f2b0d411"
+    },
+    {
+      "bytes": 92,
+      "path": "a5-01/composition/examples/10.truth.json",
+      "sha256": "71c564eb11dccc63042384135d1ca966bcac7f2c27fe4dad92b945bfe7784f1c"
+    },
+    {
+      "bytes": 2676,
+      "path": "a5-01/composition/task.json",
+      "sha256": "3e41f2a447292deac33be6621e6ff3b68ec1acd3902c2bd6badf94d92f5fe72b"
+    },
+    {
+      "bytes": 58,
+      "path": "a5-01/examples/01.input.bin",
+      "sha256": "564060c0fa6f550ca6b64baaa3bd087f8e3bc9a26c30ded3275b9707c8d2db2f"
+    },
+    {
+      "bytes": 38,
+      "path": "a5-01/examples/01.truth.json",
+      "sha256": "de8df0b6872160d78746f444c4e66b183a6acb48fc7b70d3148c834f78cd1a27"
+    },
+    {
+      "bytes": 78,
+      "path": "a5-01/examples/02.input.bin",
+      "sha256": "971175a4ea5fa90e6cca7157074a6c74a20b757fe64574d1fefa14b5c262b965"
+    },
+    {
+      "bytes": 68,
+      "path": "a5-01/examples/02.truth.json",
+      "sha256": "fa387acb67b60de01b908aa0050aedf3a9f94713e94d6de3a41bbce86ae5dffc"
+    },
+    {
+      "bytes": 78,
+      "path": "a5-01/examples/03.input.bin",
+      "sha256": "29ee265bdcd51276ea9649f980bd14f43250df0f2e78268815faf0e895bd004d"
+    },
+    {
+      "bytes": 68,
+      "path": "a5-01/examples/03.truth.json",
+      "sha256": "19e00a0b113da4fa78b0c54e93c50c6110d9ee21acffd1040e0724a7454e16ab"
+    },
+    {
+      "bytes": 102,
+      "path": "a5-01/examples/04.input.bin",
+      "sha256": "6e08274a605aadfea25fc1a93cd60b93b4155343d119e9833c90add62bf8d4a2"
+    },
+    {
+      "bytes": 128,
+      "path": "a5-01/examples/04.truth.json",
+      "sha256": "e81eff2d526a6317f40e7f6918385a3b203dd5b4bc9936fa5f7516af0a642313"
+    },
+    {
+      "bytes": 102,
+      "path": "a5-01/examples/05.input.bin",
+      "sha256": "038e88e1f4306ca9594b459e9460517f0db2b0bb82d6c64baee9765690c20f44"
+    },
+    {
+      "bytes": 122,
+      "path": "a5-01/examples/05.truth.json",
+      "sha256": "656019b19ba4a185a443c24ec49b68284b025868fcbf758bfb46e65ebf43b321"
+    },
+    {
+      "bytes": 94,
+      "path": "a5-01/examples/06.input.bin",
+      "sha256": "1a95456a6768e5e8a4e37083673ed98abd7e1b80795c0b892abd56936476c4ec"
+    },
+    {
+      "bytes": 104,
+      "path": "a5-01/examples/06.truth.json",
+      "sha256": "6a9ab6b85b4110cc5ed2f03c6d99ce31ddec6fc631d8f1d4a82001f459bf8691"
+    },
+    {
+      "bytes": 154,
+      "path": "a5-01/examples/07.input.bin",
+      "sha256": "176767e0d0380c38d4098c089f7972a93ab093ddf5a8679b9a7d1795666bba28"
+    },
+    {
+      "bytes": 200,
+      "path": "a5-01/examples/07.truth.json",
+      "sha256": "a658bc086e2ac174b5312f055ef29d0ba999412bd6f99145852ed843321d8f1f"
+    },
+    {
+      "bytes": 78,
+      "path": "a5-01/examples/08.input.bin",
+      "sha256": "17e2c481629a05e6c60c030dec632d694800bdcd711bf313abfa5dc0f8e9e184"
+    },
+    {
+      "bytes": 80,
+      "path": "a5-01/examples/08.truth.json",
+      "sha256": "f48757b7b5276cf65a7be491afc1590c40c778c38280962ca617b848c9239382"
+    },
+    {
+      "bytes": 1086,
+      "path": "a5-01/examples/09.input.bin",
+      "sha256": "bb2f41237047afc97045520797e76b455faacbcd000a99a7e4e21adcbb49c43b"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/examples/09.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 70,
+      "path": "a5-01/examples/10.input.bin",
+      "sha256": "90907608d9fe687229b22cf8bd33c17bc96ba0906b12e018c3ecaeb0ac56eab5"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/examples/10.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 462,
+      "path": "a5-01/existing-tools.txt",
+      "sha256": "b86687c02d95671400a839bcdabb34ecf9035d6e11299191c1d842c58c46d851"
+    },
+    {
+      "bytes": 1397,
+      "path": "a5-01/incompatible/SPEC.txt",
+      "sha256": "5ff7f06cdd4721b5ef5ea45d4de0d1237c27e1453bd750cd708c89a2f87f058c"
+    },
+    {
+      "bytes": 1086,
+      "path": "a5-01/incompatible/examples/01.input.bin",
+      "sha256": "4b73e82af162a4c500b784cb565aba39dbc07fb67970e19233b58e9e9eba153c"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/incompatible/examples/01.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 78,
+      "path": "a5-01/incompatible/examples/02.input.bin",
+      "sha256": "660df4671044991a77817f16bcb61a714a375e27228b33d75b3dd737739e11be"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/incompatible/examples/02.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 118,
+      "path": "a5-01/incompatible/examples/03.input.bin",
+      "sha256": "7ae48286e3e4c3733ba4af30061693e3abfb48ab232bff60e1d86c6236b285d0"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/incompatible/examples/03.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 264,
+      "path": "a5-01/incompatible/examples/04.input.bin",
+      "sha256": "77f8083acfbcc96b41dda37c2cfe110d9a106542e05a55525c2a2eda74d096b6"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/incompatible/examples/04.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 1102,
+      "path": "a5-01/incompatible/examples/05.input.bin",
+      "sha256": "c48564c331a1f19e0943947fb8cd8c77d8f94c7723b1b54d1e8ada773ce9ddb6"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/incompatible/examples/05.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 118,
+      "path": "a5-01/incompatible/examples/06.input.bin",
+      "sha256": "74bc306885889bb9250b4b0b000ed061bc36716f172953e8d7611c9ad4042504"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/incompatible/examples/06.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 118,
+      "path": "a5-01/incompatible/examples/07.input.bin",
+      "sha256": "9b9d14a5a997a42b00f1d928978ed78a4fb9d03c4ee93367dda55cfff9094b3e"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/incompatible/examples/07.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 253,
+      "path": "a5-01/incompatible/examples/08.input.bin",
+      "sha256": "8f99964d0bea0b9c93d83bf1876d04890825193ed78bcd38344f88bb6a4d37fa"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/incompatible/examples/08.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 1094,
+      "path": "a5-01/incompatible/examples/09.input.bin",
+      "sha256": "7c1383d8de08f2f2acfe65cf43789ed32a9ec4da0df83e879131b9c90cc9ccb6"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/incompatible/examples/09.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 70,
+      "path": "a5-01/incompatible/examples/10.input.bin",
+      "sha256": "3c224e902ff9890f4cc2393d32d96cfb405b9f21771277a78d78501f517e1302"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-01/incompatible/examples/10.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 3363,
+      "path": "a5-01/incompatible/task.json",
+      "sha256": "f8019b733101ff42d7decdc8d5a0e04c65378dc072fad6345dbd293f4a89187c"
+    },
+    {
+      "bytes": 820,
+      "path": "a5-01/phase-types.json",
+      "sha256": "3654fbb5e2f2c43aaf8cf9bc95ebd37402f66153d047a64d35f16c52d0dbea8f"
+    },
+    {
+      "bytes": 2995,
+      "path": "a5-01/task.json",
+      "sha256": "1092176277b398e8f514a1e6ad947a5865d6a332fc7cee006f093a67856eb709"
+    },
+    {
+      "bytes": 1231,
+      "path": "a5-02/SPEC.txt",
+      "sha256": "eb702035f7c7a1dcdefd58fbc5f9093bb2598f6d225d02f1debe83b95a0716cf"
+    },
+    {
+      "bytes": 1088,
+      "path": "a5-02/compatible/SPEC.txt",
+      "sha256": "de8594dedc00735fe122496c79d44920edcb9147b1cb153fccd2e12a62f88a87"
+    },
+    {
+      "bytes": 229,
+      "path": "a5-02/compatible/examples/01.input.txt",
+      "sha256": "ceec622ed68c4a6c5e5b6334cd8d2eadf6d8aac321b418691e92af1b1ea07578"
+    },
+    {
+      "bytes": 95,
+      "path": "a5-02/compatible/examples/01.truth.json",
+      "sha256": "95d63f9f87f754547ee6395b32caacde6fe208f8e1cd78911fcc2850bbfe97f6"
+    },
+    {
+      "bytes": 252,
+      "path": "a5-02/compatible/examples/02.input.txt",
+      "sha256": "5ffe6d31e10974d17aebf52130ea650b9dbff9967c05a0d866cd68b9b9243bd9"
+    },
+    {
+      "bytes": 13,
+      "path": "a5-02/compatible/examples/02.truth.json",
+      "sha256": "8e92e50ac467bde526d943f4b8728a2d06a3d87e1f5553a81d4c28c198d9830d"
+    },
+    {
+      "bytes": 203,
+      "path": "a5-02/compatible/examples/03.input.txt",
+      "sha256": "7644eefa83540e2a75fa7d82c8b2b7e4781defd1d845d272c84890cae1fdcee0"
+    },
+    {
+      "bytes": 75,
+      "path": "a5-02/compatible/examples/03.truth.json",
+      "sha256": "655807621c118ca081282949f0101d2acabcfb66d0e340961ed3ef81b2f0639a"
+    },
+    {
+      "bytes": 253,
+      "path": "a5-02/compatible/examples/04.input.txt",
+      "sha256": "63a00b305a09b903b9cf626e5f7d2dcf39674570dcf5c5842f83ae019bc69ea7"
+    },
+    {
+      "bytes": 77,
+      "path": "a5-02/compatible/examples/04.truth.json",
+      "sha256": "65581c45a24d8d77f5a8aa783331a6a9b8c771ce3ebe2355704d7b809f30d4d2"
+    },
+    {
+      "bytes": 253,
+      "path": "a5-02/compatible/examples/05.input.txt",
+      "sha256": "9d207ed1f2642e0759cf75a5a5cec8acaae47c4bb2d3fa2edae69fcd2302801a"
+    },
+    {
+      "bytes": 139,
+      "path": "a5-02/compatible/examples/05.truth.json",
+      "sha256": "a7a5538bdb202566f7f5c444dcdbd941d6c5e2ddc00d7ba77a0892b60b666a2e"
+    },
+    {
+      "bytes": 253,
+      "path": "a5-02/compatible/examples/06.input.txt",
+      "sha256": "3664aec6a5ef6ad6d81bf05c0e866c296e6eae4040349ae741d6f5baddde5ab7"
+    },
+    {
+      "bytes": 141,
+      "path": "a5-02/compatible/examples/06.truth.json",
+      "sha256": "51733f2660b27084bb19d2d3f2aaf6697159fac86c6b803ad539ae09884a24ed"
+    },
+    {
+      "bytes": 189,
+      "path": "a5-02/compatible/examples/07.input.txt",
+      "sha256": "eb3501d568699f09fffaa47c0f4129035d9fd8fed8c652489e1284b55ebb0248"
+    },
+    {
+      "bytes": 203,
+      "path": "a5-02/compatible/examples/07.truth.json",
+      "sha256": "6c07323fa59b80e5fe567df5ab7cfa5326f73e1b6f85134c44b9ea4dd1ddcebe"
+    },
+    {
+      "bytes": 478,
+      "path": "a5-02/compatible/examples/08.input.txt",
+      "sha256": "a3d3e350179cc19a80a36cff47951805af67fb821efc675a15888c7bb3628237"
+    },
+    {
+      "bytes": 267,
+      "path": "a5-02/compatible/examples/08.truth.json",
+      "sha256": "f56147788c880b04002bc7bd7fdb52de5859d215cda42205842bd4d175d5dedc"
+    },
+    {
+      "bytes": 229,
+      "path": "a5-02/compatible/examples/09.input.txt",
+      "sha256": "69cd8a2ddf078a20ce93165b8eb67a04377e4d0a0c3e54f434d8393e49e4e9e5"
+    },
+    {
+      "bytes": 95,
+      "path": "a5-02/compatible/examples/09.truth.json",
+      "sha256": "95d63f9f87f754547ee6395b32caacde6fe208f8e1cd78911fcc2850bbfe97f6"
+    },
+    {
+      "bytes": 252,
+      "path": "a5-02/compatible/examples/10.input.txt",
+      "sha256": "9a107aa0427a78f3c482a85673261464e3ae330eeb5aa8fafc69d8d65ffde8e6"
+    },
+    {
+      "bytes": 13,
+      "path": "a5-02/compatible/examples/10.truth.json",
+      "sha256": "8e92e50ac467bde526d943f4b8728a2d06a3d87e1f5553a81d4c28c198d9830d"
+    },
+    {
+      "bytes": 3106,
+      "path": "a5-02/compatible/task.json",
+      "sha256": "e8928a22587eb2ec025e44446f1a1207de8588ea4e73a4ff2f8449d04c66baf6"
+    },
+    {
+      "bytes": 850,
+      "path": "a5-02/composition/SPEC.txt",
+      "sha256": "ac89c1e7c059a37c5cc58ea4fdd1c6a62b57570374145aab0a06995393b711b3"
+    },
+    {
+      "bytes": 81,
+      "path": "a5-02/composition/examples/01.input.txt",
+      "sha256": "07bafc3990ed567bbbd55ec9b3c9e6df7e871ac5057178bdf6e9ffcd6ea85ae7"
+    },
+    {
+      "bytes": 94,
+      "path": "a5-02/composition/examples/01.truth.json",
+      "sha256": "cbb7c0b05e3433a934d8f40cd33e9bd57300674bf22d1139922174ef5bb9e1d6"
+    },
+    {
+      "bytes": 111,
+      "path": "a5-02/composition/examples/02.input.txt",
+      "sha256": "8fa22a1e8e8855e3ad4066b8c4bdc5e9b4d4d71284450d528575300e0f25f223"
+    },
+    {
+      "bytes": 185,
+      "path": "a5-02/composition/examples/02.truth.json",
+      "sha256": "6faf8bcf740e7af5066946c7f598af49eb162e6693a2e9f7aa8c8d6b2b0e0376"
+    },
+    {
+      "bytes": 144,
+      "path": "a5-02/composition/examples/03.input.txt",
+      "sha256": "a1b3b1d64f16393d75d9e81767e632e99d85555e03af34ce876314e7f7f62ba1"
+    },
+    {
+      "bytes": 279,
+      "path": "a5-02/composition/examples/03.truth.json",
+      "sha256": "cc1090b552648d6b5256e89d6d410482a410608ef4a940310384dff5298bb09e"
+    },
+    {
+      "bytes": 173,
+      "path": "a5-02/composition/examples/04.input.txt",
+      "sha256": "430d2ad581821fe878d011bc11fbb4103c0b9335939f4d0669a976cd738372b0"
+    },
+    {
+      "bytes": 369,
+      "path": "a5-02/composition/examples/04.truth.json",
+      "sha256": "3e15f7a2cf0d7c821a5e9f7921709641aef45805d55f47fb9c607be00fd0de0e"
+    },
+    {
+      "bytes": 198,
+      "path": "a5-02/composition/examples/05.input.txt",
+      "sha256": "72e1085ea1b94212568c076932db5b87591d8bd6856b99a0f931a022ec355286"
+    },
+    {
+      "bytes": 455,
+      "path": "a5-02/composition/examples/05.truth.json",
+      "sha256": "a69f1de5ae8262da51f328dfca63dd351b17712ef96e8c0dd0b0027def7c103a"
+    },
+    {
+      "bytes": 204,
+      "path": "a5-02/composition/examples/06.input.txt",
+      "sha256": "3cca54054497d7c2298551f840712c92c18d03f54cee9d77171d1f0c77d5377b"
+    },
+    {
+      "bytes": 273,
+      "path": "a5-02/composition/examples/06.truth.json",
+      "sha256": "636f6e0e87292ae63d89d94343c4ddd7a0f2220be2770bf0847b5801a2de7847"
+    },
+    {
+      "bytes": 128,
+      "path": "a5-02/composition/examples/07.input.txt",
+      "sha256": "1f9ed5292e18dd533a2c76cbb43a7b4d57411b4328ea3b83bd357650013cab9b"
+    },
+    {
+      "bytes": 285,
+      "path": "a5-02/composition/examples/07.truth.json",
+      "sha256": "ff45beb252031683400000dd36dda59334e4f30a8d23a4a2a811298d97a2a71a"
+    },
+    {
+      "bytes": 161,
+      "path": "a5-02/composition/examples/08.input.txt",
+      "sha256": "819957e510a639f8e8fe3b7bf759e1909a9c8ce7fa85a3ac96f132a5d080c150"
+    },
+    {
+      "bytes": 379,
+      "path": "a5-02/composition/examples/08.truth.json",
+      "sha256": "151e42db85f4d4f38c7398a3725c0c0c8747473a77a714cca21c142e0565a787"
+    },
+    {
+      "bytes": 190,
+      "path": "a5-02/composition/examples/09.input.txt",
+      "sha256": "13441af8aeb62f4808d5e845175c6b9d5b098b68c5830a914ed2ca95a805d513"
+    },
+    {
+      "bytes": 469,
+      "path": "a5-02/composition/examples/09.truth.json",
+      "sha256": "f09fb55e09886092dbfeba2851e7299d70b8db1c825dddb282b4605d9b79080a"
+    },
+    {
+      "bytes": 212,
+      "path": "a5-02/composition/examples/10.input.txt",
+      "sha256": "96432684c2efe80796e717a08e9ed72cdc020c4d9de7c516f0690d326eb02108"
+    },
+    {
+      "bytes": 469,
+      "path": "a5-02/composition/examples/10.truth.json",
+      "sha256": "a626810c91e6120b58aaa311eefefaa8c600664c91d9c4cab0d6ad4bffea0820"
+    },
+    {
+      "bytes": 2749,
+      "path": "a5-02/composition/task.json",
+      "sha256": "66fffb1542eebfa1cdf0964b44354cee0040eaec87ebe228fd7b9a7723a634fc"
+    },
+    {
+      "bytes": 160,
+      "path": "a5-02/examples/01.input.txt",
+      "sha256": "08e391aa142aa823848f7a6db7ec9534ae6d5710344faa3b8ac82e53ec4ee2c2"
+    },
+    {
+      "bytes": 95,
+      "path": "a5-02/examples/01.truth.json",
+      "sha256": "95d63f9f87f754547ee6395b32caacde6fe208f8e1cd78911fcc2850bbfe97f6"
+    },
+    {
+      "bytes": 183,
+      "path": "a5-02/examples/02.input.txt",
+      "sha256": "0192721bae4b0a2de31cd05fd2c844700934daeb916d209d2878cf5b7532f4e4"
+    },
+    {
+      "bytes": 13,
+      "path": "a5-02/examples/02.truth.json",
+      "sha256": "8e92e50ac467bde526d943f4b8728a2d06a3d87e1f5553a81d4c28c198d9830d"
+    },
+    {
+      "bytes": 134,
+      "path": "a5-02/examples/03.input.txt",
+      "sha256": "dddc95a4ac15c1f1f86a954a971b691a99c278fce3810a993bb9b8afdaf4452d"
+    },
+    {
+      "bytes": 75,
+      "path": "a5-02/examples/03.truth.json",
+      "sha256": "655807621c118ca081282949f0101d2acabcfb66d0e340961ed3ef81b2f0639a"
+    },
+    {
+      "bytes": 184,
+      "path": "a5-02/examples/04.input.txt",
+      "sha256": "bd35664bbb4ffc5de2d1e5583d1a917014365b2274b278ac51a4eb21e7f7e2f6"
+    },
+    {
+      "bytes": 77,
+      "path": "a5-02/examples/04.truth.json",
+      "sha256": "65581c45a24d8d77f5a8aa783331a6a9b8c771ce3ebe2355704d7b809f30d4d2"
+    },
+    {
+      "bytes": 184,
+      "path": "a5-02/examples/05.input.txt",
+      "sha256": "bfc6e17b9185862d25b45397e915d96985e8066e2287ddec06376efb24ec2f5e"
+    },
+    {
+      "bytes": 139,
+      "path": "a5-02/examples/05.truth.json",
+      "sha256": "a7a5538bdb202566f7f5c444dcdbd941d6c5e2ddc00d7ba77a0892b60b666a2e"
+    },
+    {
+      "bytes": 184,
+      "path": "a5-02/examples/06.input.txt",
+      "sha256": "282f92d48c069f8c7c87638a4ab31ceb102dfa25b5ab09ae9ff40ef425188eae"
+    },
+    {
+      "bytes": 141,
+      "path": "a5-02/examples/06.truth.json",
+      "sha256": "51733f2660b27084bb19d2d3f2aaf6697159fac86c6b803ad539ae09884a24ed"
+    },
+    {
+      "bytes": 120,
+      "path": "a5-02/examples/07.input.txt",
+      "sha256": "f4f912282816bdccc3d02039ee0e2ab2a128cf131ca2c0bf1034d014b55363b2"
+    },
+    {
+      "bytes": 203,
+      "path": "a5-02/examples/07.truth.json",
+      "sha256": "6c07323fa59b80e5fe567df5ab7cfa5326f73e1b6f85134c44b9ea4dd1ddcebe"
+    },
+    {
+      "bytes": 409,
+      "path": "a5-02/examples/08.input.txt",
+      "sha256": "966d52c86fabe2934c93be942ca62ccd922ff92f6394d5c10a306e4662d5d793"
+    },
+    {
+      "bytes": 267,
+      "path": "a5-02/examples/08.truth.json",
+      "sha256": "f56147788c880b04002bc7bd7fdb52de5859d215cda42205842bd4d175d5dedc"
+    },
+    {
+      "bytes": 183,
+      "path": "a5-02/examples/09.input.txt",
+      "sha256": "77d191a8e99154ea795114480b6473c05ab0d07d0524989f2715ecdcd99ecd45"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/examples/09.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 181,
+      "path": "a5-02/examples/10.input.txt",
+      "sha256": "ee374a70e0867f63984d147c5c7833d50b2c6e85b8fd1176956564748b6da48c"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/examples/10.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 460,
+      "path": "a5-02/existing-tools.txt",
+      "sha256": "38a9c6630a3923b0adce25e2a3fe4c0fa6826f9f55dd3b195ffa5cf7254572fc"
+    },
+    {
+      "bytes": 1183,
+      "path": "a5-02/incompatible/SPEC.txt",
+      "sha256": "5e056e9233b545a69e81ef8329c64a7b23bbe742684dae7a2339895cc94e5f9c"
+    },
+    {
+      "bytes": 191,
+      "path": "a5-02/incompatible/examples/01.input.txt",
+      "sha256": "7216575e397f2af026fba987c450feb353da83130ad7ffd769f6d5d0923f0a83"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/incompatible/examples/01.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 212,
+      "path": "a5-02/incompatible/examples/02.input.txt",
+      "sha256": "32485c26c83a2ace749832415b53451033cd952d9d58f20020e8b5dac795807d"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/incompatible/examples/02.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 165,
+      "path": "a5-02/incompatible/examples/03.input.txt",
+      "sha256": "c6ba4c8100bce617a9e2b35d65a31569c117d0765a28f5f28d7d8d87565597da"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/incompatible/examples/03.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 214,
+      "path": "a5-02/incompatible/examples/04.input.txt",
+      "sha256": "6a273c61b61522e3709fb17e3f05742a0055a8049f86c95e8f46380c5a8e36cb"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/incompatible/examples/04.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 218,
+      "path": "a5-02/incompatible/examples/05.input.txt",
+      "sha256": "38202b0b59c7de0bad7776922c1e6b6c59d595ef25e8302fe9a7cf79b096d678"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/incompatible/examples/05.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 198,
+      "path": "a5-02/incompatible/examples/06.input.txt",
+      "sha256": "4415e005fc828f3e4a2e01b6025cf2d831bc7c63bafe8dfd6f5b1bc38ed9f27e"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/incompatible/examples/06.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 159,
+      "path": "a5-02/incompatible/examples/07.input.txt",
+      "sha256": "96490c7de9aa3d5227441dc3a50dca7f3af58a3f24a4ee5570bd9c9fa6bbbf2c"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/incompatible/examples/07.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 441,
+      "path": "a5-02/incompatible/examples/08.input.txt",
+      "sha256": "157f234d47b31c68b3bba612aee763cec9a045802eb8fada866ddc53abca680f"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/incompatible/examples/08.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 155,
+      "path": "a5-02/incompatible/examples/09.input.txt",
+      "sha256": "6783050ad917dbb5ff51218587955daefb3a484f6fb7fe7204a540ed90bf97b0"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/incompatible/examples/09.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 1222,
+      "path": "a5-02/incompatible/examples/10.input.txt",
+      "sha256": "a34d67decc27ddcce2b51c7ede4bf2f931523b81a610d4724c6f70029499f9bc"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-02/incompatible/examples/10.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 3207,
+      "path": "a5-02/incompatible/task.json",
+      "sha256": "e177240dddec885af944bb26f880bc2a2844665a7de114631408b53ffe267f56"
+    },
+    {
+      "bytes": 820,
+      "path": "a5-02/phase-types.json",
+      "sha256": "3654fbb5e2f2c43aaf8cf9bc95ebd37402f66153d047a64d35f16c52d0dbea8f"
+    },
+    {
+      "bytes": 2825,
+      "path": "a5-02/task.json",
+      "sha256": "685ec307ff37eab2bc8129b3bab43499a35bed2614a3259b96ebb2977a426968"
+    },
+    {
+      "bytes": 1556,
+      "path": "a5-03/SPEC.txt",
+      "sha256": "3e62fd00b727025ca9fad317b02ebab459720332b35b52f710e8ea1eefb5f85a"
+    },
+    {
+      "bytes": 1318,
+      "path": "a5-03/compatible/SPEC.txt",
+      "sha256": "b6a2771d8587cc75358af52e9dc532f5048a2a703586944ed72407ca9309f33f"
+    },
+    {
+      "bytes": 129,
+      "path": "a5-03/compatible/examples/01.input.txt",
+      "sha256": "793df73c3e972cae4533749e21ced80ae2fcdd6fb25184d9a777eb7ceb231769"
+    },
+    {
+      "bytes": 138,
+      "path": "a5-03/compatible/examples/01.truth.json",
+      "sha256": "458c8527c7d1606f27599b8984129881e55343ec7d12aaf1afead425d2985131"
+    },
+    {
+      "bytes": 141,
+      "path": "a5-03/compatible/examples/02.input.txt",
+      "sha256": "85b1b87af4e4251dc155b3482c77075cd9a73ca01f45ec55ada05a8e421fc7d9"
+    },
+    {
+      "bytes": 143,
+      "path": "a5-03/compatible/examples/02.truth.json",
+      "sha256": "2d43b1cd79ae061b9c050d2c537d454f3762d973cef16df4f34976a101027b4b"
+    },
+    {
+      "bytes": 144,
+      "path": "a5-03/compatible/examples/03.input.txt",
+      "sha256": "6c796b24de55fa1b0593e572acf326f3df6c221845f7acbd8bb32551663df213"
+    },
+    {
+      "bytes": 150,
+      "path": "a5-03/compatible/examples/03.truth.json",
+      "sha256": "2fef15242674522b88c01454d27357305ddaad3d34317a1a3c4e33e3449545cc"
+    },
+    {
+      "bytes": 126,
+      "path": "a5-03/compatible/examples/04.input.txt",
+      "sha256": "e72f6307286b3c672cdabae76744dc10c0588d16f8f71d3c19912f74624b0792"
+    },
+    {
+      "bytes": 75,
+      "path": "a5-03/compatible/examples/04.truth.json",
+      "sha256": "455686678dc8249a05be57a279e9add7fff6a827fab3f7b8b1923c6d959f353d"
+    },
+    {
+      "bytes": 147,
+      "path": "a5-03/compatible/examples/05.input.txt",
+      "sha256": "305ce7ece1ca579523dad622cc600807aff1c9bb91094725b4a7d8469ad4d289"
+    },
+    {
+      "bytes": 148,
+      "path": "a5-03/compatible/examples/05.truth.json",
+      "sha256": "b6fd94e31600715793b2f1a256d3a31bdf2ac52887249396fe99b6c9e793c887"
+    },
+    {
+      "bytes": 140,
+      "path": "a5-03/compatible/examples/06.input.txt",
+      "sha256": "7e5cc35b54e4f6492e75b929ede1b38001281337bae69893c6ce2a90810d72fd"
+    },
+    {
+      "bytes": 149,
+      "path": "a5-03/compatible/examples/06.truth.json",
+      "sha256": "0f9a92f5254e6dfa615b483d501cc3b589892aaec3d5804a312c8a3c5d743fa6"
+    },
+    {
+      "bytes": 97,
+      "path": "a5-03/compatible/examples/07.input.txt",
+      "sha256": "16ce8366445474bb46e9c6219d53b13308dd9499b15729c9b8520f5cb152abca"
+    },
+    {
+      "bytes": 3,
+      "path": "a5-03/compatible/examples/07.truth.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 157,
+      "path": "a5-03/compatible/examples/08.input.txt",
+      "sha256": "2a28fc6b160625b3a932316c07913ff140f36aae1325189ce3f3612692444874"
+    },
+    {
+      "bytes": 209,
+      "path": "a5-03/compatible/examples/08.truth.json",
+      "sha256": "ee9e8116c4c537465d6be51d32dfa64055b59ca84269ab8bad4d8675658c1b50"
+    },
+    {
+      "bytes": 129,
+      "path": "a5-03/compatible/examples/09.input.txt",
+      "sha256": "3b034d08a0ed48a125a6819221e1fa1ae4a65de1959d1429ae5d88bdd9734297"
+    },
+    {
+      "bytes": 138,
+      "path": "a5-03/compatible/examples/09.truth.json",
+      "sha256": "458c8527c7d1606f27599b8984129881e55343ec7d12aaf1afead425d2985131"
+    },
+    {
+      "bytes": 141,
+      "path": "a5-03/compatible/examples/10.input.txt",
+      "sha256": "1e890e10a47a4b99938c66ddc415dcd309a60e164da5c537ff251561a48507a7"
+    },
+    {
+      "bytes": 143,
+      "path": "a5-03/compatible/examples/10.truth.json",
+      "sha256": "2d43b1cd79ae061b9c050d2c537d454f3762d973cef16df4f34976a101027b4b"
+    },
+    {
+      "bytes": 3526,
+      "path": "a5-03/compatible/task.json",
+      "sha256": "b2b6d0feb151c4f5e3441dc6a91114c3e073864b3ba8b2b3f2f60f5a4368105c"
+    },
+    {
+      "bytes": 816,
+      "path": "a5-03/composition/SPEC.txt",
+      "sha256": "733df3ffc8b318dcd79459e52591f55d450d7068c083f705e7cb6705c1c7847a"
+    },
+    {
+      "bytes": 38,
+      "path": "a5-03/composition/examples/01.input.txt",
+      "sha256": "40364e240e90357ff201ae2f5e007b7c21b03825d3b3454b80ea9e5bfaacc66e"
+    },
+    {
+      "bytes": 3,
+      "path": "a5-03/composition/examples/01.truth.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 173,
+      "path": "a5-03/composition/examples/02.input.txt",
+      "sha256": "cb32774117f9f0be92cdaf2dbda5354d4e8d018961e32ac8044dc8bf7104b321"
+    },
+    {
+      "bytes": 181,
+      "path": "a5-03/composition/examples/02.truth.json",
+      "sha256": "178e01f6e57ef1f54e54e5a73a3908a48e3a58feb2b082a3505e5f105b1dfa66"
+    },
+    {
+      "bytes": 207,
+      "path": "a5-03/composition/examples/03.input.txt",
+      "sha256": "bb8bd449f53ecfc00cdc2f0e0c1ed74499d3f5d2055d181e7dc2248398c4d0a2"
+    },
+    {
+      "bytes": 180,
+      "path": "a5-03/composition/examples/03.truth.json",
+      "sha256": "329624bddf286765441e4bdc805ae758d49ae6191f0cb3187ac2d4be389eecaf"
+    },
+    {
+      "bytes": 237,
+      "path": "a5-03/composition/examples/04.input.txt",
+      "sha256": "49292952c2ce2086412c37bee99d32a24617059e69cef33f6e15656c3602ca62"
+    },
+    {
+      "bytes": 359,
+      "path": "a5-03/composition/examples/04.truth.json",
+      "sha256": "67f2c6d43d9c9d12c4c571b37b9fb003c833dcc84940a33aabbf23127d9324d3"
+    },
+    {
+      "bytes": 275,
+      "path": "a5-03/composition/examples/05.input.txt",
+      "sha256": "300e32e4f53f2bac6554acee721604beb0f7be3a510e5c2b47f7ca79824ab92e"
+    },
+    {
+      "bytes": 272,
+      "path": "a5-03/composition/examples/05.truth.json",
+      "sha256": "ea246d21c8cfa2938a4b8cf92196aa37987e84d7e3497592f87e5584477e8952"
+    },
+    {
+      "bytes": 140,
+      "path": "a5-03/composition/examples/06.input.txt",
+      "sha256": "3e78e62089a5989bf1ce0f9adac5808dd63867bcddaa30e9283f414fb5c87ee2"
+    },
+    {
+      "bytes": 180,
+      "path": "a5-03/composition/examples/06.truth.json",
+      "sha256": "9cc859236845dfbb971e1a08c1e105dfb4c81bc51d33938281292c5887351b59"
+    },
+    {
+      "bytes": 175,
+      "path": "a5-03/composition/examples/07.input.txt",
+      "sha256": "06766e263ee575c89da16419844a76309f47c5afd969dd24cb5d217693f9376f"
+    },
+    {
+      "bytes": 182,
+      "path": "a5-03/composition/examples/07.truth.json",
+      "sha256": "068968822308af8345e1c6958d1f57f85ff3ff7723500fabaf6e399b1241f603"
+    },
+    {
+      "bytes": 210,
+      "path": "a5-03/composition/examples/08.input.txt",
+      "sha256": "b79fb7d9251b5bdb5383f084ec69f45003e70b95f5a9d694a0172898f6a5682e"
+    },
+    {
+      "bytes": 182,
+      "path": "a5-03/composition/examples/08.truth.json",
+      "sha256": "570b136ff2f7ebc9bc1c6614dac4fee114b2ce7ca9a1f8b1b0d59bc8e7722907"
+    },
+    {
+      "bytes": 240,
+      "path": "a5-03/composition/examples/09.input.txt",
+      "sha256": "a05f2759fcc18a554474561504b44cf41ce00a8177aadc49b3e094a8ec050fc1"
+    },
+    {
+      "bytes": 362,
+      "path": "a5-03/composition/examples/09.truth.json",
+      "sha256": "ff49fc6a99bbb8430ab0857bd42d747942d0825f07ad76f36c3ad2ebe134a533"
+    },
+    {
+      "bytes": 277,
+      "path": "a5-03/composition/examples/10.input.txt",
+      "sha256": "608e4fab5aaf1bc5c31939b6c4eb3abe5d5de1a9c2dedcb246c7fcc40c3bb3fb"
+    },
+    {
+      "bytes": 273,
+      "path": "a5-03/composition/examples/10.truth.json",
+      "sha256": "0dafb6faf1d127a2e07fb7f8314b7e66a03b4caa9fde9089863c0552c283bb46"
+    },
+    {
+      "bytes": 2830,
+      "path": "a5-03/composition/task.json",
+      "sha256": "2a135f5d026e9e8ff8cfa10f771dce663293b0857ac043f2b473ccf24a167e1d"
+    },
+    {
+      "bytes": 59,
+      "path": "a5-03/examples/01.input.txt",
+      "sha256": "71ddef31aa95d31bc02d7c8a0cc47b91432903178d958aafd2129d96134b3c00"
+    },
+    {
+      "bytes": 138,
+      "path": "a5-03/examples/01.truth.json",
+      "sha256": "01144374174bc14246008dcb9bca471134ed236ff5d9e67fb368e06b9f5a9fce"
+    },
+    {
+      "bytes": 71,
+      "path": "a5-03/examples/02.input.txt",
+      "sha256": "514188f64184a4dffff7702eda46e56552cc285d60c6bcc8447a41432acaa52e"
+    },
+    {
+      "bytes": 143,
+      "path": "a5-03/examples/02.truth.json",
+      "sha256": "3c10f5595853f164119d3ab9008ab02ed765f3cea82f9883665caf9970f058d8"
+    },
+    {
+      "bytes": 74,
+      "path": "a5-03/examples/03.input.txt",
+      "sha256": "6b41d02f1d96cc641b836102ace19a67f87fa0282765dc53973b5ab298a33f99"
+    },
+    {
+      "bytes": 150,
+      "path": "a5-03/examples/03.truth.json",
+      "sha256": "61473f8991aa423cc7765cc493ebae1b1bca25541dbcdf168f081b3e9d0df24a"
+    },
+    {
+      "bytes": 61,
+      "path": "a5-03/examples/04.input.txt",
+      "sha256": "0d82543a4e0f088a3c47691525382493cddad8186cc996842affd3e2404da403"
+    },
+    {
+      "bytes": 75,
+      "path": "a5-03/examples/04.truth.json",
+      "sha256": "455686678dc8249a05be57a279e9add7fff6a827fab3f7b8b1923c6d959f353d"
+    },
+    {
+      "bytes": 77,
+      "path": "a5-03/examples/05.input.txt",
+      "sha256": "97c162fd6bb3af026f7d3febad4b5fecd116ea7f6bbb606dc49deb0765ee1893"
+    },
+    {
+      "bytes": 148,
+      "path": "a5-03/examples/05.truth.json",
+      "sha256": "f2ad727f1ba0254e1ea3b59cb6bd05df890a6b94891e03c50fb7ce8c58c6b735"
+    },
+    {
+      "bytes": 70,
+      "path": "a5-03/examples/06.input.txt",
+      "sha256": "793f09b4050a9478cc5eda31ff42a75b5a21963dfdb94ade2294fdd8896abcb3"
+    },
+    {
+      "bytes": 149,
+      "path": "a5-03/examples/06.truth.json",
+      "sha256": "46542be9a00528f7f9bec17de1a45d99a04bc4ba2598bf980f7d064215e46e89"
+    },
+    {
+      "bytes": 40,
+      "path": "a5-03/examples/07.input.txt",
+      "sha256": "9fa515c900433ac5f08375316540d4029d5164c4f3b9338b22bd7e3f2d1db0c1"
+    },
+    {
+      "bytes": 3,
+      "path": "a5-03/examples/07.truth.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 82,
+      "path": "a5-03/examples/08.input.txt",
+      "sha256": "92e88db2bf6b6115d8d186863abeb4d305bdc44ab1602dbf600f590dcc7c7d33"
+    },
+    {
+      "bytes": 209,
+      "path": "a5-03/examples/08.truth.json",
+      "sha256": "6b6061aeb34ac60971091ae8b6f97f3d57134207bf97f399fac7e302d59b9468"
+    },
+    {
+      "bytes": 59,
+      "path": "a5-03/examples/09.input.txt",
+      "sha256": "413153d6432f5e3dcc72c5f5eb4a251de83dd1f50f4b20050ccbaff8f5f9abf3"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/examples/09.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 68,
+      "path": "a5-03/examples/10.input.txt",
+      "sha256": "9c55e0c4fd5925025416df20464b38cd5a1dc1dc10e39010f4bed7b52fbc336c"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/examples/10.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 470,
+      "path": "a5-03/existing-tools.txt",
+      "sha256": "f97d52b453ee9b51b9d692f6b799ed34ec84f8b82d67f833c2b5e4e1156d49d0"
+    },
+    {
+      "bytes": 1413,
+      "path": "a5-03/incompatible/SPEC.txt",
+      "sha256": "a132b03bec18338743ff3c3926d07514310b9590b9e78b41db3e78c07ec24e37"
+    },
+    {
+      "bytes": 90,
+      "path": "a5-03/incompatible/examples/01.input.txt",
+      "sha256": "fb4fc2365285e20473999d3e6da05be618637473f04c858fa257e61d2cbaf03d"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/incompatible/examples/01.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 99,
+      "path": "a5-03/incompatible/examples/02.input.txt",
+      "sha256": "3309c964cdfe588b5bc35806891e73c26cd7a1519a31f56e653a5c61fc19f31b"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/incompatible/examples/02.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 93,
+      "path": "a5-03/incompatible/examples/03.input.txt",
+      "sha256": "9a4a3c1e5b0203ba044fb205e9efba3cffc00d41b1e578e0cf99d4509cc8f7a5"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/incompatible/examples/03.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 92,
+      "path": "a5-03/incompatible/examples/04.input.txt",
+      "sha256": "3ad3bdc30ec773db24fe5eaf2b31b64629e68d58800d07c0db40a8f9d06f97f9"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/incompatible/examples/04.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 99,
+      "path": "a5-03/incompatible/examples/05.input.txt",
+      "sha256": "d6112118ed245e99140d6526e9a93cc9b5d8a86dbcd7d74681fae45ffea3d061"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/incompatible/examples/05.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 92,
+      "path": "a5-03/incompatible/examples/06.input.txt",
+      "sha256": "faa261b7e24464a00dbc45c0f3fefb9b3e193f77cd832d96ee839414db8a3e99"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/incompatible/examples/06.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 785,
+      "path": "a5-03/incompatible/examples/07.input.txt",
+      "sha256": "acb669f1318caaa9449360b579682bbc665203bd42d6db25884c01ecc06dedb1"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/incompatible/examples/07.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 104,
+      "path": "a5-03/incompatible/examples/08.input.txt",
+      "sha256": "83b890aefbcd1789e65e34c280e2a6bddd4381fd41800e352c3f73d8ed5864bb"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/incompatible/examples/08.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 99,
+      "path": "a5-03/incompatible/examples/09.input.txt",
+      "sha256": "a21c0778de27d1a86ab42d6d2224389a1415398d2e8314358b5a073969790d6d"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/incompatible/examples/09.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 83,
+      "path": "a5-03/incompatible/examples/10.input.txt",
+      "sha256": "b7180f5b2e7a99281820212788f85370a0b50d5f5b0defbc6f4ef44be3944dc5"
+    },
+    {
+      "bytes": 30,
+      "path": "a5-03/incompatible/examples/10.truth.json",
+      "sha256": "e08147fd1da5e6c985175e3d026c2a557725c83d98218fe6d027bdb0c199a002"
+    },
+    {
+      "bytes": 3627,
+      "path": "a5-03/incompatible/task.json",
+      "sha256": "b544242a9232d1b5c063da526252a6814a2202bae796760b423c962f134383bb"
+    },
+    {
+      "bytes": 820,
+      "path": "a5-03/phase-types.json",
+      "sha256": "3654fbb5e2f2c43aaf8cf9bc95ebd37402f66153d047a64d35f16c52d0dbea8f"
+    },
+    {
+      "bytes": 3254,
+      "path": "a5-03/task.json",
+      "sha256": "dcbe1a7e76930046cf03c261bb9bc2dfd42c593e6541f280e3adb6ba69115a7e"
+    },
+    {
+      "bytes": 1974,
+      "path": "runner.cjs",
+      "sha256": "43f5afe4bb64cc7fc67772cd5c702c93b07fb46bca7463df3cb75c8295bfa373"
+    },
+    {
+      "bytes": 11538,
+      "path": "score.py",
+      "sha256": "16368fef31dfb97965d9aedac1245cd7a4344f1175d8c0e994ba1043554fe85a"
+    }
+  ],
+  "hashAlgorithm": "SHA-256"
+}

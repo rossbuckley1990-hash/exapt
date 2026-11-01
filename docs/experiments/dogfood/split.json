@@ -1,0 +1,27 @@
+{
+ "given": [
+  "exapt-vendor",
+  "exapt-mutation",
+  "edge-a",
+  "exapt-vault",
+  "exapt-repr",
+  "exapt-model",
+  "exapt-miner",
+  "rcx-sandbox-pending-deny",
+  "rcx-agreement-witnesses",
+  "rcx-living-lifecycle",
+  "rcx-output-requirements",
+  "edge-b",
+  "rcx-coding-baseline",
+  "exapt-lens",
+  "exapt-layout"
+ ],
+ "unseen": [
+  "rcx-drift",
+  "rcx-cli-migration",
+  "rcx-reflectors",
+  "rcx-http-continuation",
+  "rcx-generalisation",
+  "rcx-synthesis"
+ ]
+}

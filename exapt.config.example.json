@@ -1,0 +1,7 @@
+{
+  "programs": ["/absolute/path/to/your/programs/"],
+  "dataRoots": ["/absolute/path/agents/may/read/and/write"],
+  "publish": "verified",
+  "strategy": "auto",
+  "budget": { "maxCalls": 12, "maxTokens": 120000, "maxCostUsd": 2 }
+}
