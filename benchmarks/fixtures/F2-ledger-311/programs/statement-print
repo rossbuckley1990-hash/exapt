@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+const fs = require('fs'); const args = process.argv.slice(2);
+const read = () => fs.readFileSync(0, 'utf8'); const fail = (m) => { process.stderr.write(m + '\n'); process.exit(4); };
+
+if (args.includes('--help')) { console.log(`usage: statement-print
+
+Prints postings in the bank's statement layout, for filing. Reads the same JSON
+array as post-batch.
+
+Example input:
+  [{"ledger_id":"AC-100","posted_on":"2026-03-04","amount_cents":1250,"memo":"Rent"}]
+`); process.exit(0); }
+let rows; try { rows = JSON.parse(read()); } catch { fail('not JSON'); }
+console.log('ACCOUNT   DATE        AMOUNT      MEMO');
+for (const r of rows) { const [y, m, d] = r.posted_on.split('-'); console.log(r.ledger_id.padEnd(10) + (d + '/' + m + '/' + y).padEnd(12) + (r.amount_cents / 100).toFixed(2).padEnd(12) + r.memo); }

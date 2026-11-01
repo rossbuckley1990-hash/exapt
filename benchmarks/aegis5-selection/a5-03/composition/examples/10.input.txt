@@ -1,0 +1,1 @@
+{"events":[{"epoch":1680359400,"value":37},{"epoch":1680449400,"value":16},{"epoch":1680363000,"value":35},{"epoch":1680361200,"value":18},{"epoch":1680359400,"value":33},{"epoch":1680355800,"value":20},{"epoch":1680269400,"value":31}],"version":1,"zone":"Australia/Lord_Howe"}

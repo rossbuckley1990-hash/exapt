@@ -208,31 +208,23 @@ function semanticConfidence(from: Repr, to: Repr): number {
   return best.reduce((a, b) => a + b, 0) / best.length;
 }
 
-type ValueClass = "temporal" | "numeric" | "text";
-
-const classOf = (f: Field): ValueClass => {
-  if (f.kind === "date" || f.kind === "datetime") return "temporal";
-  if (f.kind === "int" && (f.min ?? 0) > 1e8) return "temporal"; // epoch-shaped
-  if (f.kind === "int" || f.kind === "decimal") return "numeric";
-  return "text";
-};
-
-/** Fields of the target nothing in the source can determine. A field is determined by a source of
- *  a compatible class that is not plainly the origin of a different target field. This is a
- *  conservative test of information, not of meaning: it can only rule a route out. */
+/** Fields of the target nothing in the source can determine. This is a conservative test of
+ *  information, not of meaning: it can only rule a route out. */
 function missingFields(from: Repr, to: Requirement): string[] {
   if (!isRecordRepr(from)) return [];
   const needed = to.requiredFields.length ? to.requiredFields : to.repr.fields.map((f) => f.name);
-  return needed.filter((name) => {
+  const named = (s: Field) => to.repr.fields.some((t) => nameAffinity(s.name, t.name) > 0);
+  const matched = (t: Field) => from.fields.some((s) => nameAffinity(s.name, t.name) > 0 || t.samples.some((v) => v !== "" && s.samples.includes(v)));
+  const open = needed.flatMap((name) => {
     const t = to.repr.fields.find((f) => f.name === name);
-    if (!t || t.cardinality === 1 && to.repr.records > 1) return false; // a constant needs no source
-    if (from.fields.some((s) => nameAffinity(s.name, name) > 0 || t.samples.some((v) => v !== "" && s.samples.includes(v)))) return false;
-    const wanted = classOf(t);
-    return !from.fields.some((s) => {
-      if (classOf(s) !== wanted && !(wanted === "text" && classOf(s) !== "temporal")) return false;
-      return !to.repr.fields.some((o) => o.name !== name && nameAffinity(s.name, o.name) > 0 && classOf(o) === classOf(s));
-    });
+    if (!t || (t.cardinality === 1 && to.repr.records > 1) || matched(t)) return [];
+    return [t];
   });
+  // Each source field not plainly the origin of another target can explain one unmatched target,
+  // whatever its class: dates and amounts are often written in other kinds of text. A target with no
+  // such field left is the only case this test can rule out.
+  const unclaimed = from.fields.filter((s) => !named(s)).length;
+  return open.slice(unclaimed).map((t) => t.name);
 }
 
 export const WEIGHTS: Record<keyof GapScores, number> = { feasibility: 3, oracle: 4, complexity: 1.5, reusability: 1, downstream: 1, runtimeCost: 0.5, securityRisk: 0.5, semanticConfidence: 2 };

@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+const fs = require('fs'); const args = process.argv.slice(2);
+const read = () => fs.readFileSync(0, 'utf8'); const fail = (m) => { process.stderr.write(m + '\n'); process.exit(4); };
+
+if (args.includes('--help')) { console.log(`usage: post-batch
+
+Reads a JSON array of postings from standard input and prints a balance per account.
+Each posting has:
+  ledger_id   string
+  posted_on   ISO date, YYYY-MM-DD
+  amount_cents  integer, amount in thousandths of the currency unit
+  memo   string
+
+Example input:
+  [{"ledger_id":"AC-100","posted_on":"2026-03-04","amount_cents":1250,"memo":"Rent"},{"ledger_id":"AC-200","posted_on":"2026-03-05","amount_cents":999,"memo":"Fuel"}]
+`); process.exit(0); }
+let rows; try { rows = JSON.parse(read()); } catch { fail('not JSON'); }
+if (!Array.isArray(rows) || !rows.length) fail('expected a non-empty array');
+const bal = new Map();
+for (const [i, r] of rows.entries()) {
+  if (typeof r.ledger_id !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(r.posted_on ?? '') || !Number.isInteger(r.amount_cents) || typeof r.memo !== 'string') fail('posting ' + i + ' is invalid');
+  bal.set(r.ledger_id, (bal.get(r.ledger_id) ?? 0) + r.amount_cents);
+}
+console.log([...bal.keys()].sort().map((k) => k + ' ' + (bal.get(k) / 1000).toFixed(2)).join('\n'));

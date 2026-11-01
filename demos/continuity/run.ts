@@ -13,7 +13,6 @@ const DRILL_NAMES = new Set([
   "ne_110m_admin_0_scale_rank",
   "ne_110m_geography_regions_elevation_points",
   "ne_110m_geographic_lines",
-  "ne_110m_geography_regions_points",
 ]);
 
 export interface ContinuityCapsule {
@@ -27,7 +26,7 @@ export function continuityFixture(): { goal: Goal; drills: NonNullable<Goal["cor
   const corpus = corpusGoal().corpus ?? [];
   const drills = corpus.filter((c) => DRILL_NAMES.has(c.name ?? ""));
   const learning = corpus.filter((c) => !DRILL_NAMES.has(c.name ?? ""));
-  if (learning.length !== 6 || drills.length !== 4) throw new Error("Continuity fixture must contain six learning files and four outage drills");
+  if (learning.length !== 7 || drills.length !== 3) throw new Error("Continuity fixture must contain seven learning files and three outage drills");
   return {
     goal: {
       id: "continuity-natural-earth",
@@ -63,8 +62,8 @@ export async function runContinuity(opts: { seed?: number; dir?: string } = {}):
 
   try {
     heading("Continuity: rehearse the disappearance of software");
-    say("Before the outage, six real files and their independent reference outputs are available.");
-    say("Four other schemas are excluded from the invention goal and reserved for the outage drill.");
+    say("Before the outage, seven real schemas and their independent reference outputs are available.");
+    say("Three other schemas are excluded from the invention goal and reserved for the outage drill.");
     const readers = ["/usr/bin/od", "/usr/bin/file"].filter((p) => fs.existsSync(p));
     source = await openEngine(path.join(dir, "before-outage"), readers, { model: null, strategy: "deterministic-only" });
 
@@ -164,7 +163,7 @@ export async function runContinuity(opts: { seed?: number; dir?: string } = {}):
         && discovery.programs === 0
         && imported.revalidation.outcome === "accepted-import"
         && importedManifest.status === "verified-within-scope"
-        && drillResults.length === 4
+        && drillResults.length === 3
         && drillResults.every((r) => r.exact)
         && tamperRefused;
     } else {
@@ -185,7 +184,9 @@ export async function runContinuity(opts: { seed?: number; dir?: string } = {}):
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  runContinuity().then((r) => {
+  const dirIndex = process.argv.indexOf("--dir");
+  const dir = dirIndex >= 0 && process.argv[dirIndex + 1] ? path.resolve(process.argv[dirIndex + 1]) : undefined;
+  runContinuity({ dir }).then((r) => {
     process.exitCode = r.ok ? 0 : 1;
   }, (e) => {
     console.error(e);

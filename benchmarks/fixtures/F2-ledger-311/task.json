@@ -1,0 +1,24 @@
+{
+  "id": "F2-ledger-311",
+  "family": "ledger",
+  "origin": "generated",
+  "answer": "done",
+  "compare": "text",
+  "hasDrift": true,
+  "newInput": "new-statement.txt",
+  "outcome": "Given a bank statement like sample/statement.txt, produce the balances that post-batch prints. The programs in programs/ document themselves with --help.",
+  "goal": {
+    "id": "F2-ledger-311",
+    "intent": "Produce the post-batch balances from a bank statement",
+    "have": {
+      "samples": [
+        {
+          "path": "sample/statement.txt"
+        }
+      ]
+    },
+    "want": {
+      "program": "post-batch"
+    }
+  }
+}

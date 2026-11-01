@@ -1,0 +1,58 @@
+#!/usr/bin/env node
+const HELP = `feedreport - validate a FERRYFEED 2 timetable and print a route summary
+
+READS (stdin), strictly; any deviation exits 1 with a message on stderr:
+  line 1:  FERRYFEED 2 GBP
+  then one line per sailing, fields in this order:
+    sailing <YYYY-MM-DD> <HH:MM> <FROM>><TO> dur=<minutes> fare=<pounds.pp> seats=<n> vessel="<name>"
+  date   calendar date, must exist
+  HH:MM  24-hour local departure time
+  FROM,TO  distinct 3-letter upper-case port codes
+  dur    crossing time in whole minutes, a positive multiple of 5, at most 1440
+  fare   adult single fare in pounds with exactly two decimals
+  seats  passenger capacity, positive integer
+  name   vessel name, letters/spaces, no quotes
+  last line: END <number of sailings>
+
+WRITES (stdout): per-route report: sailings, first and last departure,
+  latest arrival (HH:MM, +1 if next day), cheapest and mean fare (GBP),
+  total seats; then totals.
+`;
+if (process.argv.includes('--help')) { process.stdout.write(HELP); process.exit(0); }
+function bad(m) { process.stderr.write('invalid: ' + m + '\n'); process.exit(1); }
+const text = require('fs').readFileSync(0, 'utf8');
+if (!text.endsWith('\n')) bad('missing final newline');
+const L = text.slice(0, -1).split('\n');
+if (L[0] !== 'FERRYFEED 2 GBP') bad('bad header');
+const end = L[L.length - 1].match(/^END (\d+)$/);
+if (!end) bad('missing END');
+const body = L.slice(1, -1);
+if (+end[1] !== body.length) bad('count mismatch');
+const re = /^sailing (\d{4})-(\d{2})-(\d{2}) ([01]\d|2[0-3]):([0-5]\d) ([A-Z]{3})>([A-Z]{3}) dur=(\d+) fare=(\d+)\.(\d{2}) seats=(\d+) vessel="([A-Za-z ]+)"$/;
+const routes = new Map();
+body.forEach((l, i) => {
+  const m = l.match(re);
+  if (!m) bad(`line ${i + 2}: malformed`);
+  const [y, mo, d] = [+m[1], +m[2], +m[3]];
+  const dt = new Date(Date.UTC(y, mo - 1, d));
+  if (dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) bad(`line ${i + 2}: no such date`);
+  if (m[6] === m[7]) bad(`line ${i + 2}: same port`);
+  const dur = +m[8];
+  if (dur <= 0 || dur % 5 || dur > 1440) bad(`line ${i + 2}: bad duration`);
+  const seats = +m[11];
+  if (seats <= 0) bad(`line ${i + 2}: bad seats`);
+  const dep = +m[4] * 60 + +m[5], fare = +m[9] * 100 + +m[10];
+  const k = m[6] + '>' + m[7];
+  const r = routes.get(k) || { n: 0, first: 1e9, last: -1, arr: 0, min: 1e9, sum: 0, seats: 0 };
+  r.n++; r.first = Math.min(r.first, dep); r.last = Math.max(r.last, dep);
+  r.arr = Math.max(r.arr, dep + dur); r.min = Math.min(r.min, fare);
+  r.sum += fare; r.seats += seats; routes.set(k, r);
+});
+const hm = t => String(Math.floor(t / 60) % 24).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0');
+const gbp = c => (c / 100).toFixed(2);
+let tn = 0, ts = 0;
+for (const k of [...routes.keys()].sort()) {
+  const r = routes.get(k); tn += r.n; ts += r.seats;
+  console.log(`${k}  sailings=${r.n} first=${hm(r.first)} last=${hm(r.last)} latest_arrival=${hm(r.arr)}${r.arr >= 1440 ? '+1' : ''} cheapest=${gbp(r.min)} mean=${gbp(Math.round(r.sum / r.n))} seats=${r.seats}`);
+}
+console.log(`TOTAL routes=${routes.size} sailings=${tn} seats=${ts}`);

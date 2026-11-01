@@ -61,11 +61,11 @@
       "truth": "examples/10.truth.json"
     }
   ],
-  "targetSample": "examples/01.input.txt",
+  "targetSample": "examples/01.truth.json",
   "comparison": "json",
   "limitations": [
     "Synthetic public key material only; this is deterministic compatibility testing, not a production secret-handling recommendation.",
     "No SHA1, password derivation, alternate encodings, or v2 semantics."
   ],
-  "instructions": "Implement transform(input:string,lib?)->string. Parse JSON {version:1,hash:\"sha256\"|\"sha512\",ikm:hex,salt:hex,info:hex,length:integerBytes}. Hex values are even-length ASCII hex, case insensitive, may be empty, and each decodes to at most 512 bytes. Run RFC5869 HKDF extract-then-expand, using the selected hash for both stages. length is 1..255*HashLen inclusive (8160 for SHA256; 16320 for SHA512). Return {hex:lowercaseDerivedKeyHex}. Ignore additional JSON keys and whitespace. Return {\"error\":\"UNSUPPORTED_INPUT\"} for any unsupported version/hash, invalid encoding/type/length, or invalid JSON; throwing is not refusal. Empty salt has the RFC meaning of HashLen zero bytes. Node built-in crypto.hkdfSync is explicitly allowed and is an existing solution."
+  "instructions": "Implement transform(input:string,lib?)->string. Parse JSON {version:1,hash:\"sha256\"|\"sha512\",ikm:hex,salt:hex,info:hex,length:integerBytes}. Hex values are even-length ASCII hex, case insensitive, may be empty, and each decodes to at most 512 bytes. Run RFC5869 HKDF extract-then-expand, using the selected hash for both stages. length is 1..255*HashLen inclusive (8160 for SHA256; 16320 for SHA512). Return {hex:lowercaseDerivedKeyHex}. Ignore additional JSON keys and whitespace. Return {\"error\":\"UNSUPPORTED_INPUT\"} for any unsupported version/hash, invalid encoding/type/length, or invalid JSON; throwing is not refusal. Empty salt has the RFC meaning of HashLen zero bytes. Node built-in crypto.hkdfSync is explicitly allowed and is an existing solution. targetSample points to a JSON output example in the return format described above, not an input file. Phase-specific public specs/examples are in compatible/, incompatible/, and composition/."
 }

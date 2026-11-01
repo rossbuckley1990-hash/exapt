@@ -1,0 +1,11 @@
+{
+  "hash": "sha512",
+  "ikm": "2952A1A6080594F14213FEE6BEA3D85F6245ADD5DE8B08C6BF16E84D42DD073F",
+  "info": "1BF3BD0F51C680CC6C",
+  "length": 64,
+  "salt": "DE404B379CA02F7941B8543FCF42BBE7",
+  "version": 1,
+  "metadata": {
+    "publicVariant": 4
+  }
+}

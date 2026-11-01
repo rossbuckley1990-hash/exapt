@@ -1,0 +1,59 @@
+#!/usr/bin/env node
+const HELP = `crush-report - validate a crush ledger (format Q) and print a crush report
+
+READS (stdin), strictly; any deviation exits 1 with a message on stderr:
+  line 1:   CRUSHLEDGER 2
+  per lot:  LOT <id> @ <YYYY-MM-DD> :: blk=<BLOCK> var=<VARIETY_CODE> kg=<int> oe=<int> tc=<d.d>
+  last:     END <lot count> kg=<sum of lot kg>
+Field meanings:
+  id   H<MM><DD>-<BLOCK>[-<n>]; month/day must match the date; ids unique
+  kg   fruit mass in kilograms (1..40000)
+  oe   must density in Oechsle degrees = (SG - 1) * 1000, where SG is specific
+       gravity of the must; valid range 50..140
+  tc   fruit temperature in degrees Celsius, one decimal (0.0..40.0)
+  var  upper-case variety code, A-Z and '_' only
+
+WRITES (stdout): per-variety table (lots, tonnes, mean oe weighted by kg,
+approx. potential alcohol % v/v = oe / 7.5 rounded to 0.1), warm-fruit lots
+(tc > 25.0), and totals.
+`;
+if (process.argv.includes('--help')) { process.stdout.write(HELP); process.exit(0); }
+const die = m => { process.stderr.write('invalid: ' + m + '\n'); process.exit(1); };
+const text = require('fs').readFileSync(0, 'utf8');
+if (!text.endsWith('\n')) die('missing final newline');
+const L = text.slice(0, -1).split('\n');
+if (L[0] !== 'CRUSHLEDGER 2') die('bad header');
+const re = /^LOT (H(\d\d)(\d\d)-[A-Z0-9]+(?:-[2-9])?) @ (\d{4})-(\d\d)-(\d\d) :: blk=([A-Z0-9]+) var=([A-Z_]+) kg=(\d+) oe=(\d+) tc=(-?\d+\.\d)$/;
+const lots = [], ids = new Set();
+let i = 1;
+for (; i < L.length && L[i].startsWith('LOT '); i++) {
+  const m = L[i].match(re); if (!m) die(`line ${i + 1}: malformed lot`);
+  const [, id, im, id2, y, mo, d, blk, v, kg, oe, tc] = m;
+  if (im !== mo || id2 !== d) die(`line ${i + 1}: id does not match date`);
+  const dt = new Date(Date.UTC(+y, +mo - 1, +d));
+  if (dt.getUTCMonth() !== +mo - 1 || dt.getUTCDate() !== +d) die(`line ${i + 1}: impossible date`);
+  if (!id.startsWith(`H${mo}${d}-${blk}`)) die(`line ${i + 1}: id does not match block`);
+  if (ids.has(id)) die(`line ${i + 1}: duplicate id`);
+  ids.add(id);
+  if (+kg < 1 || +kg > 40000) die(`line ${i + 1}: kg out of range`);
+  if (+oe < 50 || +oe > 140) die(`line ${i + 1}: oe out of range`);
+  if (+tc < 0 || +tc > 40) die(`line ${i + 1}: tc out of range`);
+  lots.push({ id, v, kg: +kg, oe: +oe, tc: +tc });
+}
+if (i !== L.length - 1) die('missing or misplaced END line');
+const e = L[i].match(/^END (\d+) kg=(\d+)$/); if (!e) die('malformed END');
+const tot = lots.reduce((a, l) => a + l.kg, 0);
+if (+e[1] !== lots.length) die('lot count mismatch');
+if (+e[2] !== tot) die('kg total mismatch');
+if (!lots.length) die('no lots');
+const by = {};
+for (const l of lots) { const b = by[l.v] ||= { n: 0, kg: 0, oe: 0 }; b.n++; b.kg += l.kg; b.oe += l.oe * l.kg; }
+console.log('CRUSH REPORT');
+console.log('variety'.padEnd(20) + 'lots  tonnes  mean_oe  pot_alc%');
+for (const v of Object.keys(by).sort()) {
+  const b = by[v], m = b.oe / b.kg;
+  console.log(v.padEnd(20) + String(b.n).padStart(4) + (b.kg / 1000).toFixed(2).padStart(8) + m.toFixed(1).padStart(9) + (m / 7.5).toFixed(1).padStart(10));
+}
+const warm = lots.filter(l => l.tc > 25);
+console.log('warm lots (>25.0 C): ' + (warm.length ? warm.map(l => `${l.id}(${l.tc.toFixed(1)})`).join(' ') : 'none'));
+console.log(`total: ${lots.length} lots, ${(tot / 1000).toFixed(2)} tonnes`);

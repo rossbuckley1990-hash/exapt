@@ -15,6 +15,8 @@ export interface Field {
   kind: FieldKind;
   /** Largest number of fractional digits seen, for decimals. */
   decimals?: number;
+  /** Every sample was whole; the program accepted a fraction when asked. */
+  widened?: boolean;
   min?: number;
   max?: number;
   cardinality: number;
@@ -296,7 +298,7 @@ export function kindOf(raw: string): FieldKind {
   if (/^-?(0|[1-9]\d*)\.?$/.test(s)) return "int";
   if (/^-?\d*\.\d+$/.test(s)) return "decimal";
   if (/^(true|false)$/i.test(s)) return "bool";
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return "date";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s) || /^\d{2}[/.]\d{2}[/.]\d{4}$/.test(s) || /^\d{4}\/\d{2}\/\d{2}$/.test(s)) return "date";
   if (/^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})?$/.test(s)) return "datetime";
   return "string";
 }

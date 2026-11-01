@@ -67,3 +67,9 @@ test("documented option values are read from common notations", () => {
   assert.deepEqual(optionValues("input format, one of: csv, json", "FORMAT"), ["csv", "json"]);
   assert.deepEqual(optionValues("", "{csv,json}"), ["csv", "json"]);
 });
+
+test("a program with prose-only documentation can still be learned from suggested samples", async () => {
+  const c = await mineContract("t", "t", "Reads JSON lines with who and n.", strictConsumer, { seeds: ['{"who":"a","n":1}\n{"who":"b","n":2}\n', "wrong guess\n"] });
+  assert.ok(c.input, "the program accepted one suggestion");
+  assert.equal(c.input!.positive.length, 1, "and only what it accepted counts");
+});

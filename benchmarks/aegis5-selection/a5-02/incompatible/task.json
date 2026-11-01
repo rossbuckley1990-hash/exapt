@@ -1,0 +1,75 @@
+{
+  "id": "a5-02-incompatible",
+  "intent": "Incompatible input variations under the original contract",
+  "inputKind": "text",
+  "software": [
+    {
+      "name": "OpenSSL CLI EVP_KDF / HKDF",
+      "version": "4.0.3",
+      "source": "https://docs.openssl.org/4.0/man7/EVP_KDF-HKDF/"
+    },
+    {
+      "name": "Node.js built-in crypto.hkdfSync",
+      "version": "22.23.4 / OpenSSL 3.5.9",
+      "source": "https://nodejs.org/docs/latest-v22.x/api/crypto.html"
+    },
+    {
+      "name": "RFC5869",
+      "version": "May 2010",
+      "source": "https://www.rfc-editor.org/rfc/rfc5869"
+    }
+  ],
+  "examples": [
+    {
+      "input": "examples/01.input.txt",
+      "truth": "examples/01.truth.json"
+    },
+    {
+      "input": "examples/02.input.txt",
+      "truth": "examples/02.truth.json"
+    },
+    {
+      "input": "examples/03.input.txt",
+      "truth": "examples/03.truth.json"
+    },
+    {
+      "input": "examples/04.input.txt",
+      "truth": "examples/04.truth.json"
+    },
+    {
+      "input": "examples/05.input.txt",
+      "truth": "examples/05.truth.json"
+    },
+    {
+      "input": "examples/06.input.txt",
+      "truth": "examples/06.truth.json"
+    },
+    {
+      "input": "examples/07.input.txt",
+      "truth": "examples/07.truth.json"
+    },
+    {
+      "input": "examples/08.input.txt",
+      "truth": "examples/08.truth.json"
+    },
+    {
+      "input": "examples/09.input.txt",
+      "truth": "examples/09.truth.json"
+    },
+    {
+      "input": "examples/10.input.txt",
+      "truth": "examples/10.truth.json"
+    }
+  ],
+  "targetSample": "examples/01.truth.json",
+  "comparison": "json",
+  "limitations": [
+    "Synthetic public key material only; this is deterministic compatibility testing, not a production secret-handling recommendation.",
+    "No SHA1, password derivation, alternate encodings, or v2 semantics."
+  ],
+  "instructions": "Phase classification: (a) INPUT VARIATION. The original behavioral contract and executable/dependency versions are unchanged. These are out-of-domain inputs or requests for unsupported operations/versions. Keep the original contract and return the explicit refusal. A version field in an input is not a changed installed executable. This phase is not behavioral-contract-change testing or dependency/version revalidation.\n\nImplement transform(input:string,lib?)->string. Parse JSON {version:1,hash:\"sha256\"|\"sha512\",ikm:hex,salt:hex,info:hex,length:integerBytes}. Hex values are even-length ASCII hex, case insensitive, may be empty, and each decodes to at most 512 bytes. Run RFC5869 HKDF extract-then-expand, using the selected hash for both stages. length is 1..255*HashLen inclusive (8160 for SHA256; 16320 for SHA512). Return {hex:lowercaseDerivedKeyHex}. Ignore additional JSON keys and whitespace. Return {\"error\":\"UNSUPPORTED_INPUT\"} for any unsupported version/hash, invalid encoding/type/length, or invalid JSON; throwing is not refusal. Empty salt has the RFC meaning of HashLen zero bytes. Node built-in crypto.hkdfSync is explicitly allowed and is an existing solution.",
+  "phase": "incompatible",
+  "changeType": "input-variation",
+  "behavioralContractChanged": false,
+  "executableDependencyChanged": false
+}

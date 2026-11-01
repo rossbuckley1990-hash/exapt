@@ -1,0 +1,56 @@
+#!/usr/bin/env node
+const HELP = `ferryparse - turn a hand-kept sailings log into a ferrysched feed
+
+READS (stdin): one sailing per line, fields separated by " | ":
+  14 Mar 2026 | Oban -> Craignure | MV Aurelia | dep 7:40am | 45 min | £12.50 | 180 pax
+  date (D Mon YYYY) | origin -> destination (full port names) | vessel name
+  | dep <12-hour local time>am/pm | duration ("45 min", "1h 10m" or "2h")
+  | adult single fare in pounds sterling | passenger capacity
+  Blank lines and lines starting with # are ignored.
+
+WRITES (stdout): ferrysched/1 feed. First line "#ferrysched/1", then one line per sailing:
+  S:<date>:<from>:<to>:<dep>:<dur>:<fare>:<cap>:<vessel>
+  date    YYYYMMDD
+  from,to 3-letter port codes
+  dep     departure, minutes after local midnight (0-1439)
+  dur     crossing time in 5-minute ticks, rounded up (11 = 55 minutes)
+  fare    adult single fare in pence
+  cap     passenger capacity (count)
+  vessel  vessel name without the "MV " prefix
+Unknown ports or malformed lines: message on stderr, exit 1.
+`;
+if (process.argv.includes('--help')) { process.stdout.write(HELP); process.exit(0); }
+const PORTS = { Oban:'OBN', Craignure:'CRG', Mallaig:'MAL', Armadale:'ARM', Ullapool:'ULL',
+  Stornoway:'STO', Largs:'LAR', Millport:'MIL', Portsmouth:'PME', Ryde:'RYD',
+  Lymington:'LYM', Yarmouth:'YAR', Tarbert:'TAR', Lochmaddy:'LMD' };
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function die(n, m) { process.stderr.write(`line ${n}: ${m}\n`); process.exit(1); }
+const lines = require('fs').readFileSync(0, 'utf8').split('\n');
+const out = ['#ferrysched/1'];
+lines.forEach((raw, i) => {
+  const n = i + 1, l = raw.trim();
+  if (!l || l.startsWith('#')) return;
+  const f = l.split(' | ').map(s => s.trim());
+  if (f.length !== 7) die(n, 'expected 7 fields');
+  let m = f[0].match(/^(\d{1,2}) (\w{3}) (\d{4})$/);
+  if (!m || MON.indexOf(m[2]) < 0) die(n, 'bad date');
+  const date = m[3] + String(MON.indexOf(m[2]) + 1).padStart(2, '0') + m[1].padStart(2, '0');
+  m = f[1].match(/^(.+?) -> (.+)$/);
+  if (!m || !PORTS[m[1]] || !PORTS[m[2]]) die(n, 'unknown port');
+  const from = PORTS[m[1]], to = PORTS[m[2]];
+  const vessel = f[2].replace(/^MV /, '');
+  m = f[3].match(/^dep (\d{1,2}):(\d{2})(am|pm)$/);
+  if (!m || +m[1] < 1 || +m[1] > 12 || +m[2] > 59) die(n, 'bad departure');
+  const dep = (+m[1] % 12 + (m[3] === 'pm' ? 12 : 0)) * 60 + +m[2];
+  m = f[4].match(/^(?:(\d+)h)?\s*(?:(\d+)\s*m(?:in)?)?$/);
+  if (!m || (!m[1] && !m[2])) die(n, 'bad duration');
+  const mins = (+m[1] || 0) * 60 + (+m[2] || 0);
+  const dur = Math.ceil(mins / 5);
+  m = f[5].match(/^£(\d+)(?:\.(\d{2}))?$/);
+  if (!m) die(n, 'bad fare');
+  const fare = +m[1] * 100 + +(m[2] || 0);
+  m = f[6].match(/^(\d+) pax$/);
+  if (!m) die(n, 'bad capacity');
+  out.push(['S', date, from, to, dep, dur, fare, +m[1], vessel].join(':'));
+});
+process.stdout.write(out.join('\n') + '\n');

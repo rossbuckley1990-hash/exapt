@@ -1,0 +1,11 @@
+{
+  "instants": [
+    1730613600,
+    1730613599
+  ],
+  "version": 1,
+  "zone": "America/New_York",
+  "metadata": {
+    "publicVariant": 2
+  }
+}

@@ -75,7 +75,7 @@ export class Universe {
    *  investigation supplies the identity, the documented options and the subcommands; the miner
    *  establishes what the program actually reads, which generic probes cannot reach for a strict
    *  format. Contracts are keyed by program bytes: an unchanged program is not re-investigated. */
-  async discover(opts: { seeds?: string[]; refresh?: boolean } = {}): Promise<{ programs: number; learned: string[]; unusable: string[] }> {
+  async discover(opts: { seeds?: string[]; refresh?: boolean; propose?: (name: string, docs: string) => Promise<string[]> } = {}): Promise<{ programs: number; learned: string[]; unusable: string[] }> {
     const learned: string[] = [];
     const unusable: string[] = [];
     const pending: Array<{ ref: ProgramRef; docs: string; options: DocOption[] }> = [];
@@ -117,6 +117,21 @@ export class Universe {
         if (contract.input) {
           writeJson(file, { ...contract, channel: ref.channel });
           if (contract.output?.example) seeds.push(contract.output.example);
+        }
+      }
+    }
+    // Real documentation often describes a format without showing one. A model may suggest samples
+    // from the prose; only what the program itself accepts counts, so a wrong guess costs nothing.
+    if (opts.propose) {
+      for (const { ref, docs, options } of pending.filter((p) => !mined.get(p.ref.capability)?.input).slice(0, 6)) {
+        if (!docs) continue;
+        const guesses = await opts.propose(ref.name, docs).catch(() => []);
+        if (!guesses.length) continue;
+        const contract = await mineContract(ref.capability, ref.name, docs, (input, o) => this.host.runProgram(ref, input, o), { seeds: guesses, options });
+        if (contract.input) {
+          contract.claims.push({ claim: "its positive sample was suggested by a model and confirmed by running it", status: "observed", detail: `${guesses.length} suggestion(s)` });
+          mined.set(ref.capability, contract);
+          writeJson(path.join(this.contractDir, `${ref.sha256}-${ref.args.join("_").replace(/\W/g, "_")}.json`), { ...contract, channel: ref.channel });
         }
       }
     }

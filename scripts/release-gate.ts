@@ -23,7 +23,7 @@ gate("type check", tsc.status === 0, tsc.status === 0 ? "clean" : tsc.stdout.sli
 
 const engine = await Exapt.open(configFromEnv(process.env, { home: path.join(work, "home"), programs: [], model: null }));
 const doctor = await engine.doctor();
-gate("host and containment", doctor.ok, `${doctor.selfTest?.checks.length ?? 0} sandbox attacks contained`);
+gate("host and containment", doctor.ok, doctor.ok ? `${doctor.selfTest?.checks.filter((c) => c.passed).length ?? 0} sandbox attacks contained` : doctor.checks.filter((c) => c.status === "fail").map((c) => `${c.name}: ${c.detail}`).join("; "));
 
 const bundle = JSON.parse(fs.readFileSync(path.join(ROOT, "capabilities/node-test-results.bundle.json"), "utf8")) as CapabilityBundle;
 const imported = await engine.importCapability(bundle);

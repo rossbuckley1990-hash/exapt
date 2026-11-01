@@ -58,3 +58,11 @@ test("a field no expression can explain is reported, not guessed", () => {
   const r = synthesiseLens([{ input: "a\n1\n2\n3\n", output: '{"z":"kq"}\n{"z":"mf"}\n{"z":"tb"}\n' }]);
   assert.ok(!r.ok || r.programs[0].fields[0].expr.op === "map", "only a lookup could fit, and a lookup throws on unseen keys");
 });
+
+test("a date in a local form is rewritten, and an impossible one is refused", async () => {
+  const r = synthesiseLens([{ input: "d,x\n13/02/2026,a\n28/11/2025,b\n", output: '{"on":"2026-02-13","x":"a"}\n{"on":"2025-11-28","x":"b"}\n' }]);
+  assert.ok(r.ok, r.ok ? "" : r.reason);
+  const source = emitLens(r.programs[0]);
+  assert.equal(JSON.parse(await run(source, "d,x\n01/06/2024,c\n")).on, "2024-06-01");
+  await assert.rejects(() => run(source, "d,x\n44/36/2026,c\n"));
+});

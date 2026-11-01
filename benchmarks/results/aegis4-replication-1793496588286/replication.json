@@ -1,0 +1,13 @@
+{
+  "result": {
+    "ok": true,
+    "dir": "/Users/ross/EXAPT/benchmarks/results/aegis4-replication-1793496588286",
+    "report": "/Users/ross/EXAPT/benchmarks/results/aegis4-replication-1793496588286/demo4-telemetry-report.json",
+    "capability": "exapt:fixed-width-to-kernel-telemetry-collector-4d0a23",
+    "liveMemoryGb": "19.31"
+  },
+  "elapsedMs": 216132,
+  "modelCalls": 2,
+  "reportedCostUsd": 0.046755000000000005,
+  "scope": "Replication on strengthened verification and expanded corpus, not an exact replay of the unpinned historical checkout"
+}

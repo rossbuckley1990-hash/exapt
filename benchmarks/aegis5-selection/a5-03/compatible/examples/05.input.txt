@@ -1,0 +1,11 @@
+{
+  "instants": [
+    1712415600,
+    1712415599
+  ],
+  "version": 1,
+  "zone": "Australia/Lord_Howe",
+  "metadata": {
+    "publicVariant": 4
+  }
+}

@@ -20,6 +20,7 @@ const CAP = Number(opt("cap", "14"));
 const LABEL = opt("label", `primary-${MODEL}`);
 const PHASES = opt("phases", "cold,drift,warm").split(",");
 const ONLY = opt("only", "");
+const TASKS = opt("tasks", "").split(",").filter(Boolean);
 const RESULTS = path.join(import.meta.dirname, "results", LABEL);
 const SCRATCH = path.join(fs.realpathSync(os.tmpdir()), "exapt-benchmark", LABEL);
 const REPO = path.resolve(import.meta.dirname, "..");
@@ -29,7 +30,7 @@ const SESSION_BUDGET = 0.9;
 const TIMEOUT = 720_000;
 fs.mkdirSync(RESULTS, { recursive: true });
 
-const tasks = fs.readdirSync(FIXTURES).filter((d) => fs.existsSync(path.join(FIXTURES, d, "task.json"))).sort().filter((d) => !ONLY || d.startsWith(ONLY)).map((d) => JSON.parse(fs.readFileSync(path.join(FIXTURES, d, "task.json"), "utf8")) as TaskSpec);
+const tasks = fs.readdirSync(FIXTURES).filter((d) => fs.existsSync(path.join(FIXTURES, d, "task.json"))).sort().filter((d) => (!ONLY || d.startsWith(ONLY)) && (!TASKS.length || TASKS.some((t) => d.startsWith(t)))).map((d) => JSON.parse(fs.readFileSync(path.join(FIXTURES, d, "task.json"), "utf8")) as TaskSpec);
 
 const resultFile = (t: Trial["task"], arm: string, stage: string) => path.join(RESULTS, `${t}__${arm}__${stage}.json`);
 const done = (t: string, arm: string, stage: string) => fs.existsSync(resultFile(t, arm, stage));

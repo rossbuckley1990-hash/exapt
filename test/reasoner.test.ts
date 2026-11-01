@@ -90,3 +90,14 @@ test("inputs that disagree on a syntax are treated as text, and the fullest trut
   assert.match(a.gaps[0].title, /^text -> ndjson\{name,status\}/);
   await e.host.rc.flush();
 });
+
+test("a date written as text is not mistaken for missing information", { skip: sandboxSkip }, async () => {
+  const dir = tempDir("reason");
+  const programs = path.join(dir, "programs");
+  program(programs, "sink", `if (args[0] === '--help') { console.log('usage: sink\\n\\nExample input:\\n  {"booked":"2026-03-04","amount":12}\\n  {"booked":"2026-03-05","amount":7}\\n'); process.exit(0); }
+for (const l of fs.readFileSync(0, 'utf8').trim().split('\\n')) { const o = JSON.parse(l); if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(o.booked ?? '') || typeof o.amount !== 'number') { console.error('invalid'); process.exit(3); } } console.log('ok');`);
+  const e = await engine(dir, [programs]);
+  const a = await e.analyseCompact({ id: "g", intent: "load it", have: { samples: [{ text: "STAMP,amount\n04/03/2026,12\n05/03/2026,7\n" }] }, want: { program: "sink" } }, dir);
+  assert.notEqual(a.status, "not-constructible", a.summary);
+  await e.host.rc.flush();
+});

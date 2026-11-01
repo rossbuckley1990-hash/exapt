@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const args = process.argv.slice(2);
+const read = () => fs.readFileSync(0, 'utf8');
+const lines = (t) => t.split(/\r?\n/).filter((l) => l.trim() !== '');
+const fail = (m) => { process.stderr.write(m + '\n'); process.exit(3); };
+
+const HELP = "usage: cold-archive\n\nWrites readings back out in the legacy site table for long-term storage.\nReads the same newline-delimited JSON as cold-ingest from standard input.\n\nExample input:\n  {\"origin\":\"rig-1a\",\"at_seconds\":1772619300,\"metric\":1003.0,\"sector\":\"North-Wing\"}\n";
+if (args.includes('--help') || args.includes('-h')) { process.stdout.write(HELP); process.exit(0); }
+if (args.includes('--version')) { process.stdout.write("cold-archive 0.9.4" + '\n'); process.exit(0); }
+
+const out = [["node", "logged_at", "sample", "site_label"].join(";")];
+for (const [i, l] of lines(read()).entries()) {
+  let r;
+  try { r = JSON.parse(l); } catch { fail('line ' + (i + 1) + ': not a JSON object'); }
+  const v = r["metric"], ts = r["at_seconds"];
+  if (typeof v !== 'number' || !Number.isInteger(ts) || !("origin" in r) || !("sector" in r)) fail('line ' + (i + 1) + ': incomplete reading');
+  out.push([r["origin"], new Date(ts * 1000).toISOString().replace('.000Z', 'Z'), (v * 0.001 + 0).toFixed(3), r["sector"]].join(";"));
+}
+process.stdout.write(out.join('\n') + '\n');
+

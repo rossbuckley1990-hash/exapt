@@ -1,0 +1,14 @@
+# Dock notes, Hillside Estate, 2026 harvest
+12 Aug 2026; A2; Chardonnay; 2,450 lb; 20.8 Bx; 61F
+12 Aug 2026; A3; Chardonnay; 1,980 lb; 21.2 Bx; 63F
+19 Aug 2026; B1; Pinot Noir; 3,120 lb; 23.4 Bx; 66F
+19 Aug 2026; B1; Pinot Noir; 1,500 lb; 23.9 Bx; 72F
+02 Sep 2026; C7; Merlot; 8,800 lb; 24.6 Bx; 70F
+2 Sep 2026; C8; Merlot; 7,615 lb; 25.1 Bx; 74F
+09 Sep 2026; D4; Sauvignon Blanc; 4,200 lb; 22.0 Bx; 58F
+14 Sep 2026; E2; Cabernet Sauvignon; 11,340 lb; 25.8 Bx; 79F
+14 Sep 2026; E3; Cabernet Sauvignon; 9,070 lb; 26.3 Bx; 81F
+21 Sep 2026; E3; Cabernet Franc; 2,205 lb; 24.0 Bx; 68F
+
+28 Sep 2026; F1; Zinfandel; 640 lb; 27.2 Bx; 84F
+05 Oct 2026; F5; Petite Sirah; 5,310 lb; 25.5 Bx; 55F

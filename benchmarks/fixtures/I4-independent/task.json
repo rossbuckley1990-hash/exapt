@@ -1,0 +1,23 @@
+{
+  "id": "I4-independent",
+  "family": "independent",
+  "origin": "independent",
+  "answer": "done",
+  "compare": "text",
+  "newInput": "new.txt",
+  "outcome": "I have my harvest dock notes and want the crush report showing tonnage and sugar by variety, plus any warm-fruit lots. The input looks like sample/input.txt. The programs in programs/ document themselves with --help.",
+  "goal": {
+    "id": "I4-independent",
+    "intent": "I have my harvest dock notes and want the crush report showing tonnage and sugar by variety, plus any warm-fruit lots.",
+    "have": {
+      "samples": [
+        {
+          "path": "sample/input.txt"
+        }
+      ]
+    },
+    "want": {
+      "program": "crush-report"
+    }
+  }
+}

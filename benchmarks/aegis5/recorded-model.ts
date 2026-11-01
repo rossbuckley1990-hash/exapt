@@ -13,6 +13,7 @@ export class RecordedModel implements ModelAdapter {
   readonly maxCalls: number;
   spent = 0;
   calls = 0;
+  unknownCosts = false;
   private queue: Promise<unknown> = Promise.resolve();
   constructor(dir:string,model:string,cap=0.6,maxCalls=8) {
     this.dir=dir;this.model=model;this.cap=cap;this.maxCalls=maxCalls;fs.mkdirSync(dir,{recursive:true});
@@ -28,6 +29,7 @@ export class RecordedModel implements ModelAdapter {
         const reply=await new ClaudeCli({model:this.model,maxBudgetUsd:this.cap-this.spent,timeoutMs:240000}).complete(req);
         record.reply=reply;this.spent+=reply.usage.costUsd??0;record.totalReportedCostUsd=this.spent;save();return reply;
       } catch(error) {
+        this.unknownCosts=true;
         record.error=String(error);record.usage='unavailable if provider returned an error; do not count as zero';save();throw error;
       }
     });

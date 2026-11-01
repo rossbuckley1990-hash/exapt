@@ -1,0 +1,11 @@
+{
+  "hash": "sha256",
+  "ikm": "B232F6FADEB756694701C8CEF92ECF6386526BCD85F8A0559E0CEDFE86196E45",
+  "info": "FC0CA78E063E68A566",
+  "length": 1,
+  "salt": "E1B2F6D729F54B6574D9BCE8D88C67A5",
+  "version": 1,
+  "metadata": {
+    "publicVariant": 1
+  }
+}

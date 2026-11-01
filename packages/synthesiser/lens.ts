@@ -18,6 +18,7 @@ export type Expr =
   | { op: "epoch"; e: Expr; scale: number }
   | { op: "iso"; e: Expr; scale: number; dateOnly: boolean }
   | { op: "datefmt"; e: Expr; pattern: string }
+  | { op: "redate"; e: Expr; from: string; pattern: string }
   | { op: "strip"; e: Expr; prefix: string; suffix: string }
   | { op: "part"; e: Expr; sep: string; index: number }
   | { op: "replace"; e: Expr; from: string; to: string }
@@ -104,6 +105,8 @@ function evaluate(e: Expr, r: Rec): Scalar {
       const v = cellText(evaluate(e.e, r));
       return v.startsWith(e.prefix) && v.endsWith(e.suffix) ? v.slice(e.prefix.length, v.length - e.suffix.length) : null;
     }
+    case "redate":
+      return redate(cellText(evaluate(e.e, r)), e.from, e.pattern);
     case "part":
       return cellText(evaluate(e.e, r)).split(e.sep)[e.index] ?? null;
     case "replace":
@@ -122,6 +125,22 @@ const DATE_PATTERNS = ["YYYYMMDD", "YYYY/MM/DD", "DD/MM/YYYY", "MM/DD/YYYY", "DD
 function formatDate(d: Date, pattern: string): string {
   const p = (n: number, w = 2) => String(n).padStart(w, "0");
   return pattern.replace("YYYY", String(d.getUTCFullYear())).replace("MM", p(d.getUTCMonth() + 1)).replace("DD", p(d.getUTCDate())).replace("HH", p(d.getUTCHours())).replace("mm", p(d.getUTCMinutes())).replace("ss", p(d.getUTCSeconds()));
+}
+
+const LOCAL_DATES = ["DD/MM/YYYY", "MM/DD/YYYY", "DD.MM.YYYY", "YYYY/MM/DD"];
+
+/** Dates written in a form Date.parse does not read. Invalid ones give null, never a guess. */
+function redate(text: string, from: string, pattern: string): string | null {
+  const parts = /^(\d{2}|\d{4})[/.](\d{2})[/.](\d{2}|\d{4})$/.exec(text.trim());
+  if (!parts) return null;
+  const pick = (token: string) => {
+    const index = from.split(/[/.]/).indexOf(token);
+    return parts[index + 1];
+  };
+  const [y, m, d] = [Number(pick("YYYY")), Number(pick("MM")), Number(pick("DD"))];
+  const date = new Date(Date.UTC(y, m - 1, d));
+  if (date.getUTCMonth() !== m - 1 || date.getUTCDate() !== d) return null;
+  return formatDate(date, pattern);
 }
 
 /** The simplest rational within tolerance of x, by continued fractions. */
@@ -216,6 +235,10 @@ function* bank(rows: Rec[], names: string[], counter: { n: number }): Generator<
     if (values.every((v) => kindOf(v) === "int" || kindOf(v) === "decimal")) {
       candidates.push({ op: "num", e });
       if (values.every((v) => Math.abs(Number(v)) > 1e8)) for (const scale of [1000, 1]) for (const dateOnly of [false, true]) candidates.push({ op: "iso", e, scale, dateOnly });
+    }
+    for (const from of LOCAL_DATES) {
+      if (!values.every((v) => redate(v, from, "YYYY-MM-DD") !== null)) continue;
+      for (const pattern of DATE_PATTERNS) candidates.push({ op: "redate", e, from, pattern });
     }
     if (values.every((v) => !Number.isNaN(Date.parse(v)) && /\d{4}/.test(v))) {
       candidates.push({ op: "epoch", e, scale: 1000 }, { op: "epoch", e, scale: 1 });
@@ -386,6 +409,8 @@ function emitExpr(e: Expr): string {
     }
     case "datefmt":
       return `dateText(${emitExpr(e.e)}, ${lit(e.pattern)})`;
+    case "redate":
+      return `redate(${emitExpr(e.e)}, ${lit(e.from)}, ${lit(e.pattern)})`;
     case "strip":
       return `stripped(${emitExpr(e.e)}, ${lit(e.prefix)}, ${lit(e.suffix)})`;
     case "part":
@@ -535,6 +560,16 @@ const render = (rows) => [${s.header ? `columns.map((c, i) => i === columns.leng
 function emitHelpers(fields: FieldProgram[]): string {
   const used = JSON.stringify(fields.map((f) => f.expr));
   const parts: string[] = [];
+  if (used.includes('"redate"')) parts.push(`const redate = (v, from, pattern) => {
+  const p = /^(\\d{2}|\\d{4})[/.](\\d{2})[/.](\\d{2}|\\d{4})$/.exec(text(v).trim());
+  if (!p) throw new Error("not a date: " + text(v));
+  const pick = (token) => p[from.split(/[/.]/).indexOf(token) + 1];
+  const [y, m, d] = [Number(pick("YYYY")), Number(pick("MM")), Number(pick("DD"))];
+  const date = new Date(Date.UTC(y, m - 1, d));
+  if (date.getUTCMonth() !== m - 1 || date.getUTCDate() !== d) throw new Error("not a date: " + text(v));
+  const two = (n) => String(n).padStart(2, "0");
+  return pattern.replace("YYYY", String(y)).replace("MM", two(m)).replace("DD", two(d)).replace("HH", "00").replace("mm", "00").replace("ss", "00");
+};`);
   if (used.includes('"strip"')) parts.push(`const stripped = (v, prefix, suffix) => {
   const t = text(v);
   if (!t.startsWith(prefix) || !t.endsWith(suffix)) throw new Error("unexpected value: " + t);

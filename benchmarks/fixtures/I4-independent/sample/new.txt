@@ -1,0 +1,8 @@
+18 Oct 2026; F12; Zinfandel; 7,789 lb; 20.7 Bx; 67F
+23 Aug 2026; E6; Petit Verdot; 824 lb; 22.2 Bx; 81F
+10 Sep 2026; E6; Mourvedre; 12,467 lb; 21.7 Bx; 77F
+11 Sep 2026; D3; Syrah; 13,792 lb; 20.4 Bx; 80F
+9 Sep 2026; A4; Malbec; 13,656 lb; 25.5 Bx; 66F
+11 Aug 2026; D3; Syrah; 2,832 lb; 25.0 Bx; 82F
+6 Sep 2026; B2; Viognier; 599 lb; 21.2 Bx; 57F
+17 Sep 2026; B9; Viognier; 14,196 lb; 25.6 Bx; 84F

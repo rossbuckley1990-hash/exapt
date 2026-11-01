@@ -8,7 +8,7 @@
 //   malformed    invalid input a correct program must refuse
 //   holdout      drawn fresh for each candidate that reaches this gate; failures are never fed
 //                back, so no later attempt can have been fitted to them
-import { accepted, cellText, isRecordRepr, parseRecords, renderRecords, reprLabel, sniff, type Goal, type Repr, type Universe } from "../capability-universe/index.ts";
+import { accepted, cellText, isRecordRepr, parseRecords, renderRecords, reprLabel, sniff, type Field, type Goal, type Repr, type Universe } from "../capability-universe/index.ts";
 import { digest, Rng, pool } from "../shared/index.ts";
 import { loadSample, type Gap, type OracleSpec } from "../gap-reasoner/index.ts";
 import { boundaryInputs, generateLike, malformedBinary, malformedInputs, malformedText } from "./generators.ts";
@@ -110,12 +110,40 @@ async function fieldsNotCarried(universe: Universe, route: string[], sample: str
   return [...seen].filter(([, values]) => values.size === 1).map(([k]) => k);
 }
 
+/** A field widened to fractions is kept fractional only if the inverse can tell fractions apart.
+ *  If it cannot, a fractional test value has no answer: its inverse would be the same input as a
+ *  whole number's, and a correct program could not produce both. */
+async function narrowWidened(universe: Universe, route: string[], sample: string, repr: Repr): Promise<Repr> {
+  const through = async (text: string) => {
+    let cur = text;
+    for (const id of route) {
+      const r: { ok: boolean; stdout: string; stderr?: string } = await universe.tool(id)!.run(cur).catch(() => ({ ok: false, stdout: "" }));
+      if (!accepted(r)) return null;
+      cur = r.stdout;
+    }
+    return cur;
+  };
+  const base = await through(sample);
+  const fields: Field[] = [];
+  for (const f of repr.fields) {
+    if (!f.widened) {
+      fields.push(f);
+      continue;
+    }
+    const rows = parseRecords(sample, repr.syntax).map((r) => ({ ...r, [f.name]: Number(r[f.name]) + 0.25 }));
+    const moved = await through(renderRecords(rows, repr.syntax, repr.fields.map((x) => x.name)));
+    fields.push(moved !== null && moved !== base ? f : { ...f, kind: "int", decimals: undefined, widened: undefined });
+  }
+  return { ...repr, fields };
+}
+
 export async function buildContract(universe: Universe, gap: Gap, goal: Goal): Promise<BehaviouralContract> {
   const binary = gap.from.repr.syntax.format === "binary";
   const inverse = gap.oracles.find((o) => o.kind === "inverse-route");
   const hasInverse = inverse?.kind === "inverse-route" && !!gap.to.sample;
-  const tolerance = hasInverse ? await calibrate(universe, inverse.route, gap.to.sample!, gap.to.repr, gap.from.repr) : {};
-  const notCarried = hasInverse ? await fieldsNotCarried(universe, inverse.route, gap.to.sample!, gap.to.repr, gap.from.repr, 73) : [];
+  const targetRepr = hasInverse ? await narrowWidened(universe, inverse.route, gap.to.sample!, gap.to.repr) : gap.to.repr;
+  const tolerance = hasInverse ? await calibrate(universe, inverse.route, gap.to.sample!, targetRepr, gap.from.repr) : {};
+  const notCarried = hasInverse ? await fieldsNotCarried(universe, inverse.route, gap.to.sample!, targetRepr, gap.from.repr, 73) : [];
   const properties = [
     "Pure and deterministic: the same input always gives the same output.",
     ...(isRecordRepr(gap.to.repr) && isRecordRepr(gap.from.repr) ? ["One output record per input record, in input order."] : []),
@@ -128,7 +156,7 @@ export async function buildContract(universe: Universe, gap: Gap, goal: Goal): P
     goal: goal.id,
     inputKind: binary ? "binary" : "text",
     source: { label: gap.from.label, repr: gap.from.repr, sample: binary ? gap.from.bytes.toString("base64") : gap.from.bytes.toString("utf8") },
-    target: { label: gap.to.label, repr: gap.to.repr, sample: gap.to.sample ?? "", requiredFields: gap.to.requiredFields },
+    target: { label: gap.to.label, repr: targetRepr, sample: gap.to.sample ?? "", requiredFields: gap.to.requiredFields },
     consumer: gap.to.consumer,
     upstream: gap.from.lineage.map((l) => l.tool),
     downstream: gap.to.downstream,
@@ -238,6 +266,9 @@ export class TestBench {
     // a guess at the format, so it can only punish a program for being strict.
     if (this.goal.corpus?.length || this.contract.inputKind === "binary" || !isRecordRepr(this.contract.source.repr)) return [];
     if (!lineage.length) {
+      // With a program that writes the source format, every test input can come from it. Inputs made
+      // up here from a sample may not be valid at all, and only punish strictness.
+      if (this.inverseRoute) return [];
       return Array.from({ length: n }, () => ({ id: this.next(tier), tier, input: generateLike(this.contract.source.sample, this.contract.source.repr, rng, rows()), origin: "generated" as const }));
     }
     if (!seeds.length) return [];

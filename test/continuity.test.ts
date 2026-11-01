@@ -4,10 +4,10 @@ import test from "node:test";
 import { continuityFixture, runContinuity } from "../demos/continuity/run.ts";
 import { sandboxSkip, tempDir } from "./support.ts";
 
-test("Continuity reserves four real files for the outage drill", () => {
+test("Continuity reserves three real files for the outage drill", () => {
   const { goal, drills } = continuityFixture();
-  assert.equal(goal.corpus!.length, 6);
-  assert.equal(drills.length, 4);
+  assert.equal(goal.corpus!.length, 7);
+  assert.equal(drills.length, 3);
   assert.ok(drills.every((d) => !goal.corpus!.some((c) => c.name === d.name)));
 });
 
@@ -20,6 +20,6 @@ test("Continuity restores exact records with no original host programs", { skip:
   assert.equal(result.ok, true, fs.readFileSync(result.report, "utf8"));
   assert.equal(report.preLoss.modelCalls, 0);
   assert.equal(report.outage.hostPrograms, 0);
-  assert.equal(report.outage.exactFiles, 4);
+  assert.equal(report.outage.exactFiles, 3);
   assert.equal(report.outage.tamperRefused, true);
 });

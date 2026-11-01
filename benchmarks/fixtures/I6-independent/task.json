@@ -1,0 +1,23 @@
+{
+  "id": "I6-independent",
+  "family": "independent",
+  "origin": "independent",
+  "answer": "done",
+  "compare": "text",
+  "newInput": "new.txt",
+  "outcome": "I have my handwritten sailings log and I want the route summary report showing first and last departures, latest arrivals, fares and seats for each route. The input looks like sample/input.txt. The programs in programs/ document themselves with --help.",
+  "goal": {
+    "id": "I6-independent",
+    "intent": "I have my handwritten sailings log and I want the route summary report showing first and last departures, latest arrivals, fares and seats for each route.",
+    "have": {
+      "samples": [
+        {
+          "path": "sample/input.txt"
+        }
+      ]
+    },
+    "want": {
+      "program": "feedreport"
+    }
+  }
+}

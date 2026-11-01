@@ -1,0 +1,35 @@
+{
+  "seed": 2026,
+  "pageSize": 16384,
+  "controls": [
+    {
+      "name": "x86-4kb-hallucination",
+      "fault": "hardcodes 4096 bytes per page; fails hardware page scale verification",
+      "rejected": true
+    },
+    {
+      "name": "unstripped-trailing-dot",
+      "fault": "leaves trailing dot on page counts; fails strict integer schema",
+      "rejected": true
+    },
+    {
+      "name": "broken-conservation-law",
+      "fault": "omits compressor metric; fails physical conservation invariant",
+      "rejected": true
+    }
+  ],
+  "synthesis": {
+    "mode": "model",
+    "producer": "claude-cli/sonnet"
+  },
+  "capability": {
+    "id": "exapt:fixed-width-to-kernel-telemetry-collector-4d0a23",
+    "version": 1,
+    "status": "verified-within-scope"
+  },
+  "heldOut": {
+    "matched": 6,
+    "total": 6
+  },
+  "liveReport": "OK: kernel-telemetry-collector ingested 6 metrics. Selected metrics total: 19.31 GiB (@ 16384B/page)"
+}

@@ -1,0 +1,1 @@
+This is a tooling preflight, not a scored challenge. Use the aegis shell tool to read probe.txt and copy its exact contents to out/result.txt. Do not use other services. Report whether the shell completed.

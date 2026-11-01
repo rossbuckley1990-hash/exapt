@@ -12,5 +12,5 @@
     "types": ["node"]
   },
   "include": ["packages", "apps/cli", "apps/server", "demos", "benchmarks", "scripts", "test"],
-  "exclude": ["vendor", "apps/lab/public", "benchmarks/results", "**/fixtures/**"]
+  "exclude": ["vendor", "apps/lab/public", "benchmarks/results", "benchmarks/aegis5-selection", "**/fixtures/**"]
 }

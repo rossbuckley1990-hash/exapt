@@ -10,10 +10,16 @@ access. All selector artifacts live under the two authorized directory roots.
 PUBLIC CONTRACT
 Each a5-NN/task.json uses the requested schema: id, intent, inputKind, software,
 examples (relative input and truth paths), targetSample, comparison, limitations,
-instructions. Every path is relative to its containing task directory. The separate
-composition/task.json has its own input files, truths and instructions. There are
-10 first-stage visible examples and 6 composition examples per task. targetSample
-is the first visible example (not an additional unlabeled test).
+instructions. Every path is relative to its containing task directory. Separate
+compatible/task.json, incompatible/task.json and composition/task.json files have
+their own input files, truths and instructions. There are 10 visible examples for
+the primary task and 10 for each of those three phase specs. targetSample points
+to the first output truth file, a JSON value in the documented return format.
+Phase metadata classifies compatible and incompatible as (a) input variation,
+with no changed behavioral contract or installed executable dependency/version.
+Unsupported input version fields are NOT real executable version changes.
+Composition is (b) a second-stage behavioral goal using the unchanged first-stage
+capability. This suite makes no (c) dependency-revalidation claim.
 
 SEALED CONTRACT
 /private/tmp/exapt-aegis5-sealed/a5-NN/cases.json is an array of exactly
@@ -49,12 +55,18 @@ is no fs, process, native executable launch, dependency installation or network
 interface exposed to transforms. Runtime globals can be attacked; node:vm is not
 a security boundary. Docker provides actual host isolation: no host mounts,
 network none, read-only root, non-root UID, all capabilities dropped,
-no-new-privileges, 256 MiB, 64 process limit, one CPU, 10-second case timeout,
-2 MiB transport-output limit and 1 MiB transform-result limit. Only the current
+no-new-privileges, 256 MiB, 64 process limit, one CPU, 30-second case timeout
+(including container startup),
+2 MiB transport-output limit and 1 MiB transform-result limit. Node's permission
+model additionally denies filesystem access, child processes, addons and workers;
+no allow-* exceptions are granted. The trusted transport reads inherited stdin.
+Only the current
 input and code go into each container, never expectations or other cases.
 Allowed crypto randomness APIs exist but submitted transforms must be deterministic
 and side-effect-free. Baseline and candidate must obey the same contract; do not
-grant native oracle tools to the saved-executable arm. Oracle native tools run
+grant native oracle tools to the saved-executable arm. Each arm receives exactly
+the same public task and phase trees, output samples, examples and standard Node
+environment. Oracle native tools run
 outside candidate containers and cannot be called by transforms.
 
 SCORING AND NOVELTY
@@ -89,7 +101,9 @@ reference outputs, preserved generation failures and audit documents. FREEZE.jso
 commits both manifests and per-task public-spec and hidden-corpus hashes; its own
 SHA256 is supplied separately. Report/run files and final verification logs live
 under sealed/runs and are excluded. Do not mutate committed files after evaluation.
-The deterministic generator refuses regeneration once FREEZE.json exists. Native
+The deterministic generator refuses in-place regeneration once FREEZE.json exists.
+It supports --reproduce /private/tmp/exapt-aegis5-sealed/reproductions/NEW_NAME to
+regenerate in a separate sealed directory and check all task/corpus bytes. Native
 tool versions are pinned/disclosed; byte-identical native image containers are not
 promised across OS releases, but case bytes and truth strings are frozen. The
 generator and all synthetic inputs are included; there are no manual hidden steps.

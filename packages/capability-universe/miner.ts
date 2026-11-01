@@ -131,6 +131,7 @@ export async function mineContract(tool: string, name: string, docs: string, run
       if (accepted(fractional)) {
         f.kind = "decimal";
         f.decimals = Math.max(f.decimals ?? 0, 2);
+        f.widened = true;
         claims.push({ claim: `${f.name} accepts fractional values`, status: "experimentally-supported", detail: "every sample was whole, so the program was asked" });
       }
     }

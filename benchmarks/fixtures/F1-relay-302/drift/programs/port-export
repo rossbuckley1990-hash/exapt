@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const args = process.argv.slice(2);
+const read = () => fs.readFileSync(0, 'utf8');
+const lines = (t) => t.split(/\r?\n/).filter((l) => l.trim() !== '');
+const fail = (m) => { process.stderr.write(m + '\n'); process.exit(3); };
+
+const HELP = "usage: port-export\n\nReads a raw device dump from standard input and writes the site export.\n\nEach input line is:  <id> @<unix-seconds> v=<number> n=<note>\n\nExample input:\n  rig-302-a @1772619300 v=12.0 n=North-Wing\n  rig-302-b @1772619360 v=14.0 n=East-Wing\n\nThe export is a |-delimited table with a header. The value column is in degrees Fahrenheit.\n";
+if (args.includes('--help') || args.includes('-h')) { process.stdout.write(HELP); process.exit(0); }
+if (args.includes('--version')) { process.stdout.write("port-export 1.0.0" + '\n'); process.exit(0); }
+
+const rows = lines(read()).map((l, i) => {
+  const m = /^(\S+) @(\d{10}) v=(-?\d+(?:\.\d+)?) n=(\S+)$/.exec(l);
+  if (!m) fail('line ' + (i + 1) + ': expected "<id> @<unix> v=<number> n=<note>"');
+  return m;
+});
+const out = [["device", "observed", "sample", "lane"].join("|")];
+for (const m of rows) out.push([m[1], new Date(Number(m[2]) * 1000).toISOString().replace('.000Z', 'Z'), Number(m[3]).toFixed(3), m[4]].join("|"));
+process.stdout.write(out.join('\n') + '\n');
+

@@ -1,0 +1,29 @@
+{
+  "command": "claude",
+  "args": [
+    "-p",
+    "--output-format",
+    "json",
+    "--model",
+    "sonnet",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--mcp-config",
+    "/Users/ross/EXAPT/benchmarks/results/aegis5-baseline-preflight/agent/mcp.json",
+    "--setting-sources",
+    "",
+    "--no-session-persistence",
+    "--max-turns",
+    "8",
+    "--max-budget-usd",
+    "0.1",
+    "--allowedTools",
+    "mcp__aegis__list",
+    "mcp__aegis__read",
+    "mcp__aegis__write",
+    "mcp__aegis__shell"
+  ],
+  "cwd": "/Users/ross/EXAPT/benchmarks/results/aegis5-baseline-preflight/agent/empty-client",
+  "cap": 0.1
+}

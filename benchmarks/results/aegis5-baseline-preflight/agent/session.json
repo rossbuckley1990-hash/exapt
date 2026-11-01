@@ -1,0 +1,25 @@
+{
+  "exit": 0,
+  "elapsedMs": 90880,
+  "costUsd": 0.024548,
+  "inputTokens": 10265,
+  "outputTokens": 284,
+  "turns": 2,
+  "modelUsage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 4,
+      "outputTokens": 284,
+      "cacheReadInputTokens": 4960,
+      "cacheCreationInputTokens": 5301,
+      "webSearchRequests": 0,
+      "costUSD": 0.024548,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permissionDenials": []
+}

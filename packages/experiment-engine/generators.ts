@@ -27,6 +27,13 @@ function freshValue(f: Field, rng: Rng): string {
     }
     case "datetime":
     case "date": {
+      const local = /^(\d{2})([/.])(\d{2})\2(\d{4})$/.exec(sample);
+      if (local) {
+        const dayFirst = f.samples.some((v) => Number(v.slice(0, 2)) > 12);
+        const [a, b] = dayFirst ? [rng.int(1, 28), rng.int(1, 12)] : [rng.int(1, 12), rng.int(1, 12)];
+        return `${String(a).padStart(2, "0")}${local[2]}${String(b).padStart(2, "0")}${local[2]}${local[4]}`;
+      }
+      if (Number.isNaN(Date.parse(sample))) return sample;
       const t = Date.parse(sample) + rng.int(-200, 200) * 86_400_000 + rng.int(0, 86_399) * 1000;
       const iso = new Date(t).toISOString();
       return f.kind === "date" ? iso.slice(0, 10) : iso.replace(".000Z", "Z");

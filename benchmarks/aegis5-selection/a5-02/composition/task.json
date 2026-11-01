@@ -43,12 +43,31 @@
     {
       "input": "examples/06.input.txt",
       "truth": "examples/06.truth.json"
+    },
+    {
+      "input": "examples/07.input.txt",
+      "truth": "examples/07.truth.json"
+    },
+    {
+      "input": "examples/08.input.txt",
+      "truth": "examples/08.truth.json"
+    },
+    {
+      "input": "examples/09.input.txt",
+      "truth": "examples/09.truth.json"
+    },
+    {
+      "input": "examples/10.input.txt",
+      "truth": "examples/10.truth.json"
     }
   ],
-  "targetSample": "examples/01.input.txt",
+  "targetSample": "examples/01.truth.json",
   "comparison": "json",
   "limitations": [
     "Inputs satisfy the composition schema. No unsupported composition inputs are scored."
   ],
-  "instructions": "Implement transform(input:string,lib)->string. Parse {version:1,hash,ikm,salt,labels:[string,...],message:hex}; valid first-stage hash/key/salt values, 1..5 labels (duplicates and empty labels permitted), valid even-length message hex. For each label in order form UTF8(\"AEGIS5:\"+label) as info, derive 32 bytes with retained lib[\"a5-02\"] called on the JSON first-stage request, and compute HMAC-SHA256(messageBytes) under that derived key. Return ordered [{label,tag:lowercaseHex},...]. Use the exact Unicode text without normalization. Full composition-reuse credit requires at least one actual retained call per label. HMAC via node:crypto is available."
+  "instructions": "Implement transform(input:string,lib)->string. Parse {version:1,hash,ikm,salt,labels:[string,...],message:hex}; valid first-stage hash/key/salt values, 1..5 labels (duplicates and empty labels permitted), valid even-length message hex. For each label in order form UTF8(\"AEGIS5:\"+label) as info, derive 32 bytes with retained lib[\"a5-02\"] called on the JSON first-stage request, and compute HMAC-SHA256(messageBytes) under that derived key. Return ordered [{label,tag:lowercaseHex},...]. Use the exact Unicode text without normalization. Full composition-reuse credit requires at least one actual retained call per label. HMAC via node:crypto is available. targetSample is a JSON output example. Classification: (b) a second-stage behavioral goal; the first-stage contract and software versions remain unchanged. This is not dependency revalidation.",
+  "phase": "composition",
+  "changeType": "behavioral-contract-change",
+  "executableDependencyChanged": false
 }

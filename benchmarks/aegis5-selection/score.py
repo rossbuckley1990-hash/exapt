@@ -6,7 +6,7 @@ score: evaluate a provided CommonJS transform with the fixed sealed corpus.
 No model calls, acquisition, repair, retries, engine imports, or oracle adaptation.
 """
 from pathlib import Path
-import argparse, base64, collections, hashlib, json, math, os, selectors, subprocess, time, uuid
+import argparse, base64, collections, hashlib, json, math, os, selectors, subprocess, time, uuid, tempfile
 
 PUBLIC=Path(__file__).resolve().parent
 SEALED=Path('/private/tmp/exapt-aegis5-sealed')
@@ -32,19 +32,21 @@ def verify():
     for key,val in actual.items():
         if lock[key]!=val:raise ValueError('Freeze mismatch: '+key)
     return {'verified':True,**actual,'freezeSha256':sha((PUBLIC/'FREEZE.json').read_bytes())}
-def docker_execute(payload,timeout=10):
+def docker_execute(payload,timeout=30):
     # Neither submission directories, expected outputs, other cases nor host sockets
     # enter Docker. One container per case also supplies fresh-session evaluation.
     runner=(PUBLIC/'runner.cjs').read_text()
     name='aegis5-'+uuid.uuid4().hex
-    cmd=['docker','run','--rm','--name',name,'--pull','never','--network','none','--read-only',
+    cmd=['docker','run','--rm','--interactive','--name',name,'--pull','never','--network','none','--read-only',
          '--cap-drop','ALL','--security-opt','no-new-privileges','--pids-limit','64',
          '--memory','256m','--memory-swap','256m','--cpus','1','--user','65534:65534',
-         '--env','TZ=UTC','--env','LANG=C.UTF-8',IMAGE,'node','--disable-proto=throw','-e',runner]
-    start=time.monotonic();p=subprocess.Popen(cmd,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+         '--env','TZ=UTC','--env','LANG=C.UTF-8',IMAGE,'node','--permission','--disable-proto=throw','-e',runner]
+    # An anonymous file avoids blocking in a pipe write before the timeout loop.
+    # It is unlinked, selector-owned, and contains no oracle expectations.
+    inp=tempfile.TemporaryFile(dir=SEALED/'work')
+    inp.write(pack(payload).encode());inp.seek(0)
+    start=time.monotonic();p=subprocess.Popen(cmd,stdin=inp,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     try:
-        # Payload is small enough for the live Node reader; no expected values are sent.
-        p.stdin.write(pack(payload).encode());p.stdin.close()
         sel=selectors.DefaultSelector();sel.register(p.stdout,selectors.EVENT_READ,'out');sel.register(p.stderr,selectors.EVENT_READ,'err')
         chunks={'out':bytearray(),'err':bytearray()};total=0
         while sel.get_map():
@@ -63,11 +65,19 @@ def docker_execute(payload,timeout=10):
         result['elapsedSeconds']=round(time.monotonic()-start,6)
         return result
     except Exception as e:
-        p.kill();p.wait()
+        if p.poll() is None:p.kill()
+        p.wait(timeout=5)
         # Killing the Docker client does not reliably terminate the container.
-        subprocess.run(['docker','rm','-f',name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=10)
-        return {'ok':False,'error':str(e),'calls':{},'elapsedSeconds':round(time.monotonic()-start,6)}
+        cleanupError=None
+        try:
+            subprocess.run(['docker','rm','-f',name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=10,check=True)
+        except Exception as cleanup:
+            cleanupError=str(cleanup)
+        result={'ok':False,'error':str(e),'calls':{},'elapsedSeconds':round(time.monotonic()-start,6)}
+        if cleanupError:result.update(cleanupError=cleanupError,containerName=name)
+        return result
     finally:
+        inp.close()
         for f in [p.stdout,p.stderr]:f.close()
 def strict_json(s):
     def pairs(items):

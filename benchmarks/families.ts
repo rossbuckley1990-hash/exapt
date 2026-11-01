@@ -377,4 +377,13 @@ export function generateAll(): string[] {
   return fs.readdirSync(FIXTURES).filter((d) => fs.existsSync(path.join(FIXTURES, d, "task.json")));
 }
 
-if (process.argv[1] === import.meta.filename) console.log(generateAll().join("\n"));
+/** The second round: seeds no development ever used. */
+export function generateRoundTwo(): void {
+  for (const s of [301, 302]) relay(s);
+  for (const s of [311, 312]) ledger(s);
+}
+
+if (process.argv[1] === import.meta.filename) {
+  if (process.argv[2] === "round-two") generateRoundTwo();
+  else console.log(generateAll().join("\n"));
+}

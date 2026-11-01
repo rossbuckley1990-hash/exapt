@@ -1,0 +1,1 @@
+{"events":[{"epoch":1698541200,"value":18},{"epoch":1698539400,"value":27},{"epoch":1698535800,"value":20},{"epoch":1698449400,"value":25}],"version":1,"zone":"Europe/London"}

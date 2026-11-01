@@ -1,0 +1,9 @@
+# generated schedule 1000
+1 Jul 2027 | Craignure -> Oban | MV Isle of Mull | dep 4:22pm | 55 min | £33.71 | 1250 pax
+12 Jan 2026 | Craignure -> Oban | MV Isle of Mull | dep 8:22am | 55 min | £27.32 | 1240 pax
+21 Sep 2026 | Mallaig -> Armadale | MV Coruisk | dep 3:10am | 1h 23m | £18 | 485 pax
+17 Jan 2027 | Ullapool -> Stornoway | MV Loch Seaforth | dep 5:05am | 168 min | £33.24 | 1280 pax
+27 Aug 2027 | Craignure -> Oban | MV Isle of Mull | dep 2:42am | 46 min | £39.37 | 1260 pax
+19 Apr 2027 | Ryde -> Portsmouth | MV Fastcat Solent | dep 3:22pm | 48 min | £33.70 | 2360 pax
+1 Apr 2026 | Portsmouth -> Ryde | MV Fastcat Solent | dep 10:35pm | 30 min | £17 | 2370 pax
+6 Aug 2027 | Ullapool -> Stornoway | MV Loch Seaforth | dep 1:40am | 3h | £8 | 1300 pax

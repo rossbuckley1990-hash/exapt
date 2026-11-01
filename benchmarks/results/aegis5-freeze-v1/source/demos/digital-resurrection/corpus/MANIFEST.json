@@ -1,0 +1,216 @@
+{
+  "source": "https://github.com/nvkelso/natural-earth-vector",
+  "commit": "ca96624a56bd078437bca8184e78163e5039ad19",
+  "license": "Public domain (Natural Earth, https://www.naturalearthdata.com/about/terms-of-use/)",
+  "files": [
+    {
+      "name": "ne_110m_admin_0_pacific_groupings",
+      "source": "110m_cultural/ne_110m_admin_0_pacific_groupings.dbf",
+      "sha256": "75824be2eeaa0b0d3da29e5861f5d438ee97c68a617cf7ee41e752de78c447a9",
+      "truthFrom": "geojson/ne_110m_admin_0_pacific_groupings.geojson",
+      "truthSha256": "eafb50fe19dfbd5af29610b4c038fe065b56833342fa8e92dc1069654f51933d",
+      "records": 62,
+      "fields": 2
+    },
+    {
+      "name": "ne_110m_admin_0_scale_rank",
+      "source": "110m_cultural/ne_110m_admin_0_scale_rank.dbf",
+      "sha256": "88bcb0b2f1a229d43706482ef27ec4c099b1a821a2064a591268f6a6fb079d39",
+      "truthFrom": "geojson/ne_110m_admin_0_scale_rank.geojson",
+      "truthSha256": "e3daf6576d506fd7c0ccf362de49fadca1f669ff7c22ebc7063f04128ed0f262",
+      "records": 290,
+      "fields": 7
+    },
+    {
+      "name": "ne_110m_admin_1_states_provinces_scale_rank",
+      "source": "110m_cultural/ne_110m_admin_1_states_provinces_scale_rank.dbf",
+      "sha256": "9b4913593104891d572e4c69617869807f79526e4a95367feaf0b664cd041323",
+      "truthFrom": "geojson/ne_110m_admin_1_states_provinces_scale_rank.geojson",
+      "truthSha256": "dc91a18e49984bd45c77a0c4c77fe809896cb5451a2376adce7a302707ad7e0e",
+      "records": 51,
+      "fields": 3
+    },
+    {
+      "name": "ne_110m_admin_1_states_provinces",
+      "source": "110m_cultural/ne_110m_admin_1_states_provinces.dbf",
+      "sha256": "02063542d7d19314b420640ee3eb48d5b72f5cf7ff65bed3ce8040f26013cc51",
+      "truthFrom": "geojson/ne_110m_admin_1_states_provinces.geojson",
+      "truthSha256": "ce5ada973910aa1de8b8559fadeab20fd6a61a493459ce5493296d7bf019809c",
+      "records": 51,
+      "fields": 121
+    },
+    {
+      "name": "ne_110m_geography_regions_points",
+      "source": "110m_physical/ne_110m_geography_regions_points.dbf",
+      "sha256": "1ce5573b5472e29c063293ada4d03fbb3a842d4496b177bf6c84584ebc236689",
+      "truthFrom": "geojson/ne_110m_geography_regions_points.geojson",
+      "truthSha256": "e520eecbc397864efaff1ee5feea7abf2b473145061ffba39669b2cce539406b",
+      "records": 3,
+      "fields": 39
+    },
+    {
+      "name": "ne_110m_geography_regions_elevation_points",
+      "source": "110m_physical/ne_110m_geography_regions_elevation_points.dbf",
+      "sha256": "cce87b8d03cd358d957e3cb92525782a47987649910e4ffe9fb745164da14838",
+      "truthFrom": "geojson/ne_110m_geography_regions_elevation_points.geojson",
+      "truthSha256": "5d9930bb3bb031abff14a79192141cc943bc8d292b4ad49ac5e02f16e015a699",
+      "records": 19,
+      "fields": 43
+    },
+    {
+      "name": "ne_110m_geographic_lines",
+      "source": "110m_physical/ne_110m_geographic_lines.dbf",
+      "sha256": "e1adc96efcaa038703a1121e4b843da7b1928f6da6c35c05d28c250564455f70",
+      "truthFrom": "geojson/ne_110m_geographic_lines.geojson",
+      "truthSha256": "dc1148ccf1b8f7dee45943279c6eaf80fa44641aa8b05a0de0f68d988c45eb43",
+      "records": 6,
+      "fields": 36
+    },
+    {
+      "name": "ne_110m_rivers_lake_centerlines",
+      "source": "110m_physical/ne_110m_rivers_lake_centerlines.dbf",
+      "sha256": "64a480e1e56f12c1603ab7295901923d7376b27df5f6c393d921091fe18b28f7",
+      "truthFrom": "geojson/ne_110m_rivers_lake_centerlines.geojson",
+      "truthSha256": "799c633508264517c98997aa021adbaa7d2c538efaf5235a18616a7aa86f3926",
+      "records": 13,
+      "fields": 35
+    },
+    {
+      "name": "ne_110m_lakes",
+      "source": "110m_physical/ne_110m_lakes.dbf",
+      "sha256": "ee65c43bdb14463f9a31eda58f7245e3ae0796ac606a67bea0e8386080878cbf",
+      "truthFrom": "geojson/ne_110m_lakes.geojson",
+      "truthSha256": "6afae98fb7a0cf17db31afb4c8374b2ef9e588242060de20bdb58f76a8032d35",
+      "records": 24,
+      "fields": 37
+    },
+    {
+      "name": "ne_110m_land",
+      "source": "110m_physical/ne_110m_land.dbf",
+      "sha256": "db7cf6d2de2811df09bd7fcc6f243ab78a715b83571a0cb7b36b4e2af3297caa",
+      "truthFrom": "geojson/ne_110m_land.geojson",
+      "truthSha256": "bf822b6f4d6598594c6192719ecf4b70f1474697a4e43d7755af7601c6b832d5",
+      "records": 127,
+      "fields": 3
+    },
+    {
+      "name": "ne_110m_coastline",
+      "source": "110m_physical/ne_110m_coastline.dbf",
+      "sha256": "ac7e59083a862bafc20b86d73595fdf2a7c0693a411cf3ba91910a5de9df9bc3",
+      "truthFrom": "geojson/ne_110m_coastline.geojson",
+      "truthSha256": "40d236a357c515d5221b3a7b37b9aff14d16cd470d27e1ab7cdeaef4c309a4e8",
+      "records": 134,
+      "fields": 3
+    },
+    {
+      "name": "ne_110m_geography_marine_polys",
+      "source": "110m_physical/ne_110m_geography_marine_polys.dbf",
+      "sha256": "81a8ac128a766af83cbf2037b3b670d602c44995e58227eb1e232462b374525e",
+      "truthFrom": "geojson/ne_110m_geography_marine_polys.geojson",
+      "truthSha256": "9c34b8e05be73016f75e638b23d72e4c87f30932c015f259738068e9ae00ccaa",
+      "records": 29,
+      "fields": 37
+    }
+  ],
+  "quality": {
+    "rule": "equal record counts and at least 99% of comparable cells agree, by an independent reference reader",
+    "verdicts": [
+      {
+        "name": "ne_110m_admin_0_pacific_groupings",
+        "dbfRecords": 62,
+        "truthRecords": 62,
+        "cells": 124,
+        "agreement": 1.0,
+        "admissible": true
+      },
+      {
+        "name": "ne_110m_admin_0_scale_rank",
+        "dbfRecords": 290,
+        "truthRecords": 290,
+        "cells": 2030,
+        "agreement": 1.0,
+        "admissible": true
+      },
+      {
+        "name": "ne_110m_admin_1_states_provinces_scale_rank",
+        "dbfRecords": 51,
+        "truthRecords": 51,
+        "cells": 153,
+        "agreement": 1.0,
+        "admissible": true
+      },
+      {
+        "name": "ne_110m_admin_1_states_provinces",
+        "dbfRecords": 51,
+        "truthRecords": 51,
+        "cells": 6171,
+        "agreement": 0.33576,
+        "admissible": false
+      },
+      {
+        "name": "ne_110m_geography_regions_points",
+        "dbfRecords": 3,
+        "truthRecords": 3,
+        "cells": 117,
+        "agreement": 1.0,
+        "admissible": true
+      },
+      {
+        "name": "ne_110m_geography_regions_elevation_points",
+        "dbfRecords": 19,
+        "truthRecords": 19,
+        "cells": 817,
+        "agreement": 1.0,
+        "admissible": true
+      },
+      {
+        "name": "ne_110m_geographic_lines",
+        "dbfRecords": 6,
+        "truthRecords": 6,
+        "cells": 216,
+        "agreement": 1.0,
+        "admissible": true
+      },
+      {
+        "name": "ne_110m_rivers_lake_centerlines",
+        "dbfRecords": 13,
+        "truthRecords": 13,
+        "cells": 455,
+        "agreement": 1.0,
+        "admissible": true
+      },
+      {
+        "name": "ne_110m_lakes",
+        "dbfRecords": 24,
+        "truthRecords": 24,
+        "cells": 888,
+        "agreement": 1.0,
+        "admissible": true
+      },
+      {
+        "name": "ne_110m_land",
+        "dbfRecords": 127,
+        "truthRecords": 127,
+        "cells": 381,
+        "agreement": 1.0,
+        "admissible": true
+      },
+      {
+        "name": "ne_110m_coastline",
+        "dbfRecords": 134,
+        "truthRecords": 134,
+        "cells": 402,
+        "agreement": 1.0,
+        "admissible": true
+      },
+      {
+        "name": "ne_110m_geography_marine_polys",
+        "dbfRecords": 38,
+        "truthRecords": 29,
+        "cells": 0,
+        "agreement": 0,
+        "admissible": false
+      }
+    ]
+  }
+}

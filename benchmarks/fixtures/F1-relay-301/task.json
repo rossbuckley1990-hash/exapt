@@ -1,0 +1,24 @@
+{
+  "id": "F1-relay-301",
+  "family": "relay",
+  "origin": "generated",
+  "answer": "done",
+  "compare": "text",
+  "hasDrift": true,
+  "newInput": "new.dump",
+  "outcome": "Given a raw device dump like sample/raw.dump, produce the compliance report that cold-report prints. The programs in programs/ document themselves with --help.",
+  "goal": {
+    "id": "F1-relay-301",
+    "intent": "Produce the cold-report compliance report from a raw device dump",
+    "have": {
+      "samples": [
+        {
+          "path": "sample/raw.dump"
+        }
+      ]
+    },
+    "want": {
+      "program": "cold-report"
+    }
+  }
+}

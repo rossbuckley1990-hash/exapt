@@ -1,0 +1,13 @@
+# Western Isles sailings, week of 14 March
+14 Mar 2026 | Oban -> Craignure | MV Aurelia | dep 7:40am | 45 min | £12.50 | 180 pax
+14 Mar 2026 | Craignure -> Oban | MV Aurelia | dep 8:55am | 45 min | £12.50 | 180 pax
+14 Mar 2026 | Oban -> Craignure | MV Aurelia | dep 12:10pm | 50 min | £12.50 | 180 pax
+14 Mar 2026 | Mallaig -> Armadale | MV Loch Fada | dep 9:00am | 1h 10m | £4.95 | 90 pax
+14 Mar 2026 | Armadale -> Mallaig | MV Loch Fada | dep 10:30am | 1h 10m | £4.95 | 90 pax
+15 Mar 2026 | Largs -> Millport | MV Keppel | dep 6:15am | 10 min | £3.00 | 60 pax
+15 Mar 2026 | Millport -> Largs | MV Keppel | dep 6:35am | 10 min | £3.00 | 60 pax
+15 Mar 2026 | Portsmouth -> Ryde | MV Spirit of Wight | dep 12:05am | 22 min | £21.00 | 400 pax
+15 Mar 2026 | Ryde -> Portsmouth | MV Spirit of Wight | dep 12:45pm | 22 min | £21.00 | 400 pax
+15 Mar 2026 | Oban -> Craignure | MV Aurelia | dep 4:25pm | 52 min | £12.50 | 180 pax
+16 Mar 2026 | Mallaig -> Armadale | MV Loch Fada | dep 2:00pm | 1h 15m | £4.95 | 90 pax
+16 Mar 2026 | Portsmouth -> Ryde | MV Spirit of Wight | dep 11:50pm | 25 min | £22.50 | 400 pax

@@ -1,0 +1,28 @@
+{
+  "cold": {
+    "classification": "original-contract generalization",
+    "freshContainerPerInput": true
+  },
+  "warm": {
+    "classification": "fresh-session reuse",
+    "freshInputs": 4,
+    "freshContainerPerInput": true
+  },
+  "compatible": {
+    "classification": "a: input variation",
+    "behavioralContractChanged": false,
+    "executableDependencyChanged": false
+  },
+  "incompatible": {
+    "classification": "a: input variation outside supported domain",
+    "behavioralContractChanged": false,
+    "executableDependencyChanged": false,
+    "expect": "refusal"
+  },
+  "composition": {
+    "classification": "b: second-stage behavioral goal using retained first-stage capability",
+    "firstStageContractChanged": false,
+    "executableDependencyChanged": false
+  },
+  "dependencyRevalidationClaim": false
+}

@@ -7,5 +7,17 @@
     "maxTokens": 4000,
     "temperature": 0.1
   },
-  "capRemainingUsd": 0.564736
+  "capRemainingUsd": 0.564736,
+  "reply": {
+    "text": "```js\nexport function transform(input) {\n  if (typeof input !== \"string\") throw new Error(\"input must be a string\");\n  const lines = input.split(/\\r?\\n/);\n  let i = 0;\n  while (i < lines.length && lines[i].trim() === \"\") i++;\n  const header = lines[i++] || \"\";\n  const hm = header.match(/^Mach Virtual Memory Statistics: \\(page size of (\\d+) bytes\\)\\s*$/);\n  if (!hm) throw new Error(\"invalid header\");\n  const pageSize = BigInt(hm[1]);\n  if (pageSize !== 16384n) throw new Error(\"unsupported page size\");\n\n  const map = new Map([\n    [\"Pages free\", \"memory.free_bytes\"],\n    [\"Pages active\", \"memory.active_bytes\"],\n    [\"Pages inactive\", \"memory.inactive_bytes\"],\n    [\"Pages speculative\", \"memory.speculative_bytes\"],\n    [\"Pages wired down\", \"memory.wired_bytes\"],\n    [\"Pages occupied by compressor\", \"memory.compressor_bytes\"],\n  ]);\n  const found = new Map();\n  for (; i < lines.length; i++) {\n    const line = lines[i];\n    if (line.trim() === \"\") continue;\n    const m = line.match(/^\\s*(.*?):\\s*(\\d+)\\.?\\s*$/);\n    if (!m) throw new Error(\"malformed line: \" + line);\n    const label = m[1].replace(/^\"|\"$/g, \"\").trim();\n    if (map.has(label)) {\n      if (found.has(label)) throw new Error(\"duplicate label: \" + label);\n      found.set(label, BigInt(m[2]) * pageSize);\n    }\n  }\n  const out = [];\n  for (const [label, metric] of map) {\n    if (!found.has(label)) throw new Error(\"missing metric: \" + label);\n    out.push('{\"metric\":\"' + metric + '\",\"value\":' + found.get(label).toString() + \"}\");\n  }\n  return out.join(\"\\n\") + \"\\n\";\n}\n```",
+    "usage": {
+      "inputTokens": 6754,
+      "outputTokens": 940,
+      "costUsd": 0.011491000000000001
+    },
+    "model": "sonnet",
+    "provider": "claude-cli",
+    "ms": 7818.013458000001
+  },
+  "totalReportedCostUsd": 0.046755000000000005
 }

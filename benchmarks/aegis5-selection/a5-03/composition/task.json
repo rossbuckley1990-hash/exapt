@@ -43,12 +43,31 @@
     {
       "input": "examples/06.input.txt",
       "truth": "examples/06.truth.json"
+    },
+    {
+      "input": "examples/07.input.txt",
+      "truth": "examples/07.truth.json"
+    },
+    {
+      "input": "examples/08.input.txt",
+      "truth": "examples/08.truth.json"
+    },
+    {
+      "input": "examples/09.input.txt",
+      "truth": "examples/09.truth.json"
+    },
+    {
+      "input": "examples/10.input.txt",
+      "truth": "examples/10.truth.json"
     }
   ],
-  "targetSample": "examples/01.input.txt",
+  "targetSample": "examples/01.truth.json",
   "comparison": "json",
   "limitations": [
     "Inputs satisfy the composition schema. No unsupported composition inputs are scored."
   ],
-  "instructions": "Implement transform(input:string,lib)->string. Parse {version:1,zone,events:[{epoch:integerUnixSeconds,value:integer},...]}; supported zone/epochs, at most 64 events, abs(value)<=1000000. Use retained lib[\"a5-03\"] on the event instants to find each local calendar date. Return groups sorted by date: [{date:\"YYYY-MM-DD\",count,total,firstEpoch,lastEpoch},...]. Count duplicates; total is the exact integer sum; firstEpoch/min and lastEpoch/max are UTC epoch values. Empty events return []. Full composition-reuse credit requires at least one retained call, including for empty events. Input order need not be chronological."
+  "instructions": "Implement transform(input:string,lib)->string. Parse {version:1,zone,events:[{epoch:integerUnixSeconds,value:integer},...]}; supported zone/epochs, at most 64 events, abs(value)<=1000000. Use retained lib[\"a5-03\"] on the event instants to find each local calendar date. Return groups sorted by date: [{date:\"YYYY-MM-DD\",count,total,firstEpoch,lastEpoch},...]. Count duplicates; total is the exact integer sum; firstEpoch/min and lastEpoch/max are UTC epoch values. Empty events return []. Full composition-reuse credit requires at least one retained call, including for empty events. Input order need not be chronological. targetSample is a JSON output example. Classification: (b) a second-stage behavioral goal; the first-stage contract and software versions remain unchanged. This is not dependency revalidation.",
+  "phase": "composition",
+  "changeType": "behavioral-contract-change",
+  "executableDependencyChanged": false
 }

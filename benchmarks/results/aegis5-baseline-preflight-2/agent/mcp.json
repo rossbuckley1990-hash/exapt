@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "aegis": {
+      "command": "/opt/homebrew/Cellar/node/26.12.0/bin/node",
+      "args": [
+        "/Users/ross/EXAPT/benchmarks/results/aegis5-freeze-v1/source/benchmarks/aegis5/terminal.ts",
+        "/Users/ross/EXAPT/benchmarks/results/aegis5-baseline-preflight-2/workspace",
+        "/Users/ross/EXAPT/benchmarks/results/aegis5-baseline-preflight-2/agent/tools.jsonl"
+      ]
+    }
+  }
+}

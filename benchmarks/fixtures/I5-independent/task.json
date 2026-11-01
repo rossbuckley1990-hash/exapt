@@ -1,0 +1,23 @@
+{
+  "id": "I5-independent",
+  "family": "independent",
+  "origin": "independent",
+  "answer": "done",
+  "compare": "text",
+  "newInput": "new.txt",
+  "outcome": "I have my station logbook as a plain text file and want the activity report for it: how many contacts per band and mode, and my highest power. The input looks like sample/input.txt. The programs in programs/ document themselves with --help.",
+  "goal": {
+    "id": "I5-independent",
+    "intent": "I have my station logbook as a plain text file and want the activity report for it: how many contacts per band and mode, and my highest power.",
+    "have": {
+      "samples": [
+        {
+          "path": "sample/input.txt"
+        }
+      ]
+    },
+    "want": {
+      "program": "qslaudit"
+    }
+  }
+}

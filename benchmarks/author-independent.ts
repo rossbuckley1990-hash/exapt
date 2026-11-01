@@ -8,7 +8,7 @@ import path from "node:path";
 import { FIXTURES, HOLDOUTS, ROOT, type TaskSpec } from "./families.ts";
 import { writeJson } from "../packages/shared/index.ts";
 
-const DOMAINS: Array<[string, string]> = [["I1", "seismology station bulletins"], ["I2", "theatre box office settlements"], ["I3", "beekeeping hive inspection records"]];
+const DOMAINS: Array<[string, string]> = [["I1", "seismology station bulletins"], ["I2", "theatre box office settlements"], ["I3", "beekeeping hive inspection records"], ["I4", "vineyard harvest and crush ledgers"], ["I5", "amateur radio contact logs"], ["I6", "ferry timetable feeds"]];
 const brief = fs.readFileSync(path.join(ROOT, "preregistration/authoring-brief.md"), "utf8");
 
 export async function author(id: string, domain: string, model: string): Promise<number> {
@@ -16,7 +16,7 @@ export async function author(id: string, domain: string, model: string): Promise
   const profile = path.join(work, ".confine.sb");
   const home = process.env.HOME!;
   fs.writeFileSync(profile, `(version 1)\n(allow default)\n(deny file-write*)\n(allow file-write* (subpath "${work}") (subpath "${home}/.claude") (literal "${home}/.claude.json") (subpath "/private/tmp") (subpath "/private/var/folders") (subpath "${home}/Library/Caches") (literal "/dev/null") (regex #"^/dev/tty") (regex #"^/dev/fd/"))\n(deny file-read* (subpath "${home}/.ssh") (subpath "${home}/.aws") (subpath "${home}/.gnupg"))\n`);
-  const r = spawnSync("sandbox-exec", ["-f", profile, "claude", "-p", "--output-format", "json", "--model", model, "--tools", "Bash,Read,Write,Edit", "--allowedTools", "Bash,Read,Write,Edit", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence", "--max-budget-usd", "1.5"], { input: brief.replace("{{DOMAIN}}", domain), cwd: work, encoding: "utf8", timeout: 900_000, maxBuffer: 64 * 1024 * 1024 });
+  const r = spawnSync("sandbox-exec", ["-f", profile, "claude", "-p", "--output-format", "json", "--model", model, "--tools", "Bash,Read,Write,Edit", "--allowedTools", "Bash,Read,Write,Edit", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence", "--max-budget-usd", "1.5"], { input: brief.replace("{{DOMAIN}}", domain), cwd: work, encoding: "utf8", timeout: 300_000, maxBuffer: 64 * 1024 * 1024 });
   const body = JSON.parse(r.stdout || "{}") as { total_cost_usd?: number; is_error?: boolean; result?: string };
   console.log(id, domain, "author cost", body.total_cost_usd, "error", body.is_error, String(body.result).slice(0, 160));
   await finalise(id, domain, work, `a fresh ${model} session`, body.total_cost_usd ?? 0);
@@ -70,6 +70,8 @@ if (process.argv[1] === import.meta.filename && process.argv[2] === "--finalise"
   await finalise(id, DOMAINS.find(([x]) => x === id)![1], work, "a fresh sonnet session", Number(process.argv[5] ?? 0));
 } else if (process.argv[1] === import.meta.filename) {
   const model = process.argv[2] ?? "sonnet";
-  const results = await Promise.allSettled(DOMAINS.map(([id, domain]) => author(id, domain, model)));
-  for (const r of results) if (r.status === "rejected") console.error(String(r.reason).slice(0, 400));
+  const wanted = process.argv.slice(3);
+  for (const [id, domain] of DOMAINS.filter(([i]) => wanted.includes(i))) {
+    await author(id, domain, model).catch((e) => console.error(id, String(e).slice(0, 400)));
+  }
 }

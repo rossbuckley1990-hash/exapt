@@ -1,0 +1,59 @@
+#!/usr/bin/env node
+const HELP = `qslaudit - validate a QSLAUDIT/2 log (format Q) and print an activity report
+
+READS (stdin), strictly:
+  QSLAUDIT/2
+  [contact]
+  call=<CALLSIGN>                  uppercase letters/digits, optional /suffix
+  when=<YYYY-MM-DDTHH:MM:SSZ>      UTC timestamp
+  mhz=<d+.ddd>                     frequency in MHz, exactly 3 decimals, inside an amateur band
+  mode=<SSB|CW|FM|AM|RTTY>
+  rst=<sent>/<rcvd>                2 digits for SSB/FM/AM (RS), 3 digits for CW/RTTY (RST)
+  watts=<integer 1-1500>           transmit power in watts
+  op="<name>"                      operator name in double quotes
+  [end]
+  ... more contact blocks ...
+  [total <n>]                      must equal the number of blocks
+Keys must appear in exactly that order. Any deviation: message on stderr, exit 1.
+
+WRITES (stdout): report with contacts per band, per mode, distinct stations,
+highest power (watts) and time span (UTC).
+`;
+if (process.argv.includes('--help')) { process.stdout.write(HELP); process.exit(0); }
+const fail = (m) => { console.error('invalid: ' + m); process.exit(1); };
+const L = require('fs').readFileSync(0, 'utf8').split('\n');
+if (L[L.length - 1] === '') L.pop();
+let p = 0;
+const next = () => { if (p >= L.length) fail('unexpected end of input'); return L[p++]; };
+if (next() !== 'QSLAUDIT/2') fail('bad header');
+const bands = [['160m',1.8,2],['80m',3.5,4],['60m',5.3,5.41],['40m',7,7.3],['30m',10.1,10.15],['20m',14,14.35],['17m',18.068,18.168],['15m',21,21.45],['12m',24.89,24.99],['10m',28,29.7],['6m',50,54],['2m',144,148],['70cm',420,450]];
+const byBand = {}, byMode = {}, calls = new Set();
+let n = 0, maxW = 0, first = null, last = null;
+for (;;) {
+  const h = next();
+  let m = /^\[total (\d+)\]$/.exec(h);
+  if (m) { if (+m[1] !== n) fail('total mismatch'); if (p !== L.length) fail('trailing data'); break; }
+  if (h !== '[contact]') fail(`line ${p}: expected [contact]`);
+  const kv = (k, re) => { const l = next(); const mm = re.exec(l.startsWith(k + '=') ? l.slice(k.length + 1) : '\0'); if (!mm) fail(`line ${p}: bad ${k}`); return mm; };
+  const call = kv('call', /^[A-Z0-9]{1,3}[0-9][A-Z0-9]{0,3}[A-Z](\/[A-Z0-9]+)?$/)[0];
+  const when = kv('when', /^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z$/);
+  const dt = new Date(when[0]);
+  if (isNaN(dt) || dt.toISOString().slice(0, 19) + 'Z' !== when[0]) fail(`line ${p}: impossible timestamp`);
+  const mhz = kv('mhz', /^\d+\.\d{3}$/)[0];
+  const band = bands.find(b => +mhz >= b[1] && +mhz <= b[2]);
+  if (!band) fail(`line ${p}: ${mhz} MHz outside amateur bands`);
+  const mode = kv('mode', /^(SSB|CW|FM|AM|RTTY)$/)[0];
+  const rst = kv('rst', /^(\d{2,3})\/(\d{2,3})$/);
+  const want = (mode === 'CW' || mode === 'RTTY') ? 3 : 2;
+  if (rst[1].length !== want || rst[2].length !== want) fail(`line ${p}: rst width wrong for ${mode}`);
+  const w = kv('watts', /^[1-9]\d*$/)[0];
+  if (+w > 1500) fail(`line ${p}: power over 1500 W`);
+  kv('op', /^"[^"\n]+"$/);
+  if (next() !== '[end]') fail(`line ${p}: expected [end]`);
+  n++; calls.add(call); maxW = Math.max(maxW, +w);
+  byBand[band[0]] = (byBand[band[0]] || 0) + 1; byMode[mode] = (byMode[mode] || 0) + 1;
+  if (!first || when[0] < first) first = when[0];
+  if (!last || when[0] > last) last = when[0];
+}
+const fmt = (o) => Object.entries(o).sort().map(([k, v]) => `  ${k.padEnd(6)} ${v}`).join('\n');
+console.log(`Contacts: ${n}\nDistinct stations: ${calls.size}\nHighest power: ${maxW} W\nSpan: ${first} .. ${last}\nBy band:\n${fmt(byBand)}\nBy mode:\n${fmt(byMode)}`);
