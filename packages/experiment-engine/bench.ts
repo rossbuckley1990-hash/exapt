@@ -46,6 +46,8 @@ export interface BehaviouralContract {
   oracles: OracleSpec[];
   /** Numeric slack per source field when comparing through an inverse route, measured not assumed. */
   tolerance: Record<string, number>;
+  /** Source fields the inverse route cannot reconstruct, found by experiment. It judges the rest. */
+  notCarried: string[];
   properties: string[];
 }
 
@@ -86,10 +88,34 @@ async function calibrate(universe: Universe, route: string[], sample: string, re
   return tolerance;
 }
 
+/** An inverse can only confirm what it carries. A source field that comes back the same however
+ *  the target varies holds no information from the target, so the oracle says nothing about it. */
+async function fieldsNotCarried(universe: Universe, route: string[], sample: string, repr: Repr, sourceRepr: Repr, seed: number): Promise<string[]> {
+  const rng = new Rng(seed);
+  const seen = new Map<string, Set<string>>();
+  for (let i = 0; i < 6; i++) {
+    let cur: string | null = generateLike(sample, repr, rng, 4);
+    for (const id of route) {
+      const r: { ok: boolean; stdout: string; stderr?: string } = await universe.tool(id)!.run(cur).catch(() => ({ ok: false, stdout: "" }));
+      cur = accepted(r) ? r.stdout : null;
+      if (cur === null) break;
+    }
+    if (cur === null) continue;
+    for (const row of parseRecords(cur, sourceRepr.syntax)) for (const [k, v] of Object.entries(row)) {
+      const set = seen.get(k) ?? new Set<string>();
+      set.add(cellText(v));
+      seen.set(k, set);
+    }
+  }
+  return [...seen].filter(([, values]) => values.size === 1).map(([k]) => k);
+}
+
 export async function buildContract(universe: Universe, gap: Gap, goal: Goal): Promise<BehaviouralContract> {
   const binary = gap.from.repr.syntax.format === "binary";
   const inverse = gap.oracles.find((o) => o.kind === "inverse-route");
-  const tolerance = inverse && inverse.kind === "inverse-route" && gap.to.sample ? await calibrate(universe, inverse.route, gap.to.sample, gap.to.repr, gap.from.repr) : {};
+  const hasInverse = inverse?.kind === "inverse-route" && !!gap.to.sample;
+  const tolerance = hasInverse ? await calibrate(universe, inverse.route, gap.to.sample!, gap.to.repr, gap.from.repr) : {};
+  const notCarried = hasInverse ? await fieldsNotCarried(universe, inverse.route, gap.to.sample!, gap.to.repr, gap.from.repr, 73) : [];
   const properties = [
     "Pure and deterministic: the same input always gives the same output.",
     ...(isRecordRepr(gap.to.repr) && isRecordRepr(gap.from.repr) ? ["One output record per input record, in input order."] : []),
@@ -108,6 +134,7 @@ export async function buildContract(universe: Universe, gap: Gap, goal: Goal): P
     downstream: gap.to.downstream,
     oracles: gap.oracles,
     tolerance,
+    notCarried,
     properties,
   };
 }

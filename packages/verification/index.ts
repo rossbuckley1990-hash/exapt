@@ -138,6 +138,7 @@ export async function verify(o: { universe: Universe; contract: BehaviouralContr
     ...(strongEnough ? [] : [`The test suite caught only ${mutation.value.killed} of ${mutation.value.total} injected value faults, so it may not be testing what it appears to test.`]),
     ...(contract.consumer ? [`Correct relative to ${o.universe.tool(contract.consumer)?.name} as it behaved when pinned.`] : []),
     ...bench.limitations,
+    ...(contract.notCarried?.length ? [`The inverse route does not carry ${contract.notCarried.join(", ")}, so it confirms nothing about these fields.`] : []),
   ];
   const fields = fieldRecovery(recoveryCases, allOutputs);
   if (fields) {

@@ -214,11 +214,59 @@ export interface Environment {
   base: string;
 }
 
-export function writeEnvironment(seed: number, dir: string): Environment {
+/** A further consumer two transformations away, so a second invention can stand on the first. */
+export function buildSecondStage(p: Params): Record<string, string> {
+  const t = p.target;
+  const ledger = program(`
+const blocks = read().trim().split(/\\n\\s*\\n/);
+const out = [];
+for (const b of blocks) {
+  const r = Object.fromEntries(b.split('\\n').map((l) => { const i = l.indexOf(':'); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; }));
+  for (const k of ['who', 'when', 'level']) if (!(k in r)) fail('missing ' + k);
+  if (!Number.isFinite(Number(r.level))) fail('level must be a number');
+  out.push(r.who + ' ' + Number(r.level).toFixed(2));
+}
+process.stdout.write(out.sort().join('\\n') + '\\n');
+`, `usage: ${p.theme}-ledger
+
+Reads ledger blocks from standard input, separated by blank lines, and prints one
+sorted line per block.
+
+Example input:
+  who: rig-1
+  when: 1772619300
+  level: 4.25
+
+  who: rig-2
+  when: 1772619360
+  level: 7.50
+`, `${p.theme}-ledger 1.0.0`);
+  const unledger = program(`
+const blocks = read().trim().split(/\\n\\s*\\n/);
+const out = [];
+for (const b of blocks) {
+  const r = Object.fromEntries(b.split('\\n').map((l) => { const i = l.indexOf(':'); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; }));
+  if (!('who' in r) || !('when' in r) || !('level' in r)) fail('incomplete block');
+  out.push(JSON.stringify({ ${JSON.stringify(t.id)}: r.who, ${JSON.stringify(t.time)}: Number(r.when), ${JSON.stringify(t.value)}: Number(r.level), ${JSON.stringify(t.note)}: 'unassigned' }));
+}
+process.stdout.write(out.join('\\n') + '\\n');
+`, `usage: ${p.theme}-unledger
+
+Turns ledger blocks back into newline-delimited readings for reprocessing.
+
+Example input:
+  who: rig-1
+  when: 1772619300
+  level: 4.25
+`, `${p.theme}-unledger 1.0.0`);
+  return { [`${p.theme}-ledger`]: ledger, [`${p.theme}-unledger`]: unledger };
+}
+
+export function writeEnvironment(seed: number, dir: string, opts: { secondStage?: boolean } = {}): Environment {
   const params = paramsFor(seed);
   const programs = path.join(dir, "programs");
   fs.mkdirSync(programs, { recursive: true });
-  for (const [name, source] of Object.entries(buildPrograms(params))) {
+  for (const [name, source] of Object.entries({ ...buildPrograms(params), ...(opts.secondStage ? buildSecondStage(params) : {}) })) {
     const file = path.join(programs, name);
     fs.writeFileSync(file, source, { mode: 0o755 });
     fs.chmodSync(file, 0o755);

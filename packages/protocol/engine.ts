@@ -399,6 +399,7 @@ export class Exapt {
     stage("publishing");
     await this.publishCandidate(run, result, gap, accepted, evidence, libs);
     if (run.capability?.status === "verified-within-scope") {
+      this.universe.closeGoal(run.goal.id);
       stage("running the completed workflow");
       const steps = [...gap.from.lineage, { tool: run.capability.id }, ...gap.to.downstream.map((tool) => ({ tool }))];
       run.workflow = await this.executeRoute(steps, run.goal, run.base);

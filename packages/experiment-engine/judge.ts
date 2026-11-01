@@ -119,7 +119,9 @@ export class Judge {
       cur = r.stdout;
     }
     const syntax = this.contract.source.repr.syntax;
-    const c = compareRecords(parseRecords(input, syntax), parseRecords(cur, syntax), { tolerance: this.contract.tolerance });
+    const expected = parseRecords(input, syntax);
+    const fields = Object.keys(expected[0] ?? {}).filter((f) => !this.contract.notCarried?.includes(f));
+    const c = compareRecords(expected, parseRecords(cur, syntax), { tolerance: this.contract.tolerance, fields });
     return c.equal ? null : { detail: `reading the output back does not reproduce the input: ${describeDiff(c.diffs[0])}`, diffs: c.diffs };
   }
 

@@ -348,6 +348,7 @@ const levelIndex = (l: EvidenceLevel): number => LEVEL_ORDER.indexOf(l);
  *  original was not testing what it appeared to test. */
 export function mutantsOf(source: string, seed: number, limit = 12): Mutant[] {
   const out: Mutant[] = [];
+  const code = codePositions(source);
   const inErrorMessage = (i: number): boolean => {
     const start = source.lastIndexOf("\n", i) + 1;
     return source.slice(start, i).includes("throw new Error(");
@@ -355,7 +356,9 @@ export function mutantsOf(source: string, seed: number, limit = 12): Mutant[] {
   const at = (pattern: RegExp, make: (m: RegExpMatchArray) => string, name: string, kind: Mutant["kind"] = "value") => {
     for (const m of source.matchAll(pattern)) {
       const i = m.index!;
-      if (inErrorMessage(i)) continue; // an altered message is not a behavioural fault
+      // Only code can be a fault. Text in a comment, string, template or regex is not, and an altered
+      // error message changes no behaviour. Counting these would mark good, commented code down.
+      if (!code[i] || inErrorMessage(i)) continue;
       out.push({ name: `${name} at ${i}`, kind, source: source.slice(0, i) + make(m) + source.slice(i + m[0].length) });
     }
   };
@@ -377,6 +380,51 @@ export function mutantsOf(source: string, seed: number, limit = 12): Mutant[] {
   const valueFaults = rng.shuffle(unique.filter((m) => m.kind === "value")).slice(0, Math.ceil(limit * 0.75));
   const robustness = rng.shuffle(unique.filter((m) => m.kind === "robustness"));
   return [...valueFaults, ...robustness].slice(0, limit);
+}
+
+/** True at each index that is code: not a comment, string, template text or regex literal. */
+export function codePositions(source: string): boolean[] {
+  const out = new Array<boolean>(source.length).fill(true);
+  let i = 0;
+  let last = ""; // the last significant character, to tell a regex from a division
+  const mark = (from: number, to: number) => out.fill(false, from, Math.min(to, source.length));
+  while (i < source.length) {
+    const c = source[i];
+    const next = source[i + 1];
+    if (c === "/" && next === "/") {
+      const end = source.indexOf("\n", i);
+      const stop = end < 0 ? source.length : end;
+      mark(i, stop);
+      i = stop;
+    } else if (c === "/" && next === "*") {
+      const end = source.indexOf("*/", i + 2);
+      const stop = end < 0 ? source.length : end + 2;
+      mark(i, stop);
+      i = stop;
+    } else if (c === '"' || c === "'" || c === "`") {
+      let j = i + 1;
+      while (j < source.length && source[j] !== c) j += source[j] === "\\" ? 2 : 1;
+      mark(i, j + 1);
+      i = j + 1;
+      last = c;
+    } else if (c === "/" && (!last || /[(,=:[!&|?{};+\-*%<>~^\n]/.test(last) || /\breturn\s*$/.test(source.slice(Math.max(0, i - 8), i)))) {
+      let j = i + 1;
+      let inClass = false;
+      while (j < source.length && source[j] !== "\n" && (source[j] !== "/" || inClass)) {
+        if (source[j] === "\\") j++;
+        else if (source[j] === "[") inClass = true;
+        else if (source[j] === "]") inClass = false;
+        j++;
+      }
+      mark(i, j + 1);
+      i = j + 1;
+      last = "/";
+    } else {
+      if (!/\s/.test(c)) last = c;
+      i++;
+    }
+  }
+  return out;
 }
 
 export interface Mutant {

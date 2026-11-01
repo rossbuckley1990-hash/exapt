@@ -16,24 +16,23 @@ const str = (description: string, extra: Record<string, unknown> = {}) => ({ typ
 const num = (description: string) => ({ type: "number", description });
 const bool = (description: string) => ({ type: "boolean", description });
 
-const sample = obj({ text: str("Inline UTF-8 data."), base64: str("Inline bytes as base64.") });
+const sample = obj({ text: str("UTF-8 data."), base64: str("Bytes.") });
 
 const goal = {
   ...obj({
-    id: str("Short identifier for this goal."),
-    intent: str("What is wanted, in words. For people and for ranking; it is not the acceptance test."),
-    have: obj({ samples: { type: "array", items: sample, description: "Values the workflow starts from." }, description: str("What these values are.") }, ["samples"]),
+    id: str("Short identifier."),
+    intent: str("The outcome in words. Not the acceptance test."),
+    have: obj({ samples: { type: "array", items: sample } }, ["samples"]),
     want: obj({
-      program: str("Name of an authorised program whose workflow must run to completion."),
-      sample: { ...sample, description: "A value in the desired output representation." },
-      examples: { type: "array", items: obj({ input: sample, output: sample }, ["input", "output"]), description: "Input and output pairs: the strongest statement of the outcome. Half are held out from synthesis." },
-      description: str("The outcome in words."),
+      program: str("Authorised program whose workflow must complete."),
+      sample: sample,
+      examples: { type: "array", items: obj({ input: sample, output: sample }, ["input", "output"]), description: "Half are held out from synthesis." },
     }),
-    corpus: { type: "array", items: obj({ input: sample, truth: sample, name: str("Label.") }, ["input", "truth"]), description: "Inputs with an independent source of truth. Split into tiers by EXAPT." },
-    checker: str("Authorised program that reads {\"input\",\"output\"} as JSON and exits 0 when the output is right."),
-    budget: obj({ rounds: num("Synthesis rounds."), modelCalls: num("Model calls; can only lower the operator's limit."), maxCostUsd: num("Dollars; can only lower the operator's limit.") }),
+    corpus: { type: "array", items: obj({ input: sample, truth: sample, name: str("Label.") }, ["input", "truth"]), description: "Inputs with an independent source of truth." },
+    checker: str("Authorised program reading {\"input\",\"output\"} as JSON; exit 0 means right."),
+    budget: obj({ rounds: num("Rounds."), modelCalls: num("Can only lower the operator's limit."), maxCostUsd: num("Can only lower the operator's limit.") }),
   }, ["id", "intent", "want"]),
-  description: "An explicit desired outcome. Data is inline: file paths are refused unless they fall in an operator-declared root.",
+  description: "The desired outcome, with data inline. File paths are refused.",
 };
 
 const runId = str("Run id from exapt_invent.");

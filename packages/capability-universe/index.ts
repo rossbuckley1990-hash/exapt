@@ -147,6 +147,11 @@ export class Universe {
     for (const [id, m] of this.missing) if (m.from === info.from && m.to === info.to) this.missing.delete(id);
   }
 
+  /** A goal that is closed has no missing transformation left, whatever else was ranked for it. */
+  closeGoal(goal: string): void {
+    for (const [id, m] of this.missing) if (m.goal === goal) this.missing.delete(id);
+  }
+
   removeGenerated(id: string): void {
     this.tools.delete(id);
   }

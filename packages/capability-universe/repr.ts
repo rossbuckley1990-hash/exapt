@@ -168,14 +168,16 @@ export function sniffSyntax(input: Buffer | string): Syntax {
     }
   });
   if (ls.length && objects.every(isPlainObject)) return { format: "ndjson" };
+  if (ls.length && ls.every((l) => (l.match(/(^|\s)[A-Za-z_][\w.-]*=/g) ?? []).length >= 2)) return { format: "logfmt" };
   for (const separator of [":", "="]) {
     const pattern = new RegExp(`^[A-Za-z_][\\w .-]*\\s*${separator}(\\s.*|[^\\s=:].*)?$`);
     if (ls.length >= 2 && ls.every((l) => pattern.test(l))) {
       const keys = ls.map((l) => l.slice(0, l.indexOf(separator)).trim());
-      if (new Set(keys).size < keys.length || /\n\s*\n/.test(text.trim())) return { format: "kv-blocks", separator };
+      // One block has no repeated key to prove itself by; "key: value" lines of plain names still do.
+      const plainNames = separator === ":" && keys.every((k) => /^[a-z_][a-z0-9_]*$/.test(k));
+      if (new Set(keys).size < keys.length || /\n\s*\n/.test(text.trim()) || plainNames) return { format: "kv-blocks", separator };
     }
   }
-  if (ls.length && ls.every((l) => (l.match(/(^|\s)[A-Za-z_][\w.-]*=/g) ?? []).length >= 2)) return { format: "logfmt" };
   let best: { delimiter: string; cells: number } | null = null;
   for (const d of DELIMITERS) {
     const counts = ls.map((l) => splitDelimited(l, d).length);
@@ -185,6 +187,8 @@ export function sniffSyntax(input: Buffer | string): Syntax {
     const rows = ls.map((l) => splitDelimited(l, best!.delimiter));
     return { format: "delimited", delimiter: best.delimiter, header: looksLikeHeader(rows[0], rows.slice(1)) };
   }
+  // One column has no delimiter to find: a name above values of a single kind is still a table.
+  if (ls.length >= 2 && /^[A-Za-z_]\w*$/.test(ls[0].trim()) && ls.slice(1).every((l) => ["int", "decimal", "date", "datetime"].includes(kindOf(l)))) return { format: "delimited", delimiter: ",", header: true };
   const cols = fixedWidthColumns(ls);
   if (cols) {
     const firstCells = cols.map((c) => ls[0].slice(c.start, c.end).trim());

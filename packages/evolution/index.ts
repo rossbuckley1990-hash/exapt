@@ -72,28 +72,43 @@ const improved = (o: Objective, base: Measurement, next: Measurement): boolean =
   }
 };
 
-/** Remove what the evidence does not need: delete top-level statements and lines greedily, keeping
- *  only deletions under which the whole conformance suite still passes. Needs no model. */
+/** Top-level statements: a line at column zero and whatever hangs beneath it. */
+function statements(lines: string[]): Array<[number, number]> {
+  const out: Array<[number, number]> = [];
+  let start = 0;
+  for (let i = 1; i <= lines.length; i++) {
+    const closes = i < lines.length && /^[)}\]]/.test(lines[i]);
+    if (i === lines.length || (/^\S/.test(lines[i]) && !closes)) {
+      out.push([start, i]);
+      start = i;
+    }
+  }
+  return out;
+}
+
+/** Remove what the evidence does not need: delete whole statements, then single lines, keeping only
+ *  deletions under which the conformance suite still passes. Needs no model. */
 async function deletionSearch(backend: ExecutionBackend, judge: Judge, source: string, suite: TestCase[], libs: Record<string, string>): Promise<{ source: string; evaluations: number }> {
   let lines = source.split("\n");
   let evaluations = 0;
+  const LIMIT = 80;
   const passes = async (candidate: string[]): Promise<boolean> => {
-    evaluations++;
     const text = candidate.join("\n");
     if (!syntaxValid(text).ok) return false;
-    const rs = await runCases(backend, judge, text, suite, libs);
-    return rs.every((r) => r.passed);
+    evaluations++;
+    const quick = await runCases(backend, judge, text, suite.slice(0, 2), libs);
+    if (quick.some((r) => !r.passed)) return false;
+    return (await runCases(backend, judge, text, suite.slice(2), libs)).every((r) => r.passed);
   };
-  for (let size = 6; size >= 1 && evaluations < 60; size = size > 1 ? Math.ceil(size / 2) : 0) {
-    for (let i = 0; i + size <= lines.length && evaluations < 60; i++) {
-      const removed = lines.slice(i, i + size);
-      if (removed.every((l) => !l.trim())) continue;
-      const trial = [...lines.slice(0, i), ...lines.slice(i + size)];
-      if (await passes(trial)) {
-        lines = trial;
-        i--;
-      }
-    }
+  for (const [from, to] of statements(lines).reverse()) {
+    if (evaluations >= LIMIT) break;
+    const trial = [...lines.slice(0, from), ...lines.slice(to)];
+    if (await passes(trial)) lines = trial;
+  }
+  for (let i = lines.length - 1; i >= 0 && evaluations < LIMIT; i--) {
+    if (!lines[i].trim()) continue;
+    const trial = [...lines.slice(0, i), ...lines.slice(i + 1)];
+    if (await passes(trial)) lines = trial;
   }
   return { source: lines.join("\n"), evaluations };
 }
@@ -143,7 +158,10 @@ export async function evolve(ctx: EvolveContext, m: CapabilityManifest, objectiv
     candidates.push(...p.candidates);
   }
   attempt.budget = ctx.budget.snapshot();
-  if (!candidates.length) attempt.outcome = ctx.model ? "no candidate was proposed" : "no deterministic route to this objective, and no model is configured";
+  if (!candidates.length) {
+    const deletion = objective === "smaller" || objective === "simpler";
+    attempt.outcome = deletion ? "deletion search found nothing the evidence does not need" : ctx.model ? "no candidate was proposed" : "no deterministic route to this objective, and no model is configured";
+  }
   for (const cand of candidates.slice(0, opts.maxCandidates ?? LIMITS.maxCandidates)) {
     const record = (outcome: EvolutionAttempt["candidates"][number]["outcome"], reason: string, measured?: Measurement) => attempt.candidates.push({ sha256: cand.sha256, producer: cand.producer, outcome, reason, ...(measured ? { measured } : {}) });
     if (!syntaxValid(cand.source).ok) {
